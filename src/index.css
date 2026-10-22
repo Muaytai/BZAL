@@ -1,0 +1,98 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bzal-red: #E71B26;
+  --color-bzal-red-hover: #C9141E;
+  --color-bzal-red-light: #FDECEE;
+  --color-bzal-graphite: #2B3340;
+  --color-bzal-graphite-dark: #1B222C;
+  --color-bzal-graphite-light: #444E60;
+  --color-bzal-gray: #ECEEF0;
+  --color-bzal-gray-card: #F7F8F9;
+  --color-bzal-border: #D5D9DE;
+  --color-bzal-text-muted: #647082;
+
+  --font-dela: 'Dela Gothic One', cursive, sans-serif;
+  --font-montserrat: 'Montserrat', sans-serif;
+}
+
+:root {
+  --font-sans: 'Montserrat', sans-serif;
+}
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  overflow-x: hidden;
+  background-color: #ECEEF0;
+  color: #2B3340;
+}
+
+.font-dela {
+  font-family: 'Dela Gothic One', cursive, sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.font-montserrat {
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* Authentic Brandbook Chevron Diagonal Stripes Ribbon (Pages 28, 29, 30, 40) */
+.bzal-ribbon-red-white {
+  background: repeating-linear-gradient(
+    -45deg,
+    #E71B26,
+    #E71B26 14px,
+    #FFFFFF 14px,
+    #FFFFFF 22px
+  );
+}
+
+.bzal-ribbon-red-dark {
+  background: repeating-linear-gradient(
+    -45deg,
+    #E71B26,
+    #E71B26 14px,
+    #2B3340 14px,
+    #2B3340 22px
+  );
+}
+
+.bzal-ribbon-red-light {
+  background: repeating-linear-gradient(
+    -45deg,
+    #E71B26,
+    #E71B26 14px,
+    #ECEEF0 14px,
+    #ECEEF0 22px
+  );
+}
+
+/* Subtle Industrial Grid Pattern on Light Tech Gray */
+.bg-tech-grid {
+  background-color: #ECEEF0;
+  background-image: 
+    linear-gradient(to right, rgba(43, 51, 64, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(43, 51, 64, 0.05) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.bg-tech-dots {
+  background-image: radial-gradient(circle, rgba(43, 51, 64, 0.12) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* Dark blueprint grid for selective high-impact sections */
+.bg-dark-blueprint {
+  background-color: #2B3340;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+/* Red brand watermark styling */
+.watermark-number {
+  font-family: 'Dela Gothic One', cursive, sans-serif;
+  user-select: none;
+  pointer-events: none;
+}
