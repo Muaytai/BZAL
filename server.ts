@@ -481,6 +481,39 @@ async function startServer() {
     }
   });
 
+  app.get('/api/public/inquiry-status', (req: Request, res: Response) => {
+    const rawNum = String(req.query.number || '').trim().toUpperCase();
+    if (!rawNum) {
+      res.status(400).json({ found: false, error: 'Укажите номер заявки' });
+      return;
+    }
+
+    const db = readServerDb();
+    const match = db.inquiries.find((i) => {
+      const norm = i.inquiry_number.toUpperCase();
+      return norm === rawNum || norm.endsWith(rawNum);
+    });
+
+    if (!match) {
+      res.status(404).json({ found: false });
+      return;
+    }
+
+    // Return ONLY non-confidential stage fields (no phone, email, company, or internal notes)
+    res.json({
+      found: true,
+      statusInfo: {
+        inquiry_number: match.inquiry_number,
+        created_at: match.created_at,
+        service_type: match.service_type,
+        status: match.status,
+        assigned_department: match.assigned_department,
+        feedback_status: match.feedback_status,
+        drawings_count: Array.isArray(match.drawing_files) ? match.drawing_files.length : 0,
+      },
+    });
+  });
+
   // =========================================================================
   // 2. PROTECTED ADMIN API ROUTES (Only for Specialist makc.kuxta@gmail.com)
   // =========================================================================
@@ -700,6 +733,161 @@ async function startServer() {
             err instanceof Error
               ? err.message
               : 'Ошибка соединения с Supabase',
+        });
+      }
+    }
+  );
+
+  // =========================================================================
+  // 2B. CMS CONTENT & PHOTO MANAGEMENT ENDPOINTS
+  // =========================================================================
+  const CMS_DB_FILE = path.join(DATA_DIR, 'bzal_cms_db.json');
+  const SUPABASE_CMS_PATH = 'cms/site_cms_config.json';
+
+  app.get('/api/public/cms', async (_req: Request, res: Response) => {
+    try {
+      if (fs.existsSync(CMS_DB_FILE)) {
+        const raw = fs.readFileSync(CMS_DB_FILE, 'utf-8');
+        const parsed = JSON.parse(raw);
+        if (parsed && parsed.languages) {
+          res.json({ cmsConfig: parsed });
+          return;
+        }
+      }
+
+      // Try loading from Supabase Storage if not on local disk
+      const { data, error } = await supabaseAdmin.storage
+        .from('bzal-drawings')
+        .download(SUPABASE_CMS_PATH);
+      if (!error && data) {
+        const text = await data.text();
+        const parsed = JSON.parse(text);
+        if (parsed && parsed.languages) {
+          if (!fs.existsSync(DATA_DIR)) {
+            fs.mkdirSync(DATA_DIR, { recursive: true });
+          }
+          fs.writeFileSync(CMS_DB_FILE, JSON.stringify(parsed, null, 2), 'utf-8');
+          res.json({ cmsConfig: parsed });
+          return;
+        }
+      }
+    } catch {
+      // ignore
+    }
+
+    res.json({ cmsConfig: null });
+  });
+
+  app.put(
+    '/api/admin/cms',
+    requireSpecialistAuth,
+    async (req: Request, res: Response) => {
+      try {
+        const cmsConfig = req.body?.cmsConfig;
+        if (!cmsConfig || !cmsConfig.languages) {
+          res.status(400).json({ error: 'Invalid CMS payload' });
+          return;
+        }
+
+        if (!fs.existsSync(DATA_DIR)) {
+          fs.mkdirSync(DATA_DIR, { recursive: true });
+        }
+        fs.writeFileSync(
+          CMS_DB_FILE,
+          JSON.stringify(cmsConfig, null, 2),
+          'utf-8'
+        );
+
+        await ensureSupabaseBucket();
+        await supabaseAdmin.storage
+          .from('bzal-drawings')
+          .upload(
+            SUPABASE_CMS_PATH,
+            Buffer.from(JSON.stringify(cmsConfig, null, 2), 'utf-8'),
+            {
+              contentType: 'application/json',
+              upsert: true,
+            }
+          );
+
+        res.json({ success: true });
+      } catch (err) {
+        res.status(500).json({
+          error: err instanceof Error ? err.message : 'Failed to save CMS',
+        });
+      }
+    }
+  );
+
+  app.delete(
+    '/api/admin/cms',
+    requireSpecialistAuth,
+    async (_req: Request, res: Response) => {
+      try {
+        if (fs.existsSync(CMS_DB_FILE)) {
+          fs.unlinkSync(CMS_DB_FILE);
+        }
+        await supabaseAdmin.storage
+          .from('bzal-drawings')
+          .remove([SUPABASE_CMS_PATH]);
+      } catch {
+        // ignore
+      }
+      res.json({ success: true });
+    }
+  );
+
+  app.post(
+    '/api/admin/upload-image',
+    requireSpecialistAuth,
+    async (req: Request, res: Response) => {
+      try {
+        const { fileName, contentType, base64Data } = req.body || {};
+        if (!fileName || !base64Data) {
+          res.status(400).json({ error: 'Missing fileName or base64Data' });
+          return;
+        }
+
+        await ensureSupabaseBucket();
+        const safeName = String(fileName).replace(/[^a-zA-Z0-9._-]/g, '_');
+        const stampedName = `${Date.now()}_${safeName}`;
+        const buffer = Buffer.from(base64Data, 'base64');
+
+        // 1. Save to local public/images/uploads so it works locally as well
+        const uploadsDir = path.join(
+          import.meta.dirname,
+          'public',
+          'images',
+          'uploads'
+        );
+        if (!fs.existsSync(uploadsDir)) {
+          fs.mkdirSync(uploadsDir, { recursive: true });
+        }
+        fs.writeFileSync(path.join(uploadsDir, stampedName), buffer);
+
+        // 2. Upload to Supabase Storage for permanent cloud URL
+        const storagePath = `cms-images/${stampedName}`;
+        const { error } = await supabaseAdmin.storage
+          .from('bzal-drawings')
+          .upload(storagePath, buffer, {
+            contentType: contentType || 'image/jpeg',
+            upsert: true,
+          });
+
+        if (!error) {
+          const { data: pub } = supabaseAdmin.storage
+            .from('bzal-drawings')
+            .getPublicUrl(storagePath);
+          if (pub?.publicUrl) {
+            res.json({ publicUrl: pub.publicUrl });
+            return;
+          }
+        }
+
+        res.json({ publicUrl: `/images/uploads/${stampedName}` });
+      } catch (err) {
+        res.status(500).json({
+          error: err instanceof Error ? err.message : 'Image upload failed',
         });
       }
     }

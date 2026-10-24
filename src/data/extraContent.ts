@@ -100,7 +100,7 @@ export const extraContent: Record<Language, ExtraContentLanguage> = {
     partsCatalog: {
       eyebrow: 'ОСВОЕННАЯ НОМЕНКЛАТУРА ДЕТАЛЕЙ',
       title: 'КАТАЛОГ СЕРИЙНЫХ И СПЕЦИАЛИЗИРОВАННЫХ ИЗДЕЛИЙ',
-      subtitle: 'Образцы деталей, технологической оснастки и узлов, выпускаемых на производственных мощностях ОАО «БЗАЛ» по чертежам заказчиков с гарантией точности до 0,005 мм.',
+      subtitle: 'Образцы деталей, технологической оснастки и узлов, выпускаемых на производственных мощностях ОАО БЗАЛ по чертежам заказчиков с гарантией точности до 0,005 мм.',
       allFilter: 'Все категории',
       categories: [
         { id: 'housings', label: 'Корпусные детали и станины' },
@@ -135,7 +135,7 @@ export const extraContent: Record<Language, ExtraContentLanguage> = {
       docsTitle: 'КОМПЛЕКТ СОПРОВОДИТЕЛЬНОЙ ДОКУМЕНТАЦИИ К КАЖДОЙ ПАРТИИ:',
       docsSubtitle: 'Поставляем продукцию с исчерпывающим пакетом юридически значимых технических документов:',
       docsList: [
-        'Паспорт изделия с уникальным заводским серийным номером ОАО «БЗАЛ»',
+        'Паспорт изделия с уникальным заводским серийным номером ОАО БЗАЛ',
         'Сертификаты качества завода-изготовителя на металлопрокат и поковки',
         'Протокол координатно-измерительной машины (CMM 3D Report) с картой отклонений',
         'Акт неразрушающего контроля (ультразвуковая и магнитопорошковая дефектоскопия)',
@@ -205,7 +205,7 @@ export const extraContent: Record<Language, ExtraContentLanguage> = {
       title: 'УСЛОВИЯ ДЛЯ ЗАКАЗЧИКОВ ИЗ РОССИЙСКОЙ ФЕДЕРАЦИИ И ЕАЭС',
       subtitle: 'Прямые контракты в российских рублях (RUB), нулевая ставка НДС, собственный железнодорожный тупик на территории завода и отлаженная логистика по трассе М1.',
       railwayTitle: 'СОБСТВЕННЫЙ Ж/Д ПУТЬ ПРЯМО В ЦЕХ СБОРКИ',
-      railwayBadge: 'Ж/Д ВЕТКА ОАО «БЗАЛ»',
+      railwayBadge: 'Ж/Д ВЕТКА ОАО БЗАЛ',
       railwayDesc: 'Подача железнодорожных платформ и полувагонов непосредственно под мостовые краны грузоподъемностью 20 тонн. Отгрузка крупногабаритных автоматических линий, станин и партий колесных пар до 60 тонн за один рейс без перегрузки.',
       highwayTitle: '3 КМ ДО МЕЖДУНАРОДНОЙ ТРАССЫ М1',
       highwayDesc: 'Завод расположен на прямой магистрали «Брест — Минск — Москва». Ежедневные отправки сборных и генеральных грузов ведущими транспортными компаниями (Деловые Линии, ПЭК, КИТ, Байкал-Сервис).',
@@ -253,12 +253,12 @@ export const extraContent: Record<Language, ExtraContentLanguage> = {
         { city: 'Екатеринбург / Челябинск', time: '4–5 дней', distance: '2 650 км', hubs: 'Ж/Д платформы или прямые еврофуры' }
       ],
       ctaTitle: 'ГОТОВИТЕ ЗАКАЗ ДЛЯ ПРЕДПРИЯТИЯ ИЗ РОССИИ ИЛИ ЕАЭС?',
-      ctaDesc: 'Наш департамент ВЭД и сбыта подготовит коммерческое предложение с расчётом логистики «до ворот вашего цеха» и полным пакетом документов СТ-1.',
+      ctaDesc: 'Наш отдел маркетинга и продаж подготовит коммерческое предложение с расчётом логистики «до ворот вашего цеха» и полным пакетом документов СТ-1.',
       ctaBtn: 'Запросить расчет с доставкой в РФ ↗'
     },
     machinerySpecs: {
       title: 'СВОДНЫЙ ТЕХНИЧЕСКИЙ ПАСПОРТ СТАНОЧНОГО ПАРКА',
-      subtitle: 'Основные технологические характеристики обрабатывающего оборудования Технопарка ОАО «БЗАЛ»',
+      subtitle: 'Основные технологические характеристики обрабатывающего оборудования Технопарка ОАО БЗАЛ',
       colModel: 'Модель станка',
       colCategory: 'Тип оборудования',
       colCnc: 'Система ЧПУ',
@@ -331,7 +331,7 @@ export const extraContent: Record<Language, ExtraContentLanguage> = {
       ]
     },
     passportModal: {
-      title: 'ТЕХНИЧЕСКИЙ ПАСПОРТ ТЕХНОПАРКА ОАО «БЗАЛ»',
+      title: 'ТЕХНИЧЕСКИЙ ПАСПОРТ ТЕХНОПАРКА ОАО БЗАЛ',
       subtitle: 'Официальный инженерный документ с перечнем всех станков, допусков, габаритов обработки и сертификатов для технических директоров и главных инженеров.',
       stats: [
         { label: 'Производственная площадь', value: '30 000+ м²' },
@@ -349,16 +349,16 @@ export const extraContent: Record<Language, ExtraContentLanguage> = {
       companyPlaceholder: 'ПАО «Машиностроительный завод»',
       btnDownload: 'Скачать технический паспорт PDF',
       downloadSuccessTitle: 'Паспорт сформирован для загрузки',
-      downloadSuccessDesc: 'Благодарим за интерес к мощностям ОАО «БЗАЛ». Документ готов к скачиванию. По вопросам размещения заказов обращайтесь в отдел маркетинга (Пн–Пт 08:00–16:45) по тел. +375 44 751 44 77 или на почту sales@bzal.by.',
+      downloadSuccessDesc: 'Благодарим за интерес к мощностям ОАО БЗАЛ. Документ готов к скачиванию. По вопросам размещения заказов обращайтесь в отдел маркетинга (Пн–Пт 08:00–16:30) по тел. +375 44 751 44 77 или на почту sales@bzal.by.',
       btnDirectDownload: 'Открыть PDF-документ прямо сейчас',
       btnClose: 'Закрыть',
       securityNote: 'Конфиденциальность гарантируется. Ваши контакты не передаются третьим лицам.'
     },
     engineerWidget: {
-      label: 'Отдел маркетинга',
-      dutyEngineer: 'ОТДЕЛ МАРКЕТИНГА И СБЫТА',
-      dutyStatus: 'Пн–Пт: 08:00 – 16:45 (приём заявок)',
-      callNow: 'Позвонить в отдел маркетинга',
+      label: 'Маркетинг и продажи',
+      dutyEngineer: 'ОТДЕЛ МАРКЕТИНГА И ПРОДАЖ',
+      dutyStatus: 'Пн–Пт: 08:00 – 16:30 (приём заявок)',
+      callNow: 'Позвонить в отдел маркетинга и продаж',
       sendBrief: 'Оставить заявку / Отправить чертежи',
       downloadPassport: 'Скачать паспорт оборудования (PDF)',
       backToTop: 'Наверх',
@@ -370,7 +370,7 @@ export const extraContent: Record<Language, ExtraContentLanguage> = {
     partsCatalog: {
       eyebrow: 'PROVEN MANUFACTURING PORTFOLIO',
       title: 'CATALOG OF SERIAL & CUSTOM PRECISION COMPONENTS',
-      subtitle: 'Showcase of machine components, custom tooling, and structural sub-assemblies manufactured at JSC "BZAL" manufacturing floors strictly to customer CAD drawings with tolerances down to 0.005 mm.',
+      subtitle: 'Showcase of machine components, custom tooling, and structural sub-assemblies manufactured at JSC BZAL manufacturing floors strictly to customer CAD drawings with tolerances down to 0.005 mm.',
       allFilter: 'All Categories',
       categories: [
         { id: 'housings', label: 'Housings & Machine Beds' },
@@ -405,7 +405,7 @@ export const extraContent: Record<Language, ExtraContentLanguage> = {
       docsTitle: 'ACCOMPANYING DOCUMENTATION DELIVERED WITH EVERY BATCH:',
       docsSubtitle: 'Every dispatch includes an exhaustive set of legally binding engineering and metallurgical documents:',
       docsList: [
-        'Factory Certificate & Quality Passport with unique JSC "BZAL" serial numbers',
+        'Factory Certificate & Quality Passport with unique JSC BZAL serial numbers',
         'Material Mill Test Certificates for forgings, castings, and rolled steels',
         '3D Coordinate Measuring Machine (CMM) Inspection Report with GD&T deviation map',
         'Non-Destructive Testing Certificate (Ultrasonic & Magnetic Particle flaw detection)',
@@ -528,7 +528,7 @@ export const extraContent: Record<Language, ExtraContentLanguage> = {
     },
     machinerySpecs: {
       title: 'MACHINE PARK TECHNICAL SPECIFICATIONS',
-      subtitle: 'Key technical parameters and capacities of CNC machine tools at JSC "BZAL" Technopark',
+      subtitle: 'Key technical parameters and capacities of CNC machine tools at JSC BZAL Technopark',
       colModel: 'Machine Model',
       colCategory: 'Type',
       colCnc: 'CNC Controller',
@@ -601,7 +601,7 @@ export const extraContent: Record<Language, ExtraContentLanguage> = {
       ]
     },
     passportModal: {
-      title: 'TECHNOLOGY PASSPORT OF TECHNOPARK JSC "BZAL"',
+      title: 'TECHNOLOGY PASSPORT OF TECHNOPARK JSC BZAL',
       subtitle: 'Official engineering dossier detailing all machine tools, envelope travels, dimensional tolerances, and ISO credentials for technical directors and chief engineers.',
       stats: [
         { label: 'Production Floor Area', value: '30,000+ m²' },
@@ -619,7 +619,7 @@ export const extraContent: Record<Language, ExtraContentLanguage> = {
       companyPlaceholder: 'Heavy Machinery Plant Ltd.',
       btnDownload: 'Download Technical Passport PDF',
       downloadSuccessTitle: 'Technical Passport Ready for Download',
-      downloadSuccessDesc: 'Thank you for your interest in JSC "BZAL" capacities. Your file has been generated. For order inquiries, please contact our Marketing Department (Mon–Fri 08:00–16:45) at +375 44 751 44 77 or sales@bzal.by.',
+      downloadSuccessDesc: 'Thank you for your interest in JSC BZAL capacities. Your file has been generated. For order inquiries, please contact our Marketing Department (Mon–Fri 08:00–16:30) at +375 44 751 44 77 or sales@bzal.by.',
       btnDirectDownload: 'Open PDF Dossier Now',
       btnClose: 'Close Window',
       securityNote: 'Enterprise privacy guaranteed. Data is strictly confidential.'
@@ -627,7 +627,7 @@ export const extraContent: Record<Language, ExtraContentLanguage> = {
     engineerWidget: {
       label: 'Marketing & Sales',
       dutyEngineer: 'MARKETING & SALES DEPARTMENT',
-      dutyStatus: 'Mon–Fri: 08:00 – 16:45 (UTC+3)',
+      dutyStatus: 'Mon–Fri: 08:00 – 16:30 (UTC+3)',
       callNow: 'Call Marketing Department',
       sendBrief: 'Submit Inquiry / Send Drawings',
       downloadPassport: 'Download Equipment Passport (PDF)',
@@ -889,7 +889,7 @@ export const extraContent: Record<Language, ExtraContentLanguage> = {
       companyPlaceholder: '重型装备制造集团',
       btnDownload: '立即获取装备技术白皮书 PDF',
       downloadSuccessTitle: '白皮书已生成就绪',
-      downloadSuccessDesc: '感谢您关注BZAL工业科技园区制造实力。文件已生成完毕，可立即下载。如有合作需求，请在工作时间(周一至周五 08:00–16:45)联系市场营销部：+375 44 751 44 77 或发送邮件至 sales@bzal.by。',
+      downloadSuccessDesc: '感谢您关注BZAL工业科技园区制造实力。文件已生成完毕，可立即下载。如有合作需求，请在工作时间(周一至周五 08:00–16:30)联系市场营销部：+375 44 751 44 77 或发送邮件至 sales@bzal.by。',
       btnDirectDownload: '立即在线查阅 PDF 卷宗',
       btnClose: '关闭窗口',
       securityNote: '我们严格恪守企业信息保密承诺，绝不向第三方透露您的任何联络资讯。'
@@ -897,7 +897,7 @@ export const extraContent: Record<Language, ExtraContentLanguage> = {
     engineerWidget: {
       label: '市场与销售部',
       dutyEngineer: '市场营销与销售部',
-      dutyStatus: '周一至周五: 08:00 – 16:45',
+      dutyStatus: '周一至周五: 08:00 – 16:30',
       callNow: '拨打市场营销部电话',
       sendBrief: '提交询价申请 / 发送图纸',
       downloadPassport: '下载设备技术白皮书 (PDF)',
@@ -936,7 +936,7 @@ export const manufacturedPartsList: Record<Language, ManufacturedPart[]> = {
       roughness: 'Ra 0.2 (суперфиниширование шеек)',
       batchSize: 'От 5 до 200 шт.',
       leadTime: 'От 10 рабочих дней',
-      image: '/images/bzal_lathe.jpg',
+      image: '/images/landing_img_4.jpg',
       features: ['Глубокое азотирование HV 950', 'Динамическая балансировка G 1.0', 'Шлифовка конуса 7:24']
     },
     {
@@ -951,7 +951,7 @@ export const manufacturedPartsList: Record<Language, ManufacturedPart[]> = {
       roughness: 'Ra 0.8 (накатка роликами шеек и галтелей)',
       batchSize: 'От 20 до 1 000 шт./мес',
       leadTime: 'Серийный график поставок',
-      image: '/images/bzal_wheel_sparks.jpg',
+      image: '/images/landing_img_3.jpg',
       features: ['Упрочняющая накатка роликами', '100% УЗК контроль дефектоскопом', 'Клеймение ОТК']
     },
     {
@@ -1028,6 +1028,66 @@ export const manufacturedPartsList: Record<Language, ManufacturedPart[]> = {
       leadTime: 'Серийный график',
       image: '/images/bzal_sparks.jpg',
       features: ['100% магнитная дефектоскопия', 'Высокая морозостойкость (до -60°C)', 'Маркировка']
+    },
+    {
+      id: 'part-9',
+      category: 'shafts',
+      categoryKey: 'Валы, шпиндели и оси',
+      title: 'Вал-шестерня тяжелого привода со шлицевым профилем',
+      application: 'Силовые редукторы прокатных станов, крановых лебедок и буровых установок',
+      material: 'Сталь 20ХН3А / 18ХГТ (цементация и закалка ТВЧ)',
+      dimensions: 'Ø240 × 1 850 мм (модуль m=10, эвольвентные шлицы)',
+      tolerance: 'Квалитет IT6, степень точности зубчатого профиля 6-B',
+      roughness: 'Ra 0.4 (круглое и профильное шлифование)',
+      batchSize: 'От 2 до 150 шт.',
+      leadTime: 'От 14 рабочих дней',
+      image: '/images/landing_img_3.jpg',
+      features: ['Цементация на глубину 1,6 мм', 'Твердость 59–62 HRC', 'УЗК контроль поковок']
+    },
+    {
+      id: 'part-10',
+      category: 'gears',
+      categoryKey: 'Зубчатые передачи и венцы',
+      title: 'Колесо зубчатое косозубое закаленное m=8 z=54',
+      application: 'Коробки скоростей станков, цилиндрические редукторы и трансмиссии',
+      material: 'Сталь 40ХН2МА / 12ХН3А',
+      dimensions: 'Ø465 × 125 мм (внутренний шлицевой паз)',
+      tolerance: 'Степень точности 6 по ГОСТ 1643-81',
+      roughness: 'Ra 0.4 (зубошлифование эвольвенты)',
+      batchSize: 'От 5 до 300 шт.',
+      leadTime: 'От 12 рабочих дней',
+      image: '/images/landing_img_4.jpg',
+      features: ['Контроль пятна контакта', 'Индукционная закалка ТВЧ', 'Низкий уровень шума']
+    },
+    {
+      id: 'part-11',
+      category: 'units',
+      categoryKey: 'Унифицированные станочные узлы',
+      title: 'Стол силовой гидравлический унифицированный УСГ-630',
+      application: 'Подача шпиндельных бабок в автоматических станочных линиях',
+      material: 'Чугун СЧ25, закаленные накладные направляющие (HRC 58)',
+      dimensions: '1 250 × 630 × 390 мм (ход каретки до 800 мм)',
+      tolerance: 'Точность позиционирования на жестком упоре ±0,005 мм',
+      roughness: 'Ra 0.4 (шлифованные планки и шабрение)',
+      batchSize: 'От 1 шт. и малыми сериями',
+      leadTime: 'От 20 рабочих дней',
+      image: '/images/landing_img_1.jpg',
+      features: ['Серийный узел ОАО БЗАЛ', 'Усилие подачи до 63 кН', 'Бесступенчатый цикл']
+    },
+    {
+      id: 'part-12',
+      category: 'tooling',
+      categoryKey: 'Штампы, пресс-формы и оснастка',
+      title: 'Гидравлическое спутниковое приспособление для ОЦ с ЧПУ',
+      application: 'Быстросменное базирование корпусных отливок на 4- и 5-осевых станках',
+      material: 'Сталь 40Х (термоулучшенная), базовые элементы Сталь Х12МФ (60 HRC)',
+      dimensions: '630 × 630 × 450 мм (под паллету ОЦ)',
+      tolerance: 'Повторяемость базирования и зажима ≤ 0,005 мм',
+      roughness: 'Ra 0.4 (базовые установочные пальцы и опоры)',
+      batchSize: 'Индивидуальное изготовление под деталь',
+      leadTime: 'От 18 рабочих дней',
+      image: '/images/landing_img_2.jpg',
+      features: ['Проектирование в ОГТ БЗАЛ', 'Гидрозажим за 4 секунды', 'Паспорт аттестации']
     }
   ],
 
@@ -1059,7 +1119,7 @@ export const manufacturedPartsList: Record<Language, ManufacturedPart[]> = {
       roughness: 'Ra 0.2 (superfinished bearing seats)',
       batchSize: '5 to 200 pcs',
       leadTime: 'From 10 business days',
-      image: '/images/bzal_lathe.jpg',
+      image: '/images/landing_img_4.jpg',
       features: ['Deep gas nitriding HV 950', 'Dynamic balancing G 1.0', '7:24 precision ground taper']
     },
     {
@@ -1074,7 +1134,7 @@ export const manufacturedPartsList: Record<Language, ManufacturedPart[]> = {
       roughness: 'Ra 0.8 (burnished roller finished fillets and journals)',
       batchSize: '20 to 1,000 pcs/month',
       leadTime: 'Serial delivery schedule',
-      image: '/images/bzal_wheel_sparks.jpg',
+      image: '/images/landing_img_3.jpg',
       features: ['Deep roller burnishing', '100% Ultrasonic NDT inspection', 'Full stamp traceability']
     },
     {
@@ -1151,6 +1211,66 @@ export const manufacturedPartsList: Record<Language, ManufacturedPart[]> = {
       leadTime: 'Serial delivery contract',
       image: '/images/bzal_sparks.jpg',
       features: ['100% Magnetic particle inspection', 'Low-temp impact toughness (-60°C)', 'Traceable batch stamp']
+    },
+    {
+      id: 'part-9',
+      category: 'shafts',
+      categoryKey: 'Shafts, Spindles & Axles',
+      title: 'Heavy-Duty Splined Pinion Drive Shaft',
+      application: 'Primary reducers for rolling mills, crane winches, and drilling rigs',
+      material: 'Alloy Steel 20KhN3A / 18KhGT (carburized & induction hardened)',
+      dimensions: 'Ø240 × 1,850 mm (module m=10, involute splines)',
+      tolerance: 'IT6 class, DIN 6 gear tooth profile accuracy',
+      roughness: 'Ra 0.4 (cylindrical and profile ground)',
+      batchSize: '2 to 150 pcs',
+      leadTime: 'From 14 business days',
+      image: '/images/landing_img_3.jpg',
+      features: ['1.6 mm case depth', '59–62 HRC surface hardness', '100% UT forging test']
+    },
+    {
+      id: 'part-10',
+      category: 'gears',
+      categoryKey: 'Gears & Ring Drives',
+      title: 'Hardened Helical Gear Wheel m=8 z=54',
+      application: 'Machine tool gearboxes, industrial speed reducers, and heavy transmissions',
+      material: 'Alloy Steel 40KhN2MA / 12KhN3A',
+      dimensions: 'Ø465 × 125 mm (broached internal spline bore)',
+      tolerance: 'Precision Grade 6 (GOST 1643 / DIN 3962)',
+      roughness: 'Ra 0.4 (ground involute flanks)',
+      batchSize: '5 to 300 pcs',
+      leadTime: 'From 12 business days',
+      image: '/images/landing_img_4.jpg',
+      features: ['Full contact pattern check', 'Induction hardened teeth', 'Low-noise operation']
+    },
+    {
+      id: 'part-11',
+      category: 'units',
+      categoryKey: 'Modular Machine Tool Heads',
+      title: 'Hydraulic Power Slide Table USG-630',
+      application: 'Precision linear feed unit for spindle heads in automatic transfer lines',
+      material: 'Cast Iron SCH25, hardened steel ways (58 HRC)',
+      dimensions: '1,250 × 630 × 390 mm (stroke up to 800 mm)',
+      tolerance: 'Repeatability against dead stop ±0.005 mm',
+      roughness: 'Ra 0.4 (precision ground & hand-scraped ways)',
+      batchSize: '1 pc or custom series',
+      leadTime: 'From 20 business days',
+      image: '/images/landing_img_1.jpg',
+      features: ['Standard BZAL OEM unit', 'Feed thrust up to 63 kN', 'Stepless hydraulic feed']
+    },
+    {
+      id: 'part-12',
+      category: 'tooling',
+      categoryKey: 'Tooling, Dies & Molds',
+      title: 'Hydraulic Tombstone Clamping Fixture for CNC Centers',
+      application: 'Rapid zero-point clamping of cast housings on 4- and 5-axis CNC mills',
+      material: 'Pre-hardened 40Kh Steel, locating pads X12MF (60 HRC)',
+      dimensions: '630 × 630 × 450 mm (standard CNC pallet size)',
+      tolerance: 'Clamping repeatability ≤ 0.005 mm',
+      roughness: 'Ra 0.4 (ground locating pins and rests)',
+      batchSize: 'Engineered to customer workpiece',
+      leadTime: 'From 18 business days',
+      image: '/images/landing_img_2.jpg',
+      features: ['Engineered by BZAL OGT', '4-second hydraulic clamp', 'CMM calibration passport']
     }
   ],
 
@@ -1182,7 +1302,7 @@ export const manufacturedPartsList: Record<Language, ManufacturedPart[]> = {
       roughness: 'Ra 0.2 (配合面超精镜面研磨)',
       batchSize: '5 至 200 件',
       leadTime: '10个工作日起',
-      image: '/images/bzal_lathe.jpg',
+      image: '/images/landing_img_4.jpg',
       features: ['深层离子渗氮硬度达 HV 950', 'G 1.0级高速动平衡', '7:24高精内锥孔研磨']
     },
     {
@@ -1197,7 +1317,7 @@ export const manufacturedPartsList: Record<Language, ManufacturedPart[]> = {
       roughness: 'Ra 0.8 (过渡圆角与轴颈实施高压滚压硬化强化)',
       batchSize: '每月 20 至 1,000 件',
       leadTime: '按大批量合同排期',
-      image: '/images/bzal_wheel_sparks.jpg',
+      image: '/images/landing_img_3.jpg',
       features: ['深层滚压冷作硬化', '100%超声波内部无损探伤', '全流程钢印追溯']
     },
     {
@@ -1274,6 +1394,66 @@ export const manufacturedPartsList: Record<Language, ManufacturedPart[]> = {
       leadTime: '长期供货合同',
       image: '/images/bzal_sparks.jpg',
       features: ['100%磁粉探伤无表面裂纹', '-60°C低温冲击韧度达标', '合格追溯批次标识']
+    },
+    {
+      id: 'part-9',
+      category: 'shafts',
+      categoryKey: '精密主轴、丝杠与重载光轴',
+      title: '带渐开线花键的重载驱动齿轮轴',
+      application: '轧钢机主减速机、起重绞车与石油钻机动力箱',
+      material: '渗碳合金钢 20KhN3A / 18KhGT',
+      dimensions: 'Ø240 × 1,850 毫米 (模数 m=10，花键连接)',
+      tolerance: 'IT6公差级，6级齿轮精度',
+      roughness: 'Ra 0.4 (外圆与齿形复合精密磨削)',
+      batchSize: '2 至 150 件',
+      leadTime: '14个工作日起',
+      image: '/images/landing_img_3.jpg',
+      features: ['渗碳硬化层 1.6 毫米', '表面硬度 59–62 HRC', '锻件100%超声波探伤']
+    },
+    {
+      id: 'part-10',
+      category: 'gears',
+      categoryKey: '齿轮齿圈与渐开线传动件',
+      title: '硬化斜齿圆柱齿轮 m=8 z=54',
+      application: '机床主变速箱、工业减速器与重型机械传动系',
+      material: '合金结构钢 40KhN2MA / 12KhN3A',
+      dimensions: 'Ø465 × 125 毫米 (内孔精密拉削花键)',
+      tolerance: '6级精度 (GOST 1643 / DIN 3962)',
+      roughness: 'Ra 0.4 (渐开线齿面精密磨齿)',
+      batchSize: '5 至 300 件',
+      leadTime: '12个工作日起',
+      image: '/images/landing_img_4.jpg',
+      features: ['啮合斑点全检', '高频感应淬火强化', '高速低噪平稳运行']
+    },
+    {
+      id: 'part-11',
+      category: 'units',
+      categoryKey: '组合机床通用动力滑台与动力头',
+      title: '重型液压动力滑台 USG-630',
+      application: '自动生产线中驱动多轴主轴箱实现精密直线进给',
+      material: '铸铁 SCH25，镶钢淬火导轨 (58 HRC)',
+      dimensions: '1,250 × 630 × 390 毫米 (最大行程 800 毫米)',
+      tolerance: '死挡铁重复定位精度 ±0.005 毫米',
+      roughness: 'Ra 0.4 (导轨超精磨削及人工刮研)',
+      batchSize: '单台定制或成批配套',
+      leadTime: '20个工作日起',
+      image: '/images/landing_img_1.jpg',
+      features: ['BZAL成熟定型功能部件', '最大进给推力 63 kN', '无级液压调速循环']
+    },
+    {
+      id: 'part-12',
+      category: 'tooling',
+      categoryKey: '冷热冲压模具与专用夹具',
+      title: '五轴卧式加工中心液压随行工装夹具',
+      application: '复杂铸造箱体在四轴/五轴加工中心上的快速零点定位装夹',
+      material: '调质钢 40Kh，定位元件特种模具钢 X12MF (60 HRC)',
+      dimensions: '630 × 630 × 450 毫米 (适配标准交换工作台)',
+      tolerance: '重复定位装夹精度 ≤ 0.005 毫米',
+      roughness: 'Ra 0.4 (精密研磨定位销与支承面)',
+      batchSize: '按客户工件图纸非标定制',
+      leadTime: '18个工作日起',
+      image: '/images/landing_img_2.jpg',
+      features: ['BZAL工艺部自主设计', '4秒液压快速锁紧', '附三坐标标定合格证']
     }
   ]
 };

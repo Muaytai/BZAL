@@ -30,7 +30,19 @@ export interface DrawingFileMeta {
   name: string;
   size?: number;
   storage_path?: string;
+  public_url?: string;
+  data_url?: string;
   uploaded_at: string;
+}
+
+export interface PublicInquiryStatusInfo {
+  inquiry_number: string;
+  created_at: string;
+  service_type: string;
+  status: InquiryStatus;
+  assigned_department: DepartmentCode;
+  feedback_status: FeedbackStatus;
+  drawings_count: number;
 }
 
 export interface BzalRfqInquiry {
@@ -118,7 +130,7 @@ const FALLBACK_INQUIRIES: BzalRfqInquiry[] = [
     preferred_contact: 'email',
     service_type: 'Изготовление детали: Станины, рамы и крупногабаритные корпусные узлы',
     has_drawings: 'Да, полный комплект КД (ЕСКД / 3D-модель)',
-    material: 'Чугун (СЧ20, СЧ25, ВЧ50) — литьё + мехобработка',
+    material: 'Чугун (СЧ20, СЧ25, ВЧ50) — мехобработка корпусных заготовок',
     quantity: 'Средняя серия (50 – 500 шт.)',
     drawing_files: [
       {
@@ -323,6 +335,18 @@ export function estimateInitialBudgetByn(serviceType: string, quantity: string):
   return 14500;
 }
 
+function readFileAsDataUrl(file: File): Promise<string | undefined> {
+  if (file.size > 1500 * 1024) return Promise.resolve(undefined);
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      resolve(typeof reader.result === 'string' ? reader.result : undefined);
+    };
+    reader.onerror = () => resolve(undefined);
+    reader.readAsDataURL(file);
+  });
+}
+
 export async function uploadDrawingFilesToSupabase(
   inquiryPrefix: string,
   files: File[]
@@ -333,15 +357,24 @@ export async function uploadDrawingFilesToSupabase(
   for (const file of files) {
     const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
     const storagePath = `inquiries/${inquiryPrefix}/${Date.now()}_${safeName}`;
+    const dataUrl = await readFileAsDataUrl(file);
     try {
       const { error } = await supabase.storage
         .from('bzal-drawings')
         .upload(storagePath, file, { upsert: true });
 
+      let publicUrl: string | undefined;
+      if (!error) {
+        const pub = supabase.storage.from('bzal-drawings').getPublicUrl(storagePath);
+        publicUrl = pub.data?.publicUrl;
+      }
+
       results.push({
         name: file.name,
         size: file.size,
         storage_path: error ? `server/${inquiryPrefix}/${file.name}` : storagePath,
+        public_url: publicUrl,
+        data_url: dataUrl,
         uploaded_at: now,
       });
     } catch {
@@ -349,12 +382,206 @@ export async function uploadDrawingFilesToSupabase(
         name: file.name,
         size: file.size,
         storage_path: `server/${inquiryPrefix}/${file.name}`,
+        data_url: dataUrl,
         uploaded_at: now,
       });
     }
   }
 
   return results;
+}
+
+export function downloadDrawingFile(
+  file: DrawingFileMeta,
+  inquiryNumber: string,
+  companyName?: string
+): void {
+  if (file.data_url) {
+    const link = document.createElement('a');
+    link.href = file.data_url;
+    link.download = file.name;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    return;
+  }
+
+  if (file.public_url) {
+    const link = document.createElement('a');
+    link.href = file.public_url;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    link.download = file.name;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    return;
+  }
+
+  // Generate an engineering drawing registration passport for archived/demo CAD files
+  const specText = [
+    '======================================================================',
+    'ОАО БЗАЛ — КАРТОЧКА РЕГИСТРАЦИИ ЧЕРТЕЖА / КД В АРХИВЕ ОГК И ОГТ',
+    '======================================================================',
+    `Регистрационный номер заявки: ${inquiryNumber}`,
+    `Предприятие-заказчик:         ${companyName || 'Контрагент ОАО БЗАЛ'}`,
+    `Имя файла чертежа / 3D-модели: ${file.name}`,
+    `Размер файла:                 ${file.size ? Math.round(file.size / 1024) + ' КБ' : 'Стандартный пакет КД'}`,
+    `Путь в хранилище Supabase:    ${file.storage_path || 'bzal-drawings/' + file.name}`,
+    `Дата поступления в маркетинг: ${new Date(file.uploaded_at || Date.now()).toLocaleString('ru-RU')}`,
+    '----------------------------------------------------------------------',
+    'Маршрут проработки КД:',
+    '1. Отдел маркетинга и сбыта (sales@bzal.by, Пн–Пт 08:00–16:30) — Принято',
+    '2. ОГК (Отдел главного конструктора) — Проверка допусков по ЕСКД',
+    '3. ОГТ (Отдел главного технолога) — Расчёт норм времени и припусков',
+    '======================================================================',
+  ].join('\r\n');
+
+  const blob = new Blob(['\uFEFF' + specText], {
+    type: 'text/plain;charset=utf-8;',
+  });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `Паспорт_КД_${inquiryNumber}_${file.name}.txt`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+}
+
+const TG_STORAGE_KEY = 'bzal_telegram_alert_config_v1';
+
+export interface TelegramAlertConfig {
+  botToken: string;
+  chatId: string;
+  enabled: boolean;
+}
+
+export function getTelegramConfig(): TelegramAlertConfig {
+  if (typeof window === 'undefined') {
+    return { botToken: '', chatId: '', enabled: false };
+  }
+  try {
+    const raw = window.localStorage.getItem(TG_STORAGE_KEY);
+    if (!raw) return { botToken: '', chatId: '', enabled: false };
+    return JSON.parse(raw) as TelegramAlertConfig;
+  } catch {
+    return { botToken: '', chatId: '', enabled: false };
+  }
+}
+
+export function saveTelegramConfig(cfg: TelegramAlertConfig): void {
+  if (typeof window === 'undefined') return;
+  try {
+    window.localStorage.setItem(TG_STORAGE_KEY, JSON.stringify(cfg));
+  } catch {
+    // ignore
+  }
+}
+
+export async function sendTelegramAlert(text: string, customCfg?: TelegramAlertConfig): Promise<{ ok: boolean; error?: string }> {
+  const cfg = customCfg || getTelegramConfig();
+  const token = cfg.botToken.trim();
+  const chatId = cfg.chatId.trim();
+  if (!token || !chatId) {
+    return { ok: false, error: 'Укажите Bot Token и Chat ID в настройках уведомлений' };
+  }
+  try {
+    const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chat_id: chatId,
+        text,
+        parse_mode: 'HTML',
+      }),
+    });
+    const json = await res.json();
+    if (res.ok && json.ok) {
+      return { ok: true };
+    }
+    return { ok: false, error: json.description || 'Ошибка Telegram API' };
+  } catch (err) {
+    return { ok: false, error: err instanceof Error ? err.message : 'Ошибка соединения с Telegram' };
+  }
+}
+
+export async function lookupPublicInquiryStatus(
+  inquiryNumberInput: string
+): Promise<{ found: boolean; statusInfo?: PublicInquiryStatusInfo }> {
+  const clean = inquiryNumberInput.trim().toUpperCase();
+  if (!clean) return { found: false };
+
+  try {
+    const res = await fetch(
+      `/api/public/inquiry-status?number=${encodeURIComponent(clean)}`
+    );
+    if (res.ok && res.headers.get('content-type')?.includes('application/json')) {
+      const json = await res.json();
+      if (json.found && json.statusInfo) {
+        return { found: true, statusInfo: json.statusInfo };
+      }
+    }
+  } catch {
+    // Fallback to Supabase / local cache
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from('rfq_inquiries')
+      .select(
+        'inquiry_number, created_at, service_type, status, assigned_department, feedback_status, drawing_files'
+      );
+
+    if (!error && Array.isArray(data)) {
+      const foundRow = data.find((r) => {
+        const num = String(r.inquiry_number || '').toUpperCase();
+        return num === clean || num.endsWith(clean);
+      });
+      if (foundRow) {
+        return {
+          found: true,
+          statusInfo: {
+            inquiry_number: foundRow.inquiry_number,
+            created_at: foundRow.created_at,
+            service_type: foundRow.service_type,
+            status: foundRow.status as InquiryStatus,
+            assigned_department: foundRow.assigned_department as DepartmentCode,
+            feedback_status: foundRow.feedback_status as FeedbackStatus,
+            drawings_count: Array.isArray(foundRow.drawing_files)
+              ? foundRow.drawing_files.length
+              : 0,
+          },
+        };
+      }
+    }
+  } catch {
+    // Fallback to local list
+  }
+
+  const localList = getLocalInquiries();
+  const match = localList.find((item) => {
+    const num = item.inquiry_number.toUpperCase();
+    return num === clean || num.endsWith(clean);
+  });
+
+  if (match) {
+    return {
+      found: true,
+      statusInfo: {
+        inquiry_number: match.inquiry_number,
+        created_at: match.created_at,
+        service_type: match.service_type,
+        status: match.status,
+        assigned_department: match.assigned_department,
+        feedback_status: match.feedback_status,
+        drawings_count: match.drawing_files.length,
+      },
+    };
+  }
+
+  return { found: false };
 }
 
 export async function createRfqInquiry(params: {
@@ -414,10 +641,13 @@ export async function createRfqInquiry(params: {
     feedback_status: 'pending',
     estimated_amount_byn: estimated,
     internal_notes:
-      'Заявка поступила с сайта в отдел маркетинга и сбыта (Пн–Пт 08:00–16:45). Ожидает первичной проверки и передачи в ОГК / ОГТ.',
+      'Заявка поступила с сайта в отдел маркетинга и сбыта (Пн–Пт 08:00–16:30). Ожидает первичной проверки и передачи в ОГК / ОГТ.',
     created_at: now,
   };
   saveLocalInquiries([localItem, ...localList]);
+
+  let assignedNumber = fallbackNumber;
+  let savedToCloud = false;
 
   try {
     const response = await fetch('/api/public/inquiries', {
@@ -442,30 +672,45 @@ export async function createRfqInquiry(params: {
 
     if (response.ok && response.headers.get('content-type')?.includes('application/json')) {
       const json = await response.json();
-      return {
-        inquiry: { inquiry_number: json.inquiry_number || fallbackNumber },
-        savedToCloud: true,
-      };
+      assignedNumber = json.inquiry_number || fallbackNumber;
+      savedToCloud = true;
     }
   } catch {
     // Fallback to direct Supabase cloud insert on Vercel
   }
 
-  try {
-    const { error } = await supabase.from('rfq_inquiries').insert([localItem]);
-    if (!error) {
-      return {
-        inquiry: { inquiry_number: fallbackNumber },
-        savedToCloud: true,
-      };
+  if (!savedToCloud) {
+    try {
+      const { error } = await supabase.from('rfq_inquiries').insert([localItem]);
+      if (!error) {
+        savedToCloud = true;
+      }
+    } catch {
+      // Local storage already saved
     }
-  } catch {
-    // Local storage already saved
+  }
+
+  // Send instant Telegram alert if enabled by specialist
+  const tgCfg = getTelegramConfig();
+  if (tgCfg.enabled && tgCfg.botToken && tgCfg.chatId) {
+    const msg = [
+      `🏭 <b>НОВАЯ ЗАЯВКА НА САЙТЕ ОАО БЗАЛ</b>`,
+      `📋 Номер: <b>${assignedNumber}</b>`,
+      `🏢 Предприятие: <b>${params.company}</b>`,
+      `👤 Контактное лицо: ${params.client_name}`,
+      `📞 Телефон: <b>${params.phone}</b>`,
+      `✉️ Email: ${params.email}`,
+      `⚙️ Направление: ${params.service_type}`,
+      `🔩 Материал / Партия: ${params.material} (${params.quantity})`,
+      `📐 Чертежей прикреплено: ${drawingFiles.length} шт.`,
+      `💰 Оценка бюджета: ${estimated.toLocaleString('ru-RU')} BYN`,
+    ].join('\n');
+    sendTelegramAlert(msg, tgCfg).catch(() => {});
   }
 
   return {
-    inquiry: { inquiry_number: fallbackNumber },
-    savedToCloud: false,
+    inquiry: { inquiry_number: assignedNumber },
+    savedToCloud,
   };
 }
 
@@ -533,7 +778,7 @@ export async function loginSpecialistApi(
   return {
     success: false,
     error:
-      'Неверный Email специалиста или код доступа. Доступ разрешён только уполномоченным сотрудникам ОАО «БЗАЛ».',
+      'Неверный Email специалиста или код доступа. Доступ разрешён только уполномоченным сотрудникам ОАО БЗАЛ.',
   };
 }
 
@@ -786,7 +1031,7 @@ export async function syncAllRecordsToSupabase(): Promise<{
 }
 
 export const SUPABASE_SETUP_SQL = `-- =====================================================================
--- SQL-СКРИПТ НАСТРОЙКИ БАЗЫ ДАННЫХ ОАО «БЗАЛ» В SUPABASE (PostgreSQL)
+-- SQL-СКРИПТ НАСТРОЙКИ БАЗЫ ДАННЫХ ОАО БЗАЛ В SUPABASE (PostgreSQL)
 -- Проект: https://htwkoxioebrgysccoomg.supabase.co
 -- Инструкция: Откройте SQL Editor в левом меню Supabase -> Вставьте -> Нажмите RUN
 -- =====================================================================

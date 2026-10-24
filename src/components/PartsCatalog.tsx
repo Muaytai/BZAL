@@ -23,21 +23,23 @@ export const PartsCatalog: React.FC<PartsCatalogProps> = ({
     ? parts
     : parts.filter((p) => p.category === activeCategory);
 
+  const isTwoColumnWide = filteredParts.length <= 2;
+
   return (
-    <section id="parts" className="py-20 sm:py-24 bg-[#ECEEF0] border-b border-[#D5D9DE] relative overflow-hidden">
+    <section id="parts" className="py-8 sm:py-10 bg-[#ECEEF0] border-b border-[#D5D9DE] relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 sm:mb-14">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-white rounded-md border border-[#D5D9DE] text-[#E71B26] text-xs font-dela uppercase tracking-wider mb-3 shadow-xs">
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-white rounded-md border border-[#D5D9DE] text-[#E71B26] text-xs font-dela uppercase tracking-wider mb-2 shadow-xs">
               <span className="w-2 h-2 rounded-full bg-[#E71B26]" />
               <span>{t.eyebrow}</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#2B3340] tracking-tight font-dela uppercase">
+            <h2 className="text-2xl sm:text-3xl font-black text-[#2B3340] tracking-tight font-dela uppercase">
               {t.title}
             </h2>
-            <p className="mt-3 text-sm sm:text-base text-[#444E60] font-medium leading-relaxed">
+            <p className="mt-2 text-sm text-[#444E60] font-medium leading-relaxed">
               {t.subtitle}
             </p>
           </div>
@@ -45,18 +47,18 @@ export const PartsCatalog: React.FC<PartsCatalogProps> = ({
           {/* Quick PDF Catalog Download Button */}
           <button
             onClick={onOpenPassportModal}
-            className="inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-white hover:bg-[#2B3340] hover:text-white border border-[#D5D9DE] text-[#2B3340] font-bold text-xs uppercase tracking-wider transition-all shadow-sm hover:shadow-md cursor-pointer shrink-0 self-start md:self-end"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-white hover:bg-[#2B3340] hover:text-white border border-[#D5D9DE] text-[#2B3340] font-bold text-xs uppercase tracking-wider transition-all shadow-sm hover:shadow-md cursor-pointer shrink-0 self-start md:self-end"
           >
             <Download className="w-4 h-4 text-[#E71B26]" />
             <span>{t.btnDownloadCatalog}</span>
           </button>
         </div>
 
-        {/* Category Filter Tabs */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-4 mb-8 scrollbar-thin">
+        {/* Category Filter Tabs (Wrapped cleanly without ugly scrollbar) */}
+        <div className="flex flex-wrap items-center gap-2 mb-6">
           <button
             onClick={() => setActiveCategory('all')}
-            className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all whitespace-nowrap cursor-pointer ${
+            className={`px-3.5 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all whitespace-nowrap cursor-pointer ${
               activeCategory === 'all'
                 ? 'bg-[#2B3340] text-white shadow-sm'
                 : 'bg-white text-[#647082] hover:text-[#2B3340] border border-[#D5D9DE]'
@@ -71,7 +73,7 @@ export const PartsCatalog: React.FC<PartsCatalogProps> = ({
               <button
                 key={cat.id}
                 onClick={() => setActiveCategory(cat.id)}
-                className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all whitespace-nowrap cursor-pointer ${
+                className={`px-3.5 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all whitespace-nowrap cursor-pointer ${
                   activeCategory === cat.id
                     ? 'bg-[#E71B26] text-white shadow-sm'
                     : 'bg-white text-[#647082] hover:text-[#2B3340] border border-[#D5D9DE]'
@@ -83,21 +85,37 @@ export const PartsCatalog: React.FC<PartsCatalogProps> = ({
           })}
         </div>
 
-        {/* Parts Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* Parts Grid — Adaptive so filtered categories fill 100% of the width without empty space on the right */}
+        <div
+          className={`grid gap-5 ${
+            isTwoColumnWide
+              ? 'grid-cols-1 lg:grid-cols-2'
+              : filteredParts.length === 3
+                ? 'grid-cols-1 md:grid-cols-3'
+                : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4'
+          }`}
+        >
           {filteredParts.map((part) => (
             <div
               key={part.id}
-              className="bg-white rounded-xl border border-[#D5D9DE] overflow-hidden shadow-sm hover:shadow-xl hover:border-[#E71B26] transition-all flex flex-col group"
+              className={`bg-white rounded-xl border border-[#D5D9DE] overflow-hidden shadow-sm hover:shadow-xl hover:border-[#E71B26] transition-all flex group ${
+                isTwoColumnWide ? 'flex-col sm:flex-row' : 'flex-col'
+              }`}
             >
               {/* Part Image with Tag */}
-              <div className="relative aspect-[16/11] bg-[#1E2530] overflow-hidden">
+              <div
+                className={`relative bg-[#1E2530] overflow-hidden shrink-0 ${
+                  isTwoColumnWide
+                    ? 'sm:w-[44%] aspect-[16/10] sm:aspect-auto min-h-[240px]'
+                    : 'aspect-[16/10]'
+                }`}
+              >
                 <img
                   src={part.image}
                   alt={part.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-95 group-hover:opacity-100"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#1E2530]/90 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#1E2530]/90 via-[#1E2530]/20 to-transparent" />
 
                 {/* Category Badge */}
                 <div className="absolute top-3 left-3 bg-[#2B3340]/90 backdrop-blur-md px-2.5 py-1 rounded text-[10px] font-dela text-white uppercase tracking-wider">
@@ -105,18 +123,18 @@ export const PartsCatalog: React.FC<PartsCatalogProps> = ({
                 </div>
 
                 {/* Tolerance Floating Tag */}
-                <div className="absolute top-3 right-3 bg-[#E71B26] text-white px-2 py-0.5 rounded text-[10px] font-dela tracking-wider">
+                <div className="absolute top-3 right-3 bg-[#E71B26] text-white px-2 py-0.5 rounded text-[10px] font-dela tracking-wider shadow-xs">
                   {part.tolerance.includes('IT') ? part.tolerance.split(',')[0] : '±0,005 мм'}
                 </div>
 
                 {/* Batch label on bottom image */}
-                <div className="absolute bottom-2 left-3 right-3 text-white text-[11px] font-bold truncate">
+                <div className="absolute bottom-2.5 left-3 right-3 text-white text-[11px] font-bold leading-snug line-clamp-2">
                   {part.application}
                 </div>
               </div>
 
-              {/* 45-degree Ribbon Strip */}
-              <div className="h-1.5 w-full bzal-ribbon-red-white" />
+              {/* 45-degree Ribbon Strip (Horizontal on vertical cards) */}
+              {!isTwoColumnWide && <div className="h-1.5 w-full bzal-ribbon-red-white" />}
 
               {/* Card Body */}
               <div className="p-5 flex-1 flex flex-col justify-between">
@@ -138,8 +156,18 @@ export const PartsCatalog: React.FC<PartsCatalogProps> = ({
                     </div>
 
                     <div className="flex items-start justify-between gap-2">
+                      <span className="text-[#647082] font-semibold">{t.specLabels.tolerance}</span>
+                      <span className="text-[#2B3340] font-bold text-right">{part.tolerance}</span>
+                    </div>
+
+                    <div className="flex items-start justify-between gap-2">
                       <span className="text-[#647082] font-semibold">{t.specLabels.roughness}</span>
                       <span className="text-[#E71B26] font-bold text-right">{part.roughness}</span>
+                    </div>
+
+                    <div className="flex items-start justify-between gap-2">
+                      <span className="text-[#647082] font-semibold">{t.specLabels.batch}</span>
+                      <span className="text-[#2B3340] font-bold text-right">{part.batchSize}</span>
                     </div>
 
                     <div className="flex items-start justify-between gap-2">
@@ -149,7 +177,7 @@ export const PartsCatalog: React.FC<PartsCatalogProps> = ({
                   </div>
 
                   {/* Features / Advantages Badges */}
-                  <div className="flex flex-wrap gap-1.5 mb-5">
+                  <div className="flex flex-wrap gap-1.5 mb-4">
                     {part.features.map((feat, fIdx) => (
                       <span
                         key={fIdx}
@@ -175,7 +203,7 @@ export const PartsCatalog: React.FC<PartsCatalogProps> = ({
         </div>
 
         {/* Bottom Banner with Catalog Assurance */}
-        <div className="mt-12 p-5 sm:p-6 rounded-xl bg-white border border-[#D5D9DE] shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="mt-8 p-4 sm:p-5 rounded-xl bg-white border border-[#D5D9DE] shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3 text-xs sm:text-sm text-[#444E60] font-medium">
             <CheckCircle2 className="w-5 h-5 text-[#E71B26] shrink-0" />
             <span>{t.catalogDownloadNote}</span>

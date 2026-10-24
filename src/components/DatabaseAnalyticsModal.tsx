@@ -28,7 +28,9 @@ import {
   LogOut,
   ArrowLeft,
   KeyRound,
+  Sparkles,
 } from 'lucide-react';
+import { CmsContentEditor } from './CmsContentEditor';
 import {
   BzalRfqInquiry,
   BzalPassportLead,
@@ -44,6 +46,10 @@ import {
   clearAdminSession,
   getSavedAdminToken,
   getSavedAdminEmail,
+  downloadDrawingFile,
+  getTelegramConfig,
+  saveTelegramConfig,
+  sendTelegramAlert,
   SUPABASE_SETUP_SQL,
   SUPABASE_URL,
 } from '../utils/supabase';
@@ -52,6 +58,7 @@ interface DatabaseAnalyticsModalProps {
   isOpen: boolean;
   onClose: () => void;
   refreshTrigger?: number;
+  initialTab?: 'inquiries' | 'cms' | 'analytics' | 'executive' | 'architecture';
 }
 
 const STATUS_LABELS: Record<
@@ -96,7 +103,7 @@ const STATUS_LABELS: Record<
 };
 
 const DEPARTMENT_LABELS: Record<DepartmentCode, string> = {
-  marketing: 'Отдел маркетинга и сбыта',
+  marketing: 'Отдел маркетинга и продаж',
   ogk: 'ОГК (Отдел главного конструктора)',
   ogt: 'ОГТ (Отдел главного технолога)',
   production: 'Производственные цеха ЧПУ',
@@ -135,6 +142,7 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
   isOpen,
   onClose,
   refreshTrigger = 0,
+  initialTab,
 }) => {
   const [isAuthorized, setIsAuthorized] = useState<boolean>(
     Boolean(getSavedAdminToken())
@@ -148,8 +156,14 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   const [activeTab, setActiveTab] = useState<
-    'inquiries' | 'analytics' | 'executive' | 'architecture'
-  >('inquiries');
+    'inquiries' | 'cms' | 'analytics' | 'executive' | 'architecture'
+  >(initialTab || 'cms');
+
+  useEffect(() => {
+    if (initialTab) {
+      setActiveTab(initialTab);
+    }
+  }, [initialTab]);
 
   const [inquiries, setInquiries] = useState<BzalRfqInquiry[]>([]);
   const [passportLeads, setPassportLeads] = useState<BzalPassportLead[]>([]);
@@ -188,6 +202,66 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
     estimated_amount_byn: 45000,
     comments: '',
   });
+
+  // Commercial Proposal (КП) Generator State
+  const [proposalInquiry, setProposalInquiry] = useState<BzalRfqInquiry | null>(
+    null
+  );
+  const [cpLeadTimeDays, setCpLeadTimeDays] = useState<string>('25 рабочих дней');
+  const [cpPaymentTerms, setCpPaymentTerms] = useState<string>(
+    '50% предоплата, 50% по уведомлению о готовности к отгрузке (FCA г. Барановичи)'
+  );
+  const [cpValidityDays, setCpValidityDays] = useState<string>('30 календарных дней');
+
+  // Telegram Bot Alert Configuration State
+  const [tgConfig, setTgConfig] = useState(() => getTelegramConfig());
+  const [tgStatusMsg, setTgStatusMsg] = useState<string | null>(null);
+  const [isSendingTg, setIsSendingTg] = useState(false);
+
+  const handleSaveTelegram = () => {
+    saveTelegramConfig(tgConfig);
+    setTgStatusMsg('Настройки уведомлений Telegram сохранены.');
+  };
+
+  const handleTestTelegram = async () => {
+    saveTelegramConfig(tgConfig);
+    setIsSendingTg(true);
+    setTgStatusMsg(null);
+    const res = await sendTelegramAlert(
+      [
+        '🏭 <b>ТЕСТОВОЕ УВЕДОМЛЕНИЕ АСУ БЗАЛ-МАРКЕТИНГ</b>',
+        'Связь с кабинетом специалиста ОАО БЗАЛ успешно установлена.',
+        'Все новые заявки с сайта bzal.vercel.app будут мгновенно поступать в этот чат.',
+      ].join('\n'),
+      tgConfig
+    );
+    setIsSendingTg(false);
+    setTgStatusMsg(
+      res.ok
+        ? 'Тестовое сообщение успешно доставлено в Telegram!'
+        : `Ошибка отправки: ${res.error}`
+    );
+  };
+
+  const handleSendInquiryToTelegram = async (inq: BzalRfqInquiry) => {
+    const res = await sendTelegramAlert(
+      [
+        `🏭 <b>КАРТОЧКА ЗАЯВКИ ${inq.inquiry_number} — ОАО БЗАЛ</b>`,
+        `🏢 Заказчик: <b>${inq.company}</b> (${inq.client_name})`,
+        `📞 Телефон: <b>${inq.phone}</b> | ✉️ ${inq.email}`,
+        `⚙️ Работы: ${inq.service_type}`,
+        `🔩 Материал: ${inq.material} | Объём: ${inq.quantity}`,
+        `🏛 Подразделение: ${DEPARTMENT_LABELS[inq.assigned_department]}`,
+        `💰 Оценка бюджета: <b>${Number(inq.estimated_amount_byn).toLocaleString('ru-RU')} BYN</b>`,
+        `📝 Резолюция: ${inq.internal_notes || '—'}`,
+      ].join('\n')
+    );
+    setSyncMessage(
+      res.ok
+        ? `Карточка заявки ${inq.inquiry_number} отправлена в Telegram!`
+        : `Для отправки в Telegram укажите Bot Token и Chat ID во вкладке №4 (${res.error})`
+    );
+  };
 
   const loadAllData = async () => {
     if (!getSavedAdminToken()) {
@@ -358,11 +432,11 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
 
             <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-[#E71B26] text-white text-[10px] font-dela uppercase tracking-wider mb-3">
               <Lock className="w-3 h-3" />
-              <span>СЛУЖЕБНЫЙ ДОСТУП ОАО «БЗАЛ»</span>
+              <span>СЛУЖЕБНЫЙ ДОСТУП ОАО БЗАЛ</span>
             </div>
 
             <h2 className="font-dela text-lg uppercase text-white leading-snug">
-              АСУ «БЗАЛ-МАРКЕТИНГ И АНАЛИТИКА»
+              АСУ БЗАЛ-МАРКЕТИНГ И АНАЛИТИКА
             </h2>
             <p className="text-xs text-[#BAC5CF] mt-1.5 leading-relaxed">
               Закрытая панель специалиста. Конфиденциальные данные клиентов, чертежи, телефоны и отчёты для руководства защищены серверной авторизацией.
@@ -425,7 +499,7 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
                 onClick={onClose}
                 className="w-full py-2 text-center text-xs font-bold text-[#647082] hover:text-[#2B3340] transition-colors cursor-pointer"
               >
-                ← Вернуться на публичный сайт ОАО «БЗАЛ»
+                ← Вернуться на публичный сайт ОАО БЗАЛ
               </button>
             </div>
           </div>
@@ -568,7 +642,7 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
           <div>
             <div className="flex flex-wrap items-center gap-2">
               <h2 className="font-dela text-sm sm:text-base uppercase tracking-wider text-white">
-                ЗАКРЫТАЯ АДМИН-ПАНЕЛЬ ОАО «БЗАЛ» (МАРКЕТИНГ / ОГК / ОГТ / РУКОВОДСТВО)
+                ЗАКРЫТАЯ АДМИН-ПАНЕЛЬ ОАО БЗАЛ (МАРКЕТИНГ / ОГК / ОГТ / РУКОВОДСТВО)
               </h2>
               <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
                 Специалист: {specialistEmail}
@@ -619,7 +693,19 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
 
       {/* Navigation Tabs */}
       <div className="bg-white border-b border-[#D5D9DE] px-4 sm:px-6 flex flex-wrap items-center justify-between gap-2 shrink-0">
-        <div className="flex flex-wrap gap-1 py-2">
+        <div className="flex flex-wrap gap-1.5 py-2">
+          <button
+            onClick={() => setActiveTab('cms')}
+            className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-extrabold transition-all cursor-pointer ${
+              activeTab === 'cms'
+                ? 'bg-[#E71B26] text-white shadow-xs'
+                : 'bg-[#E71B26]/10 text-[#E71B26] hover:bg-[#E71B26]/20'
+            }`}
+          >
+            <Sparkles className="w-4 h-4" />
+            <span>CMS: Редактор сайта, каталога и фото</span>
+          </button>
+
           <button
             onClick={() => setActiveTab('inquiries')}
             className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
@@ -653,7 +739,7 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
             }`}
           >
             <FileSpreadsheet className="w-4 h-4 text-[#E71B26]" />
-            <span>3. Отчёты для руководства ОАО «БЗАЛ»</span>
+            <span>3. Отчёты для руководства ОАО БЗАЛ</span>
           </button>
 
           <button
@@ -677,80 +763,84 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
 
       {/* Main Scrollable Content */}
       <div className="p-4 sm:p-6 overflow-y-auto flex-1 max-w-7xl w-full mx-auto space-y-6">
-        {/* Quick KPI Strip on top */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-          <div className="bg-white p-3.5 rounded-xl border border-[#D5D9DE] shadow-2xs">
-            <div className="text-[10px] font-bold uppercase text-[#647082]">
-              Всего заявок в БД
+        {/* CMS SITE & PHOTO EDITOR TAB */}
+        {activeTab === 'cms' && <CmsContentEditor onPreviewSite={onClose} />}
+        {/* Quick KPI Strip on top (shown on CRM/Analytics tabs) */}
+        {activeTab !== 'cms' && (
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+            <div className="bg-white p-3.5 rounded-xl border border-[#D5D9DE] shadow-2xs">
+              <div className="text-[10px] font-bold uppercase text-[#647082]">
+                Всего заявок в БД
+              </div>
+              <div className="font-dela text-xl text-[#2B3340] mt-1">
+                {metrics.total}
+              </div>
+              <div className="text-[10px] text-[#647082] mt-0.5">
+                Чертежей в хранилище: {metrics.totalDrawingsAttached}
+              </div>
             </div>
-            <div className="font-dela text-xl text-[#2B3340] mt-1">
-              {metrics.total}
-            </div>
-            <div className="text-[10px] text-[#647082] mt-0.5">
-              Чертежей в хранилище: {metrics.totalDrawingsAttached}
-            </div>
-          </div>
 
-          <div className="bg-white p-3.5 rounded-xl border border-[#D5D9DE] shadow-2xs">
-            <div className="text-[10px] font-bold uppercase text-amber-700">
-              1. В отделе маркетинга
+            <div className="bg-white p-3.5 rounded-xl border border-[#D5D9DE] shadow-2xs">
+              <div className="text-[10px] font-bold uppercase text-amber-700">
+                1. В отделе маркетинга
+              </div>
+              <div className="font-dela text-xl text-amber-600 mt-1">
+                {metrics.newInMarketing}
+              </div>
+              <div className="text-[10px] text-[#647082] mt-0.5">
+                Первичная регистрация
+              </div>
             </div>
-            <div className="font-dela text-xl text-amber-600 mt-1">
-              {metrics.newInMarketing}
-            </div>
-            <div className="text-[10px] text-[#647082] mt-0.5">
-              Первичная регистрация
-            </div>
-          </div>
 
-          <div className="bg-white p-3.5 rounded-xl border border-[#D5D9DE] shadow-2xs">
-            <div className="text-[10px] font-bold uppercase text-blue-700">
-              2. В работе ОГК / ОГТ / Цехов
+            <div className="bg-white p-3.5 rounded-xl border border-[#D5D9DE] shadow-2xs">
+              <div className="text-[10px] font-bold uppercase text-blue-700">
+                2. В работе ОГК / ОГТ / Цехов
+              </div>
+              <div className="font-dela text-xl text-blue-700 mt-1">
+                {metrics.inEngineering}
+              </div>
+              <div className="text-[10px] text-[#647082] mt-0.5">
+                Расчёт норм времени и КД
+              </div>
             </div>
-            <div className="font-dela text-xl text-blue-700 mt-1">
-              {metrics.inEngineering}
-            </div>
-            <div className="text-[10px] text-[#647082] mt-0.5">
-              Расчёт норм времени и КД
-            </div>
-          </div>
 
-          <div className="bg-white p-3.5 rounded-xl border border-[#D5D9DE] shadow-2xs">
-            <div className="text-[10px] font-bold uppercase text-emerald-700">
-              3. Обратная связь дана
+            <div className="bg-white p-3.5 rounded-xl border border-[#D5D9DE] shadow-2xs">
+              <div className="text-[10px] font-bold uppercase text-emerald-700">
+                3. Обратная связь дана
+              </div>
+              <div className="font-dela text-xl text-emerald-600 mt-1">
+                {metrics.feedbackCompleted} из {metrics.total}
+              </div>
+              <div className="text-[10px] text-[#647082] mt-0.5">
+                По телефону или на заявку
+              </div>
             </div>
-            <div className="font-dela text-xl text-emerald-600 mt-1">
-              {metrics.feedbackCompleted} из {metrics.total}
-            </div>
-            <div className="text-[10px] text-[#647082] mt-0.5">
-              По телефону или на заявку
-            </div>
-          </div>
 
-          <div className="bg-white p-3.5 rounded-xl border border-[#D5D9DE] shadow-2xs">
-            <div className="text-[10px] font-bold uppercase text-[#2B3340]">
-              Портфель всех заявок
+            <div className="bg-white p-3.5 rounded-xl border border-[#D5D9DE] shadow-2xs">
+              <div className="text-[10px] font-bold uppercase text-[#2B3340]">
+                Портфель всех заявок
+              </div>
+              <div className="font-dela text-lg text-[#2B3340] mt-1">
+                {metrics.totalBudgetByn.toLocaleString('ru-RU')} BYN
+              </div>
+              <div className="text-[10px] text-[#647082] mt-0.5">
+                Потенциал загрузки завода
+              </div>
             </div>
-            <div className="font-dela text-lg text-[#2B3340] mt-1">
-              {metrics.totalBudgetByn.toLocaleString('ru-RU')} BYN
-            </div>
-            <div className="text-[10px] text-[#647082] mt-0.5">
-              Потенциал загрузки завода
-            </div>
-          </div>
 
-          <div className="bg-[#2B3340] text-white p-3.5 rounded-xl border border-[#1B222C] shadow-2xs">
-            <div className="text-[10px] font-bold uppercase text-[#BAC5CF]">
-              КП и договоры (В работе)
-            </div>
-            <div className="font-dela text-lg text-[#E71B26] mt-1">
-              {metrics.contractedBudgetByn.toLocaleString('ru-RU')} BYN
-            </div>
-            <div className="text-[10px] text-[#BAC5CF] mt-0.5">
-              КП: {metrics.quotedCount} | Договоров: {metrics.contractedCount}
+            <div className="bg-[#2B3340] text-white p-3.5 rounded-xl border border-[#1B222C] shadow-2xs">
+              <div className="text-[10px] font-bold uppercase text-[#BAC5CF]">
+                КП и договоры (В работе)
+              </div>
+              <div className="font-dela text-lg text-[#E71B26] mt-1">
+                {metrics.contractedBudgetByn.toLocaleString('ru-RU')} BYN
+              </div>
+              <div className="text-[10px] text-[#BAC5CF] mt-0.5">
+                КП: {metrics.quotedCount} | Договоров: {metrics.contractedCount}
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
         {/* ================================================================= */}
         {/* TAB 1: INQUIRIES REGISTRY & DEPARTMENT ROUTING                    */}
@@ -1010,7 +1100,26 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
                       </span>
                     </div>
 
-                    <div className="flex items-center gap-3">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setProposalInquiry(inq)}
+                        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#2B3340] hover:bg-[#E71B26] text-white text-[11px] font-bold transition-colors cursor-pointer"
+                        title="Сформировать официальное Коммерческое предложение (КП) на бланке ОАО БЗАЛ"
+                      >
+                        <FileSpreadsheet className="w-3.5 h-3.5" />
+                        <span>Сформировать КП (А4)</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => handleSendInquiryToTelegram(inq)}
+                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-[#ECEEF0] hover:bg-[#D5D9DE] text-[#2B3340] text-[11px] font-bold transition-colors cursor-pointer"
+                        title="Отправить карточку заявки в Telegram"
+                      >
+                        <span>В Telegram</span>
+                      </button>
+
                       <div className="text-xs font-bold text-[#2B3340]">
                         Оценка:{' '}
                         <span className="font-dela text-[#E71B26]">
@@ -1059,9 +1168,9 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
                           <Mail className="w-3.5 h-3.5 text-[#E71B26]" />
                           <a
                             href={`mailto:${inq.email}?subject=${encodeURIComponent(
-                              `Ответ ОАО «БЗАЛ» по заявке ${inq.inquiry_number} (${inq.service_type})`
+                              `Ответ ОАО БЗАЛ по заявке ${inq.inquiry_number} (${inq.service_type})`
                             )}&body=${encodeURIComponent(
-                              `Уважаемый(ая) ${inq.client_name}!\n\nОтдел маркетинга и сбыта ОАО «БЗАЛ» совместно с инженерными службами (ОГК / ОГТ) рассмотрел вашу заявку № ${inq.inquiry_number} (${inq.service_type}).\n\nС уважением,\nОтдел маркетинга и сбыта ОАО «БЗАЛ»\nТел.: +375 44 751 44 77, +375 (163) 67-20-48\nEmail: sales@bzal.by`
+                              `Уважаемый(ая) ${inq.client_name}!\n\nОтдел маркетинга и сбыта ОАО БЗАЛ совместно с инженерными службами (ОГК / ОГТ) рассмотрел вашу заявку № ${inq.inquiry_number} (${inq.service_type}).\n\nС уважением,\nОтдел маркетинга и сбыта ОАО БЗАЛ\nТел.: +375 44 751 44 77, +375 (163) 67-20-48\nEmail: sales@bzal.by`
                             )}`}
                             className="font-bold text-[#E71B26] hover:underline break-all"
                           >
@@ -1111,21 +1220,29 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
 
                       <div>
                         <span className="text-[10px] font-bold uppercase text-[#647082] block mb-1">
-                          Файлы чертежей в хранилище (bzal-drawings):
+                          Файлы чертежей в хранилище (нажмите, чтобы скачать КД):
                         </span>
                         {inq.drawing_files && inq.drawing_files.length > 0 ? (
                           <div className="flex flex-wrap gap-1.5">
                             {inq.drawing_files.map((file, idx) => (
-                              <span
+                              <button
                                 key={idx}
-                                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#FDECEE] border border-[#E71B26]/30 text-[#2B3340] text-[11px] font-bold"
-                                title={`Путь в БД: ${file.storage_path || file.name}`}
+                                type="button"
+                                onClick={() =>
+                                  downloadDrawingFile(
+                                    file,
+                                    inq.inquiry_number,
+                                    inq.company
+                                  )
+                                }
+                                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#FDECEE] hover:bg-[#E71B26] text-[#2B3340] hover:text-white border border-[#E71B26]/30 text-[11px] font-bold transition-colors cursor-pointer"
+                                title={`Скачать чертёж / карточку КД: ${file.name}`}
                               >
-                                <FileCheck className="w-3.5 h-3.5 text-[#E71B26] shrink-0" />
-                                <span className="truncate max-w-[210px]">
+                                <Download className="w-3.5 h-3.5 shrink-0" />
+                                <span className="truncate max-w-[190px]">
                                   {file.name}
                                 </span>
-                              </span>
+                              </button>
                             ))}
                           </div>
                         ) : (
@@ -1368,7 +1485,7 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
                   Потребность в металле и заготовках (Для ОМТС и ОГТ)
                 </h3>
                 <p className="text-xs text-[#647082] mb-4">
-                  Анализ запрашиваемых марок сталей и литья по входящим заявкам
+                  Анализ запрашиваемых марок сталей и заготовок по входящим заявкам
                 </p>
                 <div className="space-y-2.5">
                   {metrics.materialBreakdown.map(([mat, count], i) => (
@@ -1437,7 +1554,7 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
                     УПРАВЛЕНЧЕСКАЯ ОТЧЁТНОСТЬ ДИРЕКЦИИ
                   </div>
                   <h3 className="font-dela text-base sm:text-lg uppercase text-[#2B3340]">
-                    Сводный отчёт для руководства ОАО «БЗАЛ» по коммерческим заявкам
+                    Сводный отчёт для руководства ОАО БЗАЛ по коммерческим заявкам
                   </h3>
                   <p className="text-xs text-[#647082]">
                     Сформировано автоматически на основании базы данных обращений отдела маркетинга, ОГК и ОГТ
@@ -1694,9 +1811,371 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
                 {SUPABASE_SETUP_SQL}
               </pre>
             </div>
+
+            {/* Telegram Instant Notifications Setup */}
+            <div className="bg-white p-6 rounded-xl border-2 border-[#2B3340] shadow-xs space-y-4">
+              <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#ECEEF0] pb-4">
+                <div>
+                  <div className="text-[10px] font-dela uppercase text-[#E71B26] mb-1">
+                    МГНОВЕННЫЕ ОПОВЕЩЕНИЯ О НОВЫХ ЗАЯВКАХ
+                  </div>
+                  <h4 className="font-dela text-sm sm:text-base uppercase text-[#2B3340]">
+                    Интеграция с Telegram-ботом отдела маркетинга ОАО БЗАЛ
+                  </h4>
+                  <p className="text-xs text-[#647082] mt-0.5">
+                    При отправке клиентом заявки на сайте карточка с телефоном, предприятием и списком чертежей автоматически дублируется в ваш Telegram.
+                  </p>
+                </div>
+
+                <label className="inline-flex items-center gap-2 text-xs font-extrabold text-[#2B3340] cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={tgConfig.enabled}
+                    onChange={(e) =>
+                      setTgConfig({ ...tgConfig, enabled: e.target.checked })
+                    }
+                    className="w-4 h-4 accent-[#E71B26]"
+                  />
+                  <span>Включить авто-уведомления в Telegram</span>
+                </label>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                <div>
+                  <label className="block font-bold text-[#2B3340] uppercase mb-1">
+                    Telegram Bot Token (от @BotFather)
+                  </label>
+                  <input
+                    type="password"
+                    value={tgConfig.botToken}
+                    onChange={(e) =>
+                      setTgConfig({ ...tgConfig, botToken: e.target.value })
+                    }
+                    placeholder="Например: 7123456789:AAH..."
+                    className="w-full px-3.5 py-2.5 rounded-lg bg-[#ECEEF0] border border-[#D5D9DE] font-mono text-xs text-[#2B3340]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-bold text-[#2B3340] uppercase mb-1">
+                    Ваш Chat ID (или ID рабочей группы маркетинга)
+                  </label>
+                  <input
+                    type="text"
+                    value={tgConfig.chatId}
+                    onChange={(e) =>
+                      setTgConfig({ ...tgConfig, chatId: e.target.value })
+                    }
+                    placeholder="Например: 412983741 или -100192837465"
+                    className="w-full px-3.5 py-2.5 rounded-lg bg-[#ECEEF0] border border-[#D5D9DE] font-mono text-xs text-[#2B3340]"
+                  />
+                </div>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-3">
+                <button
+                  type="button"
+                  onClick={handleSaveTelegram}
+                  className="px-4 py-2.5 rounded-lg bg-[#2B3340] hover:bg-[#1B222C] text-white text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
+                >
+                  Сохранить настройки
+                </button>
+                <button
+                  type="button"
+                  onClick={handleTestTelegram}
+                  disabled={isSendingTg}
+                  className="px-4 py-2.5 rounded-lg bg-[#E71B26] hover:bg-[#C9141E] text-white text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
+                >
+                  {isSendingTg
+                    ? 'Отправка...'
+                    : 'Проверить отправку тестового сообщения'}
+                </button>
+                {tgStatusMsg && (
+                  <span className="text-xs font-bold text-[#2B3340]">
+                    {tgStatusMsg}
+                  </span>
+                )}
+              </div>
+            </div>
           </div>
         )}
       </div>
+
+      {/* =================================================================== */}
+      {/* COMMERCIAL PROPOSAL (КП А4) MODAL GENERATOR                         */}
+      {/* =================================================================== */}
+      {proposalInquiry && (
+        <div className="fixed inset-0 z-50 bg-black/75 flex items-center justify-center p-4 overflow-y-auto">
+          <div className="w-full max-w-4xl bg-white rounded-2xl border-2 border-[#2B3340] shadow-2xl overflow-hidden my-8">
+            <div className="bg-[#2B3340] text-white px-6 py-4 flex flex-wrap items-center justify-between gap-3 print:hidden">
+              <div>
+                <div className="text-[10px] font-dela uppercase text-[#E71B26]">
+                  ГЕНЕРАТОР ОФИЦИАЛЬНОГО БЛАНКА КП (ЛИСТ А4)
+                </div>
+                <h3 className="font-dela text-base uppercase text-white">
+                  Коммерческое предложение по заявке {proposalInquiry.inquiry_number}
+                </h3>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    handleFieldUpdate(proposalInquiry.id, {
+                      status: 'quoted',
+                      feedback_status: 'replied_by_email',
+                    });
+                    window.print();
+                  }}
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#E71B26] hover:bg-[#C9141E] text-white text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
+                >
+                  <Printer className="w-4 h-4" />
+                  <span>Печать бланка КП / PDF (А4)</span>
+                </button>
+
+                <a
+                  href={`mailto:${proposalInquiry.email}?subject=${encodeURIComponent(
+                    `Коммерческое предложение ОАО БЗАЛ по заявке № ${proposalInquiry.inquiry_number}`
+                  )}&body=${encodeURIComponent(
+                    [
+                      `Уважаемый(ая) ${proposalInquiry.client_name}!`,
+                      '',
+                      `Направляем Вам официальное коммерческое предложение ОАО БЗАЛ по заявке № ${proposalInquiry.inquiry_number} (${proposalInquiry.company}):`,
+                      `1. Наименование работ: ${proposalInquiry.service_type}`,
+                      `2. Материал / Сплав: ${proposalInquiry.material}`,
+                      `3. Объём партии: ${proposalInquiry.quantity}`,
+                      `4. Стоимость без НДС: ${Number(proposalInquiry.estimated_amount_byn).toLocaleString('ru-RU')} BYN`,
+                      `5. НДС (20%): ${(Number(proposalInquiry.estimated_amount_byn) * 0.2).toLocaleString('ru-RU')} BYN`,
+                      `6. Итого с НДС: ${(Number(proposalInquiry.estimated_amount_byn) * 1.2).toLocaleString('ru-RU')} BYN`,
+                      `7. Срок изготовления: ${cpLeadTimeDays}`,
+                      `8. Условия поставки и оплаты: ${cpPaymentTerms}`,
+                      `9. Срок действия предложения: ${cpValidityDays}`,
+                      '',
+                      'С уважением,',
+                      'Отдел маркетинга и сбыта ОАО БЗАЛ (Холдинг «БЕЛАВТОМАЗ»)',
+                      '225410, г. Барановичи, ул. Королика, 8',
+                      'Тел.: +375 44 751 44 77, +375 (163) 67-20-48',
+                      'Email: sales@bzal.by',
+                    ].join('\n')
+                  )}`}
+                  onClick={() =>
+                    handleFieldUpdate(proposalInquiry.id, {
+                      status: 'quoted',
+                      feedback_status: 'replied_by_email',
+                    })
+                  }
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-white text-[#2B3340] hover:bg-[#ECEEF0] text-xs font-bold uppercase tracking-wider transition-colors"
+                >
+                  <Mail className="w-4 h-4 text-[#E71B26]" />
+                  <span>Отправить КП на Email</span>
+                </a>
+
+                <button
+                  type="button"
+                  onClick={() => setProposalInquiry(null)}
+                  className="p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white cursor-pointer"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+
+            {/* Editable Commercial Parameters (hidden when printing) */}
+            <div className="bg-[#ECEEF0] px-6 py-4 border-b border-[#D5D9DE] grid grid-cols-1 md:grid-cols-3 gap-3 text-xs print:hidden">
+              <div>
+                <label className="block font-bold text-[#2B3340] mb-1">
+                  Срок изготовления / выполнения:
+                </label>
+                <input
+                  type="text"
+                  value={cpLeadTimeDays}
+                  onChange={(e) => setCpLeadTimeDays(e.target.value)}
+                  className="w-full px-3 py-1.5 rounded bg-white border border-[#D5D9DE] font-bold text-[#2B3340]"
+                />
+              </div>
+              <div>
+                <label className="block font-bold text-[#2B3340] mb-1">
+                  Условия оплаты и базис поставки:
+                </label>
+                <input
+                  type="text"
+                  value={cpPaymentTerms}
+                  onChange={(e) => setCpPaymentTerms(e.target.value)}
+                  className="w-full px-3 py-1.5 rounded bg-white border border-[#D5D9DE] font-bold text-[#2B3340]"
+                />
+              </div>
+              <div>
+                <label className="block font-bold text-[#2B3340] mb-1">
+                  Срок действия КП:
+                </label>
+                <input
+                  type="text"
+                  value={cpValidityDays}
+                  onChange={(e) => setCpValidityDays(e.target.value)}
+                  className="w-full px-3 py-1.5 rounded bg-white border border-[#D5D9DE] font-bold text-[#2B3340]"
+                />
+              </div>
+            </div>
+
+            {/* Official A4 Letterhead Preview */}
+            <div className="p-8 space-y-6 text-[#2B3340] text-xs">
+              <div className="flex items-start justify-between border-b-2 border-[#2B3340] pb-4">
+                <div className="flex items-center gap-3">
+                  <img
+                    src="/images/bzal_mark_pristine_red.png"
+                    alt="БЗАЛ"
+                    className="w-12 h-12 object-contain"
+                  />
+                  <div>
+                    <div className="font-dela text-base uppercase text-[#2B3340]">
+                      ОАО Барановичский завод автоматических линий
+                    </div>
+                    <div className="text-[11px] font-bold text-[#647082]">
+                      Холдинг «БЕЛАВТОМАЗ» • Республика Беларусь, 225410, г. Барановичи, ул. Королика, 8
+                    </div>
+                    <div className="text-[11px] text-[#647082]">
+                      Тел.: +375 44 751 44 77, +375 (163) 67-20-48 • Email: sales@bzal.by
+                    </div>
+                  </div>
+                </div>
+
+                <div className="text-right text-[11px]">
+                  <div className="font-extrabold text-[#2B3340]">
+                    Исх. № КП-{proposalInquiry.inquiry_number}
+                  </div>
+                  <div className="text-[#647082]">
+                    от {new Date().toLocaleDateString('ru-RU')} г.
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-[#F8F9FA] p-4 rounded-xl border border-[#D5D9DE]">
+                <div>
+                  <div className="text-[10px] font-bold uppercase text-[#647082]">
+                    Заказчик (Кому):
+                  </div>
+                  <div className="font-extrabold text-sm text-[#2B3340] mt-0.5">
+                    {proposalInquiry.company}
+                  </div>
+                  <div className="text-xs text-[#444E60] mt-0.5">
+                    Контактное лицо: {proposalInquiry.client_name}
+                  </div>
+                </div>
+                <div>
+                  <div className="text-[10px] font-bold uppercase text-[#647082]">
+                    Реквизиты обращения:
+                  </div>
+                  <div className="font-bold text-[#2B3340] mt-0.5">
+                    Заявка № {proposalInquiry.inquiry_number} от{' '}
+                    {new Date(proposalInquiry.created_at).toLocaleDateString('ru-RU')}
+                  </div>
+                  <div className="text-xs text-[#444E60] mt-0.5">
+                    Тел.: {proposalInquiry.phone} • Email: {proposalInquiry.email}
+                  </div>
+                </div>
+              </div>
+
+              <div className="text-center py-1">
+                <h4 className="font-dela text-base uppercase text-[#2B3340]">
+                  КОММЕРЧЕСКОЕ ПРЕДЛОЖЕНИЕ
+                </h4>
+                <p className="text-xs text-[#647082] mt-1">
+                  По результатам конструкторско-технологической проработки документации в ОГК и ОГТ ОАО БЗАЛ сообщаем стоимость и сроки выполнения заказа:
+                </p>
+              </div>
+
+              <table className="w-full border-collapse border border-[#2B3340] text-xs">
+                <thead>
+                  <tr className="bg-[#2B3340] text-white">
+                    <th className="border border-[#2B3340] p-2.5 text-left">№</th>
+                    <th className="border border-[#2B3340] p-2.5 text-left">
+                      Наименование работ / Номенклатура и материал
+                    </th>
+                    <th className="border border-[#2B3340] p-2.5 text-left">
+                      Объём партии
+                    </th>
+                    <th className="border border-[#2B3340] p-2.5 text-right">
+                      Сумма без НДС (BYN)
+                    </th>
+                    <th className="border border-[#2B3340] p-2.5 text-right">
+                      НДС 20% (BYN)
+                    </th>
+                    <th className="border border-[#2B3340] p-2.5 text-right">
+                      Всего с НДС (BYN)
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td className="border border-[#D5D9DE] p-3 font-bold">1</td>
+                    <td className="border border-[#D5D9DE] p-3">
+                      <div className="font-extrabold text-[#2B3340]">
+                        {proposalInquiry.service_type}
+                      </div>
+                      <div className="text-[11px] text-[#647082] mt-0.5">
+                        Материал: {proposalInquiry.material} • КД:{' '}
+                        {proposalInquiry.has_drawings}
+                      </div>
+                    </td>
+                    <td className="border border-[#D5D9DE] p-3 font-bold">
+                      {proposalInquiry.quantity}
+                    </td>
+                    <td className="border border-[#D5D9DE] p-3 text-right font-bold">
+                      {Number(proposalInquiry.estimated_amount_byn).toLocaleString(
+                        'ru-RU'
+                      )}
+                    </td>
+                    <td className="border border-[#D5D9DE] p-3 text-right">
+                      {(
+                        Number(proposalInquiry.estimated_amount_byn) * 0.2
+                      ).toLocaleString('ru-RU')}
+                    </td>
+                    <td className="border border-[#D5D9DE] p-3 text-right font-dela text-[#E71B26]">
+                      {(
+                        Number(proposalInquiry.estimated_amount_byn) * 1.2
+                      ).toLocaleString('ru-RU')}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div className="space-y-2 bg-[#F8F9FA] p-4 rounded-xl border border-[#D5D9DE]">
+                <div>
+                  <strong>1. Срок изготовления:</strong> {cpLeadTimeDays} с момента согласования технической документации и поступления авансового платежа.
+                </div>
+                <div>
+                  <strong>2. Условия оплаты и поставки:</strong> {cpPaymentTerms}.
+                </div>
+                <div>
+                  <strong>3. Контроль качества:</strong> 100% приёмочный контроль ОТК ОАО БЗАЛ с предоставлением паспорта качества и сертификатов на металл.
+                </div>
+                <div>
+                  <strong>4. Срок действия предложения:</strong> {cpValidityDays}.
+                </div>
+              </div>
+
+              <div className="pt-6 border-t border-[#D5D9DE] flex items-center justify-between text-xs">
+                <div>
+                  <div className="font-extrabold text-[#2B3340]">
+                    Отдел маркетинга и сбыта ОАО БЗАЛ
+                  </div>
+                  <div className="text-[#647082]">
+                    Режим работы: Пн–Пт 08:00 – 16:30 • sales@bzal.by
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className="font-bold text-[#2B3340]">
+                    ________________________ / Специалист ОМиС /
+                  </div>
+                  <div className="text-[10px] text-[#647082] mt-0.5">
+                    М.П. • Подпись
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

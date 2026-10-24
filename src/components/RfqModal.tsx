@@ -11,6 +11,7 @@ interface RfqModalProps {
   initialService?: string;
   onInquiryCreated?: () => void;
   onOpenCrm?: () => void;
+  onOpenPrivacyPolicy?: () => void;
 }
 
 export const RfqModal: React.FC<RfqModalProps> = ({
@@ -20,6 +21,7 @@ export const RfqModal: React.FC<RfqModalProps> = ({
   initialService,
   onInquiryCreated,
   onOpenCrm,
+  onOpenPrivacyPolicy,
 }) => {
   const t = content[currentLang];
   const [submitted, setSubmitted] = useState(false);
@@ -337,6 +339,45 @@ export const RfqModal: React.FC<RfqModalProps> = ({
                     )}
                   </div>
                 </div>
+
+                {/* Personal Data Protection Consent (Law of RB No. 99-Z) */}
+                <label className="flex items-start gap-2 pt-1 text-[11px] text-[#444E60] cursor-pointer">
+                  <input
+                    type="checkbox"
+                    required
+                    defaultChecked
+                    className="mt-0.5 accent-[#E71B26] shrink-0"
+                  />
+                  <span>
+                    {currentLang === 'ru' ? (
+                      <>
+                        Даю согласие на обработку персональных данных в соответствии с{' '}
+                        <button
+                          type="button"
+                          onClick={onOpenPrivacyPolicy}
+                          className="text-[#E71B26] font-bold underline cursor-pointer"
+                        >
+                          Законом РБ № 99-З «О защите персональных данных»
+                        </button>
+                      </>
+                    ) : currentLang === 'en' ? (
+                      <>
+                        I consent to personal data processing under{' '}
+                        <button
+                          type="button"
+                          onClick={onOpenPrivacyPolicy}
+                          className="text-[#E71B26] font-bold underline cursor-pointer"
+                        >
+                          Law of Belarus No. 99-Z
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        同意根据白俄罗斯第99-Z号法律处理个人数据
+                      </>
+                    )}
+                  </span>
+                </label>
 
                 {/* Submit button */}
                 <button

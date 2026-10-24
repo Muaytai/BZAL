@@ -96,3 +96,74 @@ body {
   user-select: none;
   pointer-events: none;
 }
+
+/* ============================================================================
+   ВЕРСИЯ ДЛЯ СЛАБОВИДЯЩИХ (СТБ 2105 / Постановление СМ РБ № 645)
+   ============================================================================ */
+html.a11y-font-md {
+  font-size: 112%;
+}
+
+html.a11y-font-lg {
+  font-size: 125%;
+}
+
+html.a11y-links-highlight a {
+  text-decoration: underline !important;
+  text-underline-offset: 3px !important;
+  text-decoration-thickness: 2px !important;
+}
+
+html.a11y-img-grayscale img {
+  filter: grayscale(100%) contrast(115%) !important;
+}
+
+html.a11y-img-hidden img {
+  opacity: 0.08 !important;
+  filter: grayscale(100%) !important;
+}
+
+/* High contrast: Black on White */
+html.a11y-theme-bw,
+html.a11y-theme-bw body {
+  background-color: #FFFFFF !important;
+  color: #000000 !important;
+}
+
+html.a11y-theme-bw section,
+html.a11y-theme-bw footer,
+html.a11y-theme-bw header > div,
+html.a11y-theme-bw .bg-tech-grid {
+  background-color: #FFFFFF !important;
+  background-image: none !important;
+  color: #000000 !important;
+  border-color: #000000 !important;
+}
+
+html.a11y-theme-bw a {
+  text-decoration: underline !important;
+}
+
+/* High contrast: White on Black (Inverted) */
+html.a11y-theme-wb {
+  filter: invert(100%) hue-rotate(180deg);
+}
+
+html.a11y-theme-wb img {
+  filter: invert(100%) hue-rotate(180deg);
+}
+
+/* High contrast: Dark Blue on Light Blue */
+html.a11y-theme-blue,
+html.a11y-theme-blue body {
+  background-color: #DCEEFF !important;
+  color: #062647 !important;
+}
+
+html.a11y-theme-blue section,
+html.a11y-theme-blue .bg-tech-grid {
+  background-color: #DCEEFF !important;
+  background-image: none !important;
+  color: #062647 !important;
+}
+

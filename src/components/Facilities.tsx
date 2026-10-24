@@ -42,26 +42,26 @@ export const Facilities: React.FC<FacilitiesProps> = ({
       });
 
   return (
-    <section id="equipment" className="py-20 sm:py-24 bg-white border-b border-[#D5D9DE] relative">
+    <section id="equipment" className="py-8 sm:py-10 bg-white border-b border-[#D5D9DE] relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header with Switcher */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 sm:mb-14">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6 sm:mb-8">
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#ECEEF0] rounded-md border border-[#D5D9DE] text-[#E71B26] text-xs font-dela uppercase tracking-wider mb-3">
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#ECEEF0] rounded-md border border-[#D5D9DE] text-[#E71B26] text-xs font-dela uppercase tracking-wider mb-2.5">
               <span className="w-2 h-2 rounded-full bg-[#E71B26]" />
               <span>{t.equipment.eyebrow}</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#2B3340] tracking-tight font-dela uppercase">
+            <h2 className="text-xl sm:text-3xl lg:text-4xl font-black text-[#2B3340] tracking-tight font-dela uppercase">
               {t.equipment.title}
             </h2>
-            <p className="mt-3 text-sm sm:text-base text-[#444E60] font-medium leading-relaxed">
+            <p className="mt-2 text-xs sm:text-base text-[#444E60] font-medium leading-relaxed">
               {t.equipment.subtitle}
             </p>
           </div>
 
           {/* View Mode Toggle (Cards vs Technical Specs Table) */}
-          <div className="flex items-center gap-2 bg-[#ECEEF0] p-1 rounded-xl border border-[#D5D9DE] self-start md:self-end">
+          <div className="flex items-center gap-1.5 bg-[#ECEEF0] p-1 rounded-xl border border-[#D5D9DE] self-start md:self-end shrink-0">
             <button
               onClick={() => setViewMode('cards')}
               className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold uppercase transition-all cursor-pointer ${
@@ -90,12 +90,12 @@ export const Facilities: React.FC<FacilitiesProps> = ({
 
         {/* Category Filters (when in cards view) */}
         {viewMode === 'cards' && (
-          <div className="flex items-center gap-2 overflow-x-auto pb-4 mb-8 scrollbar-thin">
+          <div className="flex flex-wrap items-center gap-2 mb-6">
             {categories.map((cat) => (
               <button
                 key={cat.id}
                 onClick={() => setSelectedCategory(cat.id)}
-                className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all whitespace-nowrap cursor-pointer ${
+                className={`px-3.5 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
                   selectedCategory === cat.id
                     ? 'bg-[#2B3340] text-white shadow-sm'
                     : 'bg-[#ECEEF0] text-[#647082] hover:text-[#2B3340] border border-[#D5D9DE]'
@@ -109,13 +109,13 @@ export const Facilities: React.FC<FacilitiesProps> = ({
 
         {/* View Mode 1: Rich Cards Grid */}
         {viewMode === 'cards' && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             {filteredList.map((item) => (
               <div
                 key={item.id}
                 className="rounded-2xl bg-white border border-[#D5D9DE] overflow-hidden shadow-md hover:border-[#E71B26] transition-all flex flex-col group"
               >
-                <div className="aspect-[16/10] relative overflow-hidden bg-[#2B3340]">
+                <div className="aspect-[16/9] relative overflow-hidden bg-[#2B3340]">
                   <img
                     src={item.image}
                     alt={item.name}

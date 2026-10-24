@@ -12,11 +12,11 @@ export const EaeuLogistics: React.FC<EaeuLogisticsProps> = ({ currentLang, onOpe
   const t = extraContent[currentLang]?.eaeuTrade || extraContent.ru.eaeuTrade;
 
   return (
-    <section id="eaeu" className="py-20 sm:py-24 bg-[#ECEEF0] border-b border-[#D5D9DE] relative overflow-hidden">
+    <section id="eaeu" className="py-8 sm:py-10 bg-[#ECEEF0] border-b border-[#D5D9DE] relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Section Header */}
-        <div className="max-w-3xl mb-12 sm:mb-16">
+        <div className="max-w-3xl mb-6 sm:mb-8">
           <div className="inline-flex items-center gap-2 px-3 py-1 bg-white rounded-md border border-[#D5D9DE] text-[#E71B26] text-xs font-dela uppercase tracking-wider mb-3 shadow-xs">
             <span className="w-2 h-2 rounded-full bg-[#E71B26]" />
             <span>{t.eyebrow}</span>

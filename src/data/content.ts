@@ -4,8 +4,8 @@ export const content = {
   ru: {
     brand: {
       name: 'ТЕХНОПАРК',
-      subname: 'ОАО «БЗАЛ»',
-      fullName: 'ОАО «Барановичский завод автоматических линий»',
+      subname: 'ОАО БЗАЛ',
+      fullName: 'ОАО Барановичский завод автоматических линий',
       slogan: 'Промышленный инжиниринг • Станкостроение • Металлообработка',
       address: 'Республика Беларусь, 225410, г. Барановичи, ул. Королика, 8',
       phone: '+375 44 751 44 77',
@@ -14,7 +14,7 @@ export const content = {
       phoneMarket: '+375 (163) 67-20-41',
       email: 'sales@bzal.by',
       website: 'www.bzal.by',
-      workingHours: 'Пн-Пт: 08:00 – 16:45 (МСК/Минск)',
+      workingHours: 'Пн-Пт: 08:00 – 16:30 (МСК/Минск)',
       since: 'С 1974 ГОДА',
       btnRfq: 'Заявка по ТЗ',
     },
@@ -34,10 +34,10 @@ export const content = {
       titleHighlight: 'ИНЖЕНЕРНЫЕ РЕШЕНИЯ',
       titleRest: 'ДЛЯ ВАШЕЙ ПРОМЫШЛЕННОСТИ',
       sloganTitle: '«СТАНКИ, СОЗДАННЫЕ СПЕЦИАЛЬНО ДЛЯ ВАС»',
-      sloganDesc: 'Полный производственный цикл станкостроительного гиганта: конструкторское бюро (ОГК), технологический отдел (ОГТ), литейное и заготовительное производство, высокоточная ЧПУ-металлообработка до 0,005 мм на 30 000+ м². Приём заявок через отдел маркетинга, проработка в инженерных службах завода и официальный расчёт по чертежам.',
-      primaryCta: 'Отправить заявку в отдел маркетинга ↗',
+      sloganDesc: 'Полный производственный цикл станкостроительного гиганта: конструкторское бюро (ОГК), технологический отдел (ОГТ), заготовительное и термическое производство, высокоточная ЧПУ-металлообработка до 0,005 мм на 30 000+ м². Приём заявок через отдел маркетинга, проработка в инженерных службах завода и официальный расчёт по чертежам.',
+      primaryCta: 'Отправить заявку в отдел маркетинга и продаж ↗',
       secondaryCta: 'Каталог станков и мощностей ↓',
-      salesLeadLabel: 'Отдел маркетинга и сбыта (Пн–Пт 08:00–16:45):',
+      salesLeadLabel: 'Отдел маркетинга и продаж (Пн–Пт 08:00–16:30):',
       trustBadges: [
         'СТБ ISO 9001-2015',
         'Лаборатория ОТК',
@@ -54,20 +54,20 @@ export const content = {
         { value: '8 000+', label: 'Агрегатных и специальных станков' },
         { value: '50+ ЛЕТ', label: 'Машиностроительного опыта (с 1974)' },
       ],
-      plantLocationTag: 'ОАО «БЗАЛ», г. Барановичи',
+      plantLocationTag: 'ОАО БЗАЛ, г. Барановичи',
       certTag: 'СТБ ISO 9001-2015',
     },
     about: {
       eyebrow: 'ИСТОРИЯ И ПРОИЗВОДСТВЕННЫЙ ПОТЕНЦИАЛ',
       title: 'БОЛЕЕ 50 ЛЕТ НА РЫНКЕ СТАНКОСТРОЕНИЯ',
-      lead: 'Технопарк ОАО «БЗАЛ» создан на базе Барановичского завода автоматических линий — легендарного флагмана станкостроения, поставляющего специализированное станочное оборудование и автоматические линии на крупнейшие машиностроительные заводы.',
+      lead: 'Технопарк ОАО БЗАЛ создан на базе Барановичского завода автоматических линий — легендарного флагмана станкостроения, поставляющего специализированное станочное оборудование и автоматические линии на крупнейшие машиностроительные заводы.',
       quote: '«Мы создаем специализированное оборудование и детали, превосходящие стандарты, опираясь на традиции качества и непрерывные инновации.»',
-      quoteAuthor: 'Руководство ОАО «БЗАЛ»',
+      quoteAuthor: 'Руководство ОАО БЗАЛ',
       quoteBadge: 'Основан 14 марта 1974 г.',
       desc2: 'Сегодня Технопарк объединяет многолетний опыт заводской школы конструкторов и технологов с современными 3-, 4- и 5-осевыми обрабатывающими центрами. Мы берем на себя задачи любой сложности: от штучного реверс-инжиниринга импортных узлов до серийного контрактного производства деталей для станкостроения, энергетики, горнодобывающей и транспортной отраслей.',
       bulletTitle: 'Ключевые преимущества заводского Технопарка:',
       bullets: [
-        'Полная инфраструктура: литейные, заготовительные, механообрабатывающие и сборочные участки в одном месте.',
+        'Полная инфраструктура: заготовительные, сварочные, термические, механообрабатывающие и сборочные участки в одном месте.',
         'Сильнейшие службы ОГК (главного конструктора) и ОГТ (главного технолога) со стажем решения нестандартных машиностроительных задач.',
         'Собственные подстанции высокой мощности, подъездные ж/д пути и крановое хозяйство грузоподъемностью до 20 тонн.',
         'Прямая ответственность государственного акционерного общества с официальной гарантией и паспортами изделий.'
@@ -131,18 +131,18 @@ export const content = {
       subtitle: 'Широкая номенклатура универсального и высокоточного оборудования с ЧПУ для обработки крупногабаритных и сложных корпусных деталей.',
       workZoneLabel: 'Рабочая зона:',
       bannerEyebrow: 'ДОПОЛНИТЕЛЬНЫЕ МОЩНОСТИ ЗАВОДА',
-      bannerTitle: 'Литейное, термическое, гальваническое и покрасочное производство',
-      bannerDesc: 'Помимо станочной обработки, на территории ОАО «БЗАЛ» функционируют участки чугунного и стального литья, участки объемной и ТВЧ-термообработки, химического оксидирования, цинкования и порошковой окраски.',
+      bannerTitle: 'Заготовительное, сварочное, термическое и покрасочное производство',
+      bannerDesc: 'Помимо станочной обработки, на территории ОАО БЗАЛ функционируют заготовительный и сварочный участки, участки объемной и ТВЧ-термообработки, цементации, азотирования и промышленной окраски.',
       bannerCta: 'Запросить паспорта оборудования',
     },
     comparison: {
       eyebrow: 'ЭКОНОМИЧЕСКАЯ ЭФФЕКТИВНОСТЬ',
-      title: 'ТЕХНОПАРК ОАО «БЗАЛ» ИЛИ ЧАСТНЫЕ ПОСРЕДНИКИ?',
+      title: 'ТЕХНОПАРК ОАО БЗАЛ ИЛИ ЧАСТНЫЕ ПОСРЕДНИКИ?',
       subtitle: 'Сравните факты и исключите скрытые затраты, срывы сроков и брак при размещении заказов.',
       colCriterion: 'Критерий оценки',
-      colBzal: 'Технопарк ОАО «БЗАЛ»',
+      colBzal: 'Технопарк ОАО БЗАЛ',
       colBrokers: 'Частные посредники / Брокеры',
-      directContractNote: 'Договор заключается напрямую с ОАО «БЗАЛ» без третьих лиц',
+      directContractNote: 'Договор заключается напрямую с ОАО БЗАЛ без третьих лиц',
       ctaLink: 'Рассчитать экономию по вашему ТЗ →',
     },
     process: {
@@ -190,9 +190,9 @@ export const content = {
       step5Label: '5. ПРИКРЕПИТЬ ЧЕРТЕЖ ИЛИ ТЗ (PDF, STEP, DWG, ZIP):',
       uploadTitle: 'Нажмите для выбора файлов или перетащите их сюда',
       uploadFormats: 'Поддерживаются форматы PDF, STEP, DWG, IGES, ZIP до 50 Мб',
-      rightCardTitle: 'ОТДЕЛ МАРКЕТИНГА И СБЫТА',
+      rightCardTitle: 'ОТДЕЛ МАРКЕТИНГА И ПРОДАЖ',
       rightCardBadge: 'ПРЯМОЙ ДОГОВОР',
-      rightCardDesc: 'Заполните контакты и выберите удобный способ связи. Специалисты отдела маркетинга примут заявку, передадут ТЗ инженерам и службам завода и сообщат результат по телефону или ответят на заявку.',
+      rightCardDesc: 'Заполните контакты и выберите удобный способ связи. Специалисты отдела маркетинга и продаж примут заявку, передадут ТЗ инженерам и службам завода и сообщат результат по телефону или ответят на заявку.',
       fieldName: 'Ваше имя / Должность *',
       fieldNamePlaceholder: 'Константин, Главный технолог',
       fieldCompany: 'Организация / Завод *',
@@ -203,30 +203,30 @@ export const content = {
       fieldEmailPlaceholder: 'tech@plant.ru',
       fieldComments: 'Комментарии к задаче (необязательно)',
       fieldCommentsPlaceholder: 'Особые требования к термообработке, шероховатости или срокам',
-      submitBtn: 'Отправить заявку в отдел маркетинга',
-      turnaroundNote: 'График работы: Пн–Пт с 08:00 до 16:45 (Сб, Вс — выходной)',
+      submitBtn: 'Отправить заявку в отдел маркетинга и продаж',
+      turnaroundNote: 'График работы: Пн–Пт с 08:00 до 16:30 (Сб, Вс — выходной)',
       confNote: 'Обратная связь по телефону или в ответ на вашу заявку',
-      successTitle: 'Заявка передана в отдел маркетинга ОАО «БЗАЛ»',
-      successDesc: 'Ваше обращение зарегистрировано отделом маркетинга. Мы передадим техническую документацию инженерам (ОГК, ОГТ) и профильным службам завода, после чего свяжемся с вами по телефону или дадим письменный ответ на вашу заявку.',
+      successTitle: 'Заявка передана в отдел маркетинга и продаж ОАО БЗАЛ',
+      successDesc: 'Ваше обращение зарегистрировано отделом маркетинга и продаж. Мы передадим техническую документацию инженерам (ОГК, ОГТ) и профильным службам завода, после чего свяжемся с вами по телефону или дадим письменный ответ на вашу заявку.',
       successParamsTitle: 'Параметры вашей заявки:',
       newReqBtn: 'Отправить еще одну заявку',
     },
     contacts: {
       eyebrow: 'ОТДЕЛ МАРКЕТИНГА И ПРОДАЖ',
-      title: 'СВЯЖИТЕСЬ С ОТДЕЛОМ МАРКЕТИНГА И СБЫТА',
-      subtitle: 'Сначала вы связываетесь с отделом маркетинга — мы принимаем чертежи, эскизы или ТЗ, передаём их инженерам и профильным службам завода, а затем сообщаем обратную связь по телефону или отвечаем на вашу заявку.',
-      cardDepartment: 'ТЕХНОПАРК ОАО «БЗАЛ» • ОТДЕЛ МАРКЕТИНГА И СБЫТА',
-      phoneEngineerLabel: 'Отдел сбыта и приёма заявок:',
+      title: 'СВЯЖИТЕСЬ С ОТДЕЛОМ МАРКЕТИНГА И ПРОДАЖ',
+      subtitle: 'Сначала вы связываетесь с отделом маркетинга и продаж — мы принимаем чертежи, эскизы или ТЗ, передаём их инженерам и профильным службам завода, а затем сообщаем обратную связь по телефону или отвечаем на вашу заявку.',
+      cardDepartment: 'ТЕХНОПАРК ОАО БЗАЛ • ОТДЕЛ МАРКЕТИНГА И ПРОДАЖ',
+      phoneEngineerLabel: 'Отдел маркетинга и продаж (приём заявок):',
       phoneFaxLabel: 'Тел./факс:',
-      phoneMarketLabel: 'Отдел маркетинга:',
+      phoneMarketLabel: 'Отдел маркетинга и продаж:',
       emailLabel: 'Электронная почта:',
       emailDesc: 'Для приёма заявок, чертежей, ТЗ и спецификаций',
       addressLabel: 'Адрес производства:',
       addressVal: '225410, Республика Беларусь, Брестская обл., г. Барановичи, ул. Королика, 8',
       hoursLabel: 'Режим работы (Пн–Пт):',
-      hoursTime: 'Понедельник — Пятница: 08:00 – 16:45',
+      hoursTime: 'Понедельник — Пятница: 08:00 – 16:30',
       hoursTimezone: 'Сб, Вс — выходной (Время Московское / Минское)',
-      sendDrawingBtn: 'Оставить заявку в отдел маркетинга',
+      sendDrawingBtn: 'Оставить заявку в отдел маркетинга и продаж',
       mainPortalBtn: 'Основной портал bzal.by',
       logisticsTitle: 'ТРАНСПОРТНАЯ ДОСТУПНОСТЬ И ЛОГИСТИКА:',
       logisticsDesc: 'Завод расположен в 3 км от международной автомагистрали М1 (Брест — Минск — Москва). Действующая железнодорожная ветка заходит непосредственно на закрытую территорию цехов, что позволяет оперативно отгружать негабаритные станки, линии и тяжелые металлоконструкции полувагонами и платформами.',
@@ -241,15 +241,15 @@ export const content = {
       isoCert: 'Система менеджмента качества сертифицирована по СТБ ISO 9001-2015.',
       sectionsTitle: 'РАЗДЕЛЫ САЙТА:',
       reqTitle: 'РЕКВИЗИТЫ И СВЯЗЬ:',
-      salesDept: '(Отдел сбыта)',
-      faxDept: '(Факс / Маркетинг)',
+      salesDept: '(Отдел маркетинга и продаж)',
+      faxDept: '(Факс / Приёмная)',
       unpLabel: 'УНП 200166848 • ОКПО 00223254',
-      allRightsReserved: 'ОАО «БЗАЛ». Технопарк станкостроения и инжиниринга. Все права защищены.',
+      allRightsReserved: 'ОАО БЗАЛ. Технопарк станкостроения и инжиниринга. Все права защищены.',
       portalLink: 'Официальный сайт www.bzal.by',
       servicesLink: 'bzal-uslugi.by',
     },
     modal: {
-      badge: 'ТЕХНОПАРК ОАО БЗАЛ • ОТДЕЛ МАРКЕТИНГА',
+      badge: 'ТЕХНОПАРК ОАО БЗАЛ • ОТДЕЛ МАРКЕТИНГА И ПРОДАЖ',
       title: 'Заявка на расчёт по ТЗ и чертежам',
       subtitle: 'Отдел маркетинга примет заявку, передаст документацию инженерам (ОГК, ОГТ) и профильным службам завода, после чего сообщит обратную связь по телефону или ответит на заявку.',
       serviceLabel: 'Направление работ:',
@@ -275,8 +275,8 @@ export const content = {
       chooseFileLabel: 'Выбрать файлы чертежей',
       filesCountLabel: 'Файлов выбрано:',
       submitBtn: 'Отправить заявку в отдел маркетинга',
-      note: 'Пн–Пт 08:00–16:45 • Обратная связь по телефону или в ответ на заявку',
-      successTitle: 'Заявка принята отделом маркетинга ОАО «БЗАЛ»',
+      note: 'Пн–Пт 08:00–16:30 • Обратная связь по телефону или в ответ на заявку',
+      successTitle: 'Заявка принята отделом маркетинга ОАО БЗАЛ',
       successDesc: 'Спасибо! Отдел маркетинга зарегистрировал ваше обращение. Мы передадим техническое задание инженерам и профильным службам завода, после чего свяжемся с вами по телефону или ответим на вашу заявку.',
       closeBtn: 'Закрыть окно',
     }
@@ -285,8 +285,8 @@ export const content = {
   en: {
     brand: {
       name: 'TECHNOPARK',
-      subname: 'JSC "BZAL"',
-      fullName: 'JSC "Baranovichi Automatic Lines Plant"',
+      subname: 'JSC BZAL',
+      fullName: 'JSC Baranovichi Automatic Lines Plant',
       slogan: 'Industrial Engineering • Machine Tool Building • Metalworking',
       address: '8 Korolika Str., 225410, Baranovichi, Republic of Belarus',
       phone: '+375 44 751 44 77',
@@ -295,7 +295,7 @@ export const content = {
       phoneMarket: '+375 (163) 67-20-41',
       email: 'sales@bzal.by',
       website: 'www.bzal.by',
-      workingHours: 'Mon-Fri: 08:00 – 16:45 (UTC+3)',
+      workingHours: 'Mon-Fri: 08:00 – 16:30 (UTC+3)',
       since: 'SINCE 1974',
       btnRfq: 'Request Quote',
     },
@@ -315,10 +315,10 @@ export const content = {
       titleHighlight: 'ENGINEERING SOLUTIONS',
       titleRest: 'FOR YOUR INDUSTRY',
       sloganTitle: '«MACHINE TOOLS ENGINEERED SPECIFICALLY FOR YOU»',
-      sloganDesc: 'Integrated production cycle of a machine tool giant: Design Bureau (CAD/R&D), Process Planning (CAM), in-house foundry, and high-precision CNC machining down to 0.005 mm across 30,000+ m². Official quotation via our Marketing Department and plant engineering divisions.',
-      primaryCta: 'Submit Inquiry to Marketing ↗',
-      secondaryCta: 'Explore Machine Park ↓',
-      salesLeadLabel: 'Marketing & Sales Dept (Mon–Fri 08:00–16:45):',
+      sloganDesc: 'Integrated production cycle of a machine tool giant: Design Bureau (CAD/R&D), Process Planning (CAM), blank preparation & heat treatment, and high-precision CNC machining down to 0.005 mm across 30,000+ m². Official quotation via our Marketing Department and plant engineering divisions.',
+      primaryCta: 'Submit Inquiry to Marketing',
+      secondaryCta: 'Explore Machine Park',
+      salesLeadLabel: 'Marketing & Sales Dept (Mon–Fri 08:00–16:30):',
       trustBadges: [
         'ISO 9001:2015 Certified',
         'In-House QC Lab',
@@ -335,20 +335,20 @@ export const content = {
         { value: '8,000+', label: 'Specialized machine tools delivered' },
         { value: '50+ YEARS', label: 'Machine tool engineering heritage (1974)' },
       ],
-      plantLocationTag: 'JSC "BZAL", Baranovichi',
+      plantLocationTag: 'JSC BZAL, Baranovichi',
       certTag: 'ISO 9001:2015',
     },
     about: {
       eyebrow: 'HERITAGE & PRODUCTION CAPACITY',
       title: 'OVER 50 YEARS IN MACHINE TOOL BUILDING',
-      lead: 'Technopark of JSC "BZAL" was established on the foundation of the Baranovichi Automatic Lines Plant — a flagship manufacturer delivering specialized machine tools and automated transfer lines to major heavy industries.',
+      lead: 'Technopark of JSC BZAL was established on the foundation of the Baranovichi Automatic Lines Plant — a flagship manufacturer delivering specialized machine tools and automated transfer lines to major heavy industries.',
       quote: '"We engineer specialized equipment and components surpassing industry standards, anchored in quality traditions and continuous innovation."',
-      quoteAuthor: 'Executive Board of JSC "BZAL"',
+      quoteAuthor: 'Executive Board of JSC BZAL',
       quoteBadge: 'Established March 14, 1974',
       desc2: 'Today, the Technopark combines decades of technical mastery with modern multi-axis CNC machining centers. We manage projects from custom reverse-engineering of imported assemblies to serial contract manufacturing for machinery, energy, mining, and transport sectors.',
       bulletTitle: 'Key plant advantages:',
       bullets: [
-        'Complete infrastructure: foundry, cutting, heavy machining, and assembly shops under one roof.',
+        'Complete infrastructure: blank preparation, welding, heat treatment, heavy machining, and assembly shops under one roof.',
         'High-caliber design (OGK) and process engineering (OGT) teams capable of solving non-standard mechanical challenges.',
         'High-capacity power substations, on-site railway spurs, and heavy overhead cranes up to 20 tons.',
         'Official manufacturer warranty, traceability, and certified inspection reports.'
@@ -412,18 +412,18 @@ export const content = {
       subtitle: 'Versatile, heavy-duty, and multi-axis CNC machine park suited for large-format and complex housing parts.',
       workZoneLabel: 'Work envelope:',
       bannerEyebrow: 'ADDITIONAL IN-HOUSE FACILITIES',
-      bannerTitle: 'Foundry, Heat Treatment, Plating & Powder Coating',
-      bannerDesc: 'In addition to precision CNC machining, JSC "BZAL" operates cast iron and steel foundry units, induction and deep-hardening heat treatment, electroplating, zinc passivation, and industrial painting.',
+      bannerTitle: 'Blank Cutting, Welding, Heat Treatment & Industrial Coating',
+      bannerDesc: 'In addition to precision CNC machining, JSC BZAL operates blank cutting and welding divisions, induction and deep-hardening heat treatment, carburizing, nitriding, and industrial painting.',
       bannerCta: 'Request machine specifications',
     },
     comparison: {
       eyebrow: 'ECONOMIC ADVANTAGE',
-      title: 'TECHNOPARK JSC "BZAL" VS INTERMEDIARY BROKERS',
+      title: 'TECHNOPARK JSC BZAL VS INTERMEDIARY BROKERS',
       subtitle: 'Compare real facts and eliminate hidden markups, delivery delays, and quality risks.',
       colCriterion: 'Evaluation Criterion',
-      colBzal: 'Technopark JSC "BZAL"',
+      colBzal: 'Technopark JSC BZAL',
       colBrokers: 'Intermediary Brokers / Trading Agencies',
-      directContractNote: 'Direct enterprise contract executed with JSC "BZAL" with no middle parties',
+      directContractNote: 'Direct enterprise contract executed with JSC BZAL with no middle parties',
       ctaLink: 'Calculate your savings from your brief →',
     },
     process: {
@@ -485,9 +485,9 @@ export const content = {
       fieldComments: 'Project Notes (Optional)',
       fieldCommentsPlaceholder: 'Heat treatment, surface roughness, or specific delivery deadlines',
       submitBtn: 'Submit Inquiry to Marketing Dept',
-      turnaroundNote: 'Working hours: Mon–Fri 08:00 – 16:45 (Sat, Sun closed)',
+      turnaroundNote: 'Working hours: Mon–Fri 08:00 – 16:30 (Sat, Sun closed)',
       confNote: 'Feedback provided via phone call or reply to your application',
-      successTitle: 'Inquiry Received by Marketing Dept of JSC "BZAL"',
+      successTitle: 'Inquiry Received by Marketing Dept of JSC BZAL',
       successDesc: 'Your application has been registered by our Marketing Department. We will transfer the technical documentation to our engineering and production services (OGK, OGT) and contact you by phone or reply to your inquiry.',
       successParamsTitle: 'Parameters of your submission:',
       newReqBtn: 'Submit another inquiry',
@@ -496,7 +496,7 @@ export const content = {
       eyebrow: 'SALES & MARKETING DIVISION',
       title: 'CONTACT OUR MARKETING & SALES DEPARTMENT',
       subtitle: 'First you contact the Marketing Department — we receive your drawings or technical brief, transfer them to our engineers and relevant plant services, and then provide feedback by phone or in reply to your inquiry.',
-      cardDepartment: 'TECHNOPARK JSC "BZAL" • SALES & MARKETING DIVISION',
+      cardDepartment: 'TECHNOPARK JSC BZAL • SALES & MARKETING DIVISION',
       phoneEngineerLabel: 'Sales & Inquiry Intake:',
       phoneFaxLabel: 'Tel./Fax:',
       phoneMarketLabel: 'Marketing Dept:',
@@ -505,7 +505,7 @@ export const content = {
       addressLabel: 'Manufacturing Plant Address:',
       addressVal: '8 Korolika Str., 225410, Baranovichi, Republic of Belarus',
       hoursLabel: 'Working Hours (Mon–Fri):',
-      hoursTime: 'Monday — Friday: 08:00 – 16:45',
+      hoursTime: 'Monday — Friday: 08:00 – 16:30',
       hoursTimezone: 'Sat, Sun — Closed (UTC+3 / Moscow / Minsk time)',
       sendDrawingBtn: 'Submit Inquiry to Marketing',
       mainPortalBtn: 'Main Portal www.bzal.by',
@@ -525,7 +525,7 @@ export const content = {
       salesDept: '(Sales Division)',
       faxDept: '(Fax / Marketing)',
       unpLabel: 'Tax ID: UNP 200166848 • OKPO 00223254',
-      allRightsReserved: 'JSC "BZAL". Machine tool engineering technopark. All rights reserved.',
+      allRightsReserved: 'JSC BZAL. Machine tool engineering technopark. All rights reserved.',
       portalLink: 'Official portal www.bzal.by',
       servicesLink: 'bzal-uslugi.by',
     },
@@ -556,8 +556,8 @@ export const content = {
       chooseFileLabel: 'Select drawing files',
       filesCountLabel: 'Files selected:',
       submitBtn: 'Send Inquiry to Marketing Dept',
-      note: 'Mon–Fri 08:00–16:45 • Feedback by phone or in reply to your inquiry',
-      successTitle: 'Inquiry Received by Marketing Dept of JSC "BZAL"',
+      note: 'Mon–Fri 08:00–16:30 • Feedback by phone or in reply to your inquiry',
+      successTitle: 'Inquiry Received by Marketing Dept of JSC BZAL',
       successDesc: 'Thank you! Our Marketing Department has registered your request. We will forward the specifications to our engineers and plant services and reply by phone or email.',
       closeBtn: 'Close Window',
     }
@@ -576,7 +576,7 @@ export const content = {
       phoneMarket: '+375 (163) 67-20-41',
       email: 'sales@bzal.by',
       website: 'www.bzal.by',
-      workingHours: '周一至周五: 08:00 – 16:45 (UTC+3)',
+      workingHours: '周一至周五: 08:00 – 16:30 (UTC+3)',
       since: '始于1974年',
       btnRfq: '技术询价',
     },
@@ -596,10 +596,10 @@ export const content = {
       titleHighlight: '工程解决方案',
       titleRest: '赋能核心重工业',
       sloganTitle: '«为您专属量身研制的专用机床与自动化线»',
-      sloganDesc: '依托大型机床工业综合体完备体系：总设计师部(CAD)、工艺技术部(CAM)、铸造下料与高精数控机加工，精度达0.005毫米，厂房面积超30,000平方米。由市场销售部统一受理询价并转交各工程技术部门核算反馈。',
-      primaryCta: '向市场部提交技术询价 ↗',
-      secondaryCta: '查看加工机床设备 ↓',
-      salesLeadLabel: '市场与销售部热线 (周一至周五 08:00–16:45)：',
+      sloganDesc: '依托大型机床工业综合体完备体系：总设计师部(CAD)、工艺技术部(CAM)、下料热处理与高精数控机加工，精度达0.005毫米，厂房面积超30,000平方米。由市场销售部统一受理询价并转交各工程技术部门核算反馈。',
+      primaryCta: '向市场部提交技术询价',
+      secondaryCta: '查看加工机床设备',
+      salesLeadLabel: '市场与销售部热线 (周一至周五 08:00–16:30)：',
       trustBadges: [
         'ISO 9001:2015 质量体系',
         '厂内专业质检中心',
@@ -629,7 +629,7 @@ export const content = {
       desc2: '如今，科技园区融合资深工程师团队与现代化多轴数控加工中心。承接从进口零部件逆向研发替代到大批量机械零部件合同制造的各类工程挑战。',
       bulletTitle: '源头大厂核心优势：',
       bullets: [
-        '完备基础设施：铸造、下料、重型机械加工及组装车间齐备。',
+        '完备基础设施：下料、焊接、热处理、重型机械加工及组装车间齐备。',
         '雄厚的总设计师部与工艺技术部，具备复杂非标机械研发制造经验。',
         '高配自备变电站、专用铁路支线及20吨重型行吊起重能力。',
         '国有控股股份公司资质，出具权威产品质量证明书并提供正规质保。'
@@ -693,8 +693,8 @@ export const content = {
       subtitle: '通用与高精度数控机床门类齐全，专长于大型复杂箱体件与异形件加工。',
       workZoneLabel: '加工行程规格：',
       bannerEyebrow: '厂区综合配套制造能力',
-      bannerTitle: '铸造、热处理、表面电镀与喷塑车间',
-      bannerDesc: '除高精密机加工外，BZAL厂区内设有大型铸铁与铸钢车间、整体淬火及高频感应热处理、化学发黑、镀锌钝化及专业静电粉末喷涂流水线。',
+      bannerTitle: '下料、焊接、热处理与工业喷涂车间',
+      bannerDesc: '除高精密机加工外，BZAL厂区内设有下料与焊接车间、整体淬火及高频感应热处理、渗碳渗氮及专业工业防腐喷涂流水线。',
       bannerCta: '索取设备技术参数表',
     },
     comparison: {
@@ -766,7 +766,7 @@ export const content = {
       fieldComments: '技术要求补充说明 (选填)',
       fieldCommentsPlaceholder: '热处理硬度、表面光洁度或特定交付时限要求',
       submitBtn: '向市场营销部提交申请',
-      turnaroundNote: '工作时间：周一至周五 08:00 – 16:45 (周末休息)',
+      turnaroundNote: '工作时间：周一至周五 08:00 – 16:30 (周末休息)',
       confNote: '通过电话或回复您的申请提供正式反馈',
       successTitle: '您的询价已提交至BZAL市场营销部',
       successDesc: '市场营销部已登记您的申请。我们将把技术资料转交总设计师部、工艺部及相关部门审核，随后通过电话或邮件回复向您反馈结果。',
@@ -786,7 +786,7 @@ export const content = {
       addressLabel: '工厂实际地址：',
       addressVal: '白俄罗斯共和国布列斯特州巴拉诺维奇市科罗利卡街8号，邮编 225410',
       hoursLabel: '工作时间 (周一至周五)：',
-      hoursTime: '周一至周五: 08:00 – 16:45',
+      hoursTime: '周一至周五: 08:00 – 16:30',
       hoursTimezone: '周六、周日休息 (莫斯科 / 明斯克时区 UTC+3)',
       sendDrawingBtn: '向市场部提交申请',
       mainPortalBtn: '访问总厂官网 www.bzal.by',
@@ -837,7 +837,7 @@ export const content = {
       chooseFileLabel: '选取图纸文件',
       filesCountLabel: '已选文件数：',
       submitBtn: '向市场营销部提交申请',
-      note: '周一至周五 08:00–16:45 • 通过电话或回复申请提供反馈',
+      note: '周一至周五 08:00–16:30 • 通过电话或回复申请提供反馈',
       successTitle: '询价申请已送达BZAL市场营销部',
       successDesc: '感谢您的垂询！市场营销部已登记您的需求，将转交工程师及相关部门审核后，通过电话或回复申请与您联系。',
       closeBtn: '关闭窗口',
@@ -853,7 +853,7 @@ export const competencyTabs: Record<'ru' | 'en' | 'zh', CompetencyTab[]> = {
       title: 'Конструкторское бюро (ОГК)',
       badge: 'РАЗРАБОТКА И АДАПТАЦИЯ КД',
       shortDesc: 'Проектирование машин, узлов и специальной технологической оснастки по ЕСКД.',
-      fullDesc: 'Отдел главного конструктора (ОГК) ОАО «БЗАЛ» обладает более чем 50-летним опытом разработки специального металлорежущего оборудования, автоматических линий и нестандартной оснастки. Мы создаем 3D-модели, выполняем статические и динамические расчеты и выпускаем исчерпывающую документацию.',
+      fullDesc: 'Отдел главного конструктора (ОГК) ОАО БЗАЛ обладает более чем 50-летним опытом разработки специального металлорежущего оборудования, автоматических линий и нестандартной оснастки. Мы создаем 3D-модели, выполняем статические и динамические расчеты и выпускаем исчерпывающую документацию.',
       features: [
         'Проектирование с нуля по техническому заданию заказчика',
         'Реверс-инжиниринг и импортозамещение зарубежных компонентов и узлов',
@@ -867,7 +867,7 @@ export const competencyTabs: Record<'ru' | 'en' | 'zh', CompetencyTab[]> = {
         { label: 'Подача заявки', value: 'Через отдел маркетинга' },
         { label: 'Инженерный штат', value: '25+ конструкторов I и высшей кат.' }
       ],
-      image: '/images/bzal_wheel_sparks.jpg',
+      image: '/images/landing_img_1.jpg',
       accentQuote: 'От концепта до проверенной КД, готовой к запуску в производство без доработок.'
     },
     {
@@ -890,7 +890,7 @@ export const competencyTabs: Record<'ru' | 'en' | 'zh', CompetencyTab[]> = {
         { label: 'Оптимизация цикла', value: 'до 30% экономии времени' },
         { label: 'Поддержка цеха', value: 'Непосредственный контроль технолога' }
       ],
-      image: '/images/bzal_lathe.jpg',
+      image: '/images/landing_img_3.jpg',
       accentQuote: 'Исключаем брак на этапе симуляции еще до первого касания фрезой заготовки.'
     },
     {
@@ -914,7 +914,7 @@ export const competencyTabs: Record<'ru' | 'en' | 'zh', CompetencyTab[]> = {
         { label: 'Контроль геометрии', value: 'КИМ и поверенный инструмент ОТК' }
       ],
       image: '/images/bzal_gears.jpg',
-      accentQuote: 'От прецизионных шпиндельных пар до тяжелых сварно-литых станин станков.'
+      accentQuote: 'От прецизионных шпиндельных пар до тяжелых станин и корпусов станков.'
     },
     {
       id: 'contract',
@@ -922,7 +922,7 @@ export const competencyTabs: Record<'ru' | 'en' | 'zh', CompetencyTab[]> = {
       title: 'Контрактное производство и сборка',
       badge: 'ПОЛНЫЙ ЦИКЛ OEM/ODM',
       shortDesc: 'Серийный выпуск узлов, механизмов, агрегатов и автоматических станочных линий.',
-      fullDesc: 'ОАО «БЗАЛ» берет на себя роль комплексного производственного подрядчика. Мы закупаем сертифицированный металлопрокат, изготавливаем детали, выполняем термообработку, гальванику, слесарно-сборочные работы и стендовые испытания.',
+      fullDesc: 'ОАО БЗАЛ берет на себя роль комплексного производственного подрядчика. Мы закупаем сертифицированный металлопрокат, изготавливаем детали, выполняем термообработку, покраску, слесарно-сборочные работы и стендовые испытания.',
       features: [
         'Мелкосерийное и серийное контрактное производство по чертежам заказчика',
         'Узловая и агрегатная сборка механических, гидравлических и пневмосистем',
@@ -945,7 +945,7 @@ export const competencyTabs: Record<'ru' | 'en' | 'zh', CompetencyTab[]> = {
       title: 'Площади и инфраструктура Технопарка',
       badge: 'ПЛОЩАДКИ ДЛЯ РЕЗИДЕНТОВ',
       shortDesc: 'Аренда оборудованных производственных цехов с мощными коммуникациями.',
-      fullDesc: 'Технопарк ОАО «БЗАЛ» предоставляет площади для промышленных резидентов, технологических стартапов и смежных производств. Готовая инженерная инфраструктура, льготные условия и кооперация с основным заводом.',
+      fullDesc: 'Технопарк ОАО БЗАЛ предоставляет площади для промышленных резидентов, технологических стартапов и смежных производств. Готовая инженерная инфраструктура, льготные условия и кооперация с основным заводом.',
       features: [
         'Производственные площади от 200 до 15 000 м² с высотой потолков до 12 м',
         'Действующие кран-балки и мостовые краны грузоподъемностью 5, 10 и 20 тонн',
@@ -970,7 +970,7 @@ export const competencyTabs: Record<'ru' | 'en' | 'zh', CompetencyTab[]> = {
       title: 'Design Bureau (OGK)',
       badge: 'CAD DESIGN & ADAPTATION',
       shortDesc: 'Design of machinery, assemblies, and custom tooling strictly to engineering standards.',
-      fullDesc: 'Chief Designer Division (OGK) of JSC "BZAL" holds over 50 years of experience designing specialized metal-cutting equipment, automated transfer lines, and non-standard tooling. We create 3D CAD models, run stress/kinematic simulations, and prepare comprehensive technical packages.',
+      fullDesc: 'Chief Designer Division (OGK) of JSC BZAL holds over 50 years of experience designing specialized metal-cutting equipment, automated transfer lines, and non-standard tooling. We create 3D CAD models, run stress/kinematic simulations, and prepare comprehensive technical packages.',
       features: [
         'Full custom design based on customer specifications (URS/brief)',
         'Reverse engineering and import substitution of complex machinery parts',
@@ -984,7 +984,7 @@ export const competencyTabs: Record<'ru' | 'en' | 'zh', CompetencyTab[]> = {
         { label: 'Inquiry Intake', value: 'Via Marketing Department' },
         { label: 'Design Staff', value: '25+ Senior Mechanical Engineers' }
       ],
-      image: '/images/bzal_wheel_sparks.jpg',
+      image: '/images/landing_img_1.jpg',
       accentQuote: 'From concept to validated drawings ready for immediate machining without rework.'
     },
     {
@@ -1007,7 +1007,7 @@ export const competencyTabs: Record<'ru' | 'en' | 'zh', CompetencyTab[]> = {
         { label: 'Cycle Optimization', value: 'up to 30% time savings' },
         { label: 'Shop Floor Support', value: 'Direct on-site engineering supervision' }
       ],
-      image: '/images/bzal_lathe.jpg',
+      image: '/images/landing_img_3.jpg',
       accentQuote: 'Eliminating scrap in CAM simulation before the cutting tool ever touches the workpiece.'
     },
     {
@@ -1031,7 +1031,7 @@ export const competencyTabs: Record<'ru' | 'en' | 'zh', CompetencyTab[]> = {
         { label: 'Quality Verification', value: 'CMM & calibrated metrology tools' }
       ],
       image: '/images/bzal_gears.jpg',
-      accentQuote: 'From micron-grade spindle pairs to heavy cast/welded machine beds.'
+      accentQuote: 'From micron-grade spindle pairs to heavy machine beds and housings.'
     },
     {
       id: 'contract',
@@ -1039,7 +1039,7 @@ export const competencyTabs: Record<'ru' | 'en' | 'zh', CompetencyTab[]> = {
       title: 'Contract Manufacturing & Assembly',
       badge: 'FULL-CYCLE OEM/ODM',
       shortDesc: 'Serial production of sub-assemblies, mechanisms, units, and automatic machine lines.',
-      fullDesc: 'JSC "BZAL" acts as an integrated manufacturing contractor. We source certified mill materials, machine components, handle thermal/chemical treatments, perform electromechanical assembly, and complete test runs.',
+      fullDesc: 'JSC BZAL acts as an integrated manufacturing contractor. We source certified mill materials, machine components, handle thermal treatment and protective coating, perform electromechanical assembly, and complete test runs.',
       features: [
         'Pilot and serial contract manufacturing to customer technical drawings',
         'Modular assembly of mechanical, hydraulic, and pneumatic systems',
@@ -1062,7 +1062,7 @@ export const competencyTabs: Record<'ru' | 'en' | 'zh', CompetencyTab[]> = {
       title: 'Technopark Infrastructure & Spaces',
       badge: 'RESIDENT INDUSTRIAL FLOORS',
       shortDesc: 'Leasing of equipped heavy-duty manufacturing bays with robust power and utilities.',
-      fullDesc: 'Technopark JSC "BZAL" provides production spaces for industrial enterprises, tech ventures, and engineering operations. Ready industrial utilities, beneficial rates, and direct supply chain cooperation with the plant.',
+      fullDesc: 'Technopark JSC BZAL provides production spaces for industrial enterprises, tech ventures, and engineering operations. Ready industrial utilities, beneficial rates, and direct supply chain cooperation with the plant.',
       features: [
         'Production spaces from 200 to 15,000 m² with ceiling heights up to 12 m',
         'Operating overhead bridge cranes with 5, 10, and 20-ton capacities',
@@ -1101,7 +1101,7 @@ export const competencyTabs: Record<'ru' | 'en' | 'zh', CompetencyTab[]> = {
         { label: '询价受理', value: '通过市场营销部统一受理' },
         { label: '技术队伍', value: '25+位资深机械主任设计工程师' }
       ],
-      image: '/images/bzal_wheel_sparks.jpg',
+      image: '/images/landing_img_1.jpg',
       accentQuote: '从产品概念到成熟图纸，无缝衔接车间加工，免除二次修改风险。'
     },
     {
@@ -1124,7 +1124,7 @@ export const competencyTabs: Record<'ru' | 'en' | 'zh', CompetencyTab[]> = {
         { label: '节拍优化', value: '最高缩减30%单件工时' },
         { label: '车间指导', value: '工艺技术人员常驻车间实地保障' }
       ],
-      image: '/images/bzal_lathe.jpg',
+      image: '/images/landing_img_3.jpg',
       accentQuote: '在电脑仿真阶段彻底消除过切与干涉，保护每一件毛坯工件。'
     },
     {
@@ -1207,39 +1207,79 @@ export const equipmentList: Record<'ru' | 'en' | 'zh', EquipmentItem[]> = {
       category: 'Фрезерная группа ЧПУ',
       precision: '±0,005 мм',
       capacity: 'Зона обработки до 2000 × 1200 × 1000 мм',
-      description: 'Высокоскоростная обработка сложных пространственных корпусов, штампов и турбинных лопаток за один установ.',
+      description: 'Высокоскоростная обработка сложных пространственных корпусов, штампов и фасонных поверхностей за один установ.',
       image: '/images/bzal_gears.jpg',
       tags: ['5-осей', 'Высокая точность', 'Корпусные детали']
     },
     {
+      id: 'eq-5',
+      name: 'Вертикально-фрезерные и портальные центры с ЧПУ',
+      category: 'Фрезерная группа ЧПУ',
+      precision: '±0,008 мм',
+      capacity: 'Стол до 1600 × 800 мм, шпиндель до 12 000 об/мин',
+      description: 'Серийное фрезерование плит, кронштейнов, крышек редукторов, пазов и высокоточных посадочных поверхностей.',
+      image: '/images/landing_img_2.jpg',
+      tags: ['Серийная ЧПУ', 'Плиты и крышки', 'Fanuc / Siemens']
+    },
+    {
       id: 'eq-2',
-      name: 'Тяжелые горизонтально-расточные станки',
+      name: 'Тяжелые горизонтально-расточные станки с ЧПУ',
       category: 'Расточная группа',
       precision: '±0,01 мм',
       capacity: 'Стол до 2500 × 2000 мм, нагрузка до 5 000 кг',
-      description: 'Точная расточка соосных отверстий и плоскостная фрезеровка массивных литых и сварных станин металлорежущих станков.',
+      description: 'Точная расточка соосных отверстий и плоскостная фрезеровка массивных станин и корпусов металлорежущих станков.',
       image: '/images/bzal_lines.jpg',
       tags: ['Крупный габарит', 'Станины до 5 т', 'Соосность']
     },
     {
+      id: 'eq-6',
+      name: 'Координатно-расточные прецизионные станки',
+      category: 'Расточная группа',
+      precision: '±0,004 мм',
+      capacity: 'Зона расточки до 1120 × 630 × 600 мм',
+      description: 'Финишная обработка высокоточных межцентровых расстояний в корпусах шпиндельных бабок, кондукторах и пресс-формах.',
+      image: '/images/landing_img_1.jpg',
+      tags: ['Точность IT5–IT6', 'Кондукторы', 'Шпиндельные бабки']
+    },
+    {
       id: 'eq-3',
-      name: 'Токарно-карусельные и токарные станки с ЧПУ',
+      name: 'Токарно-карусельные и тяжелые токарные станки с ЧПУ',
       category: 'Токарная группа',
       precision: '±0,008 мм',
       capacity: 'Диаметр обработки до Ø1600 мм, длина до 3000 мм',
-      description: 'Обработка тяжелых валов, фланцев, зубчатых колес и колесных пар с возможностью фрезерования и сверления.',
-      image: '/images/bzal_wheel_sparks.jpg',
+      description: 'Обработка тяжелых валов, фланцев, зубчатых венцов и железнодорожных колесных пар с приводным инструментом.',
+      image: '/images/landing_img_3.jpg',
       tags: ['Токарная обработка', 'Валы до 3 м', 'Фланцы Ø1600']
+    },
+    {
+      id: 'eq-7',
+      name: 'Токарно-револьверные обрабатывающие центры с осью Y',
+      category: 'Токарная группа',
+      precision: '±0,005 мм',
+      capacity: 'Диаметр над станиной до Ø650 мм, РМЦ до 1500 мм',
+      description: 'Комплексная токарно-фрезерная обработка ступенчатых валов, шпинделей, гильз и сложных резьбовых соединений за один установ.',
+      image: '/images/bzal_sparks.jpg',
+      tags: ['Приводной инструмент', 'Ось Y', 'Серийные тела вращения']
     },
     {
       id: 'eq-4',
       name: 'Координатно-шлифовальные и круглошлифовальные станки',
       category: 'Шлифовальная группа',
       precision: '±0,002 мм',
-      capacity: 'Шероховатость до Ra 0,1 мкм',
-      description: 'Финишная доводка прецизионных шпиндельных шеек, высокоточных направляющих и калибров.',
-      image: '/images/bzal_lathe.jpg',
+      capacity: 'Шероховатость до Ra 0,1 мкм, длина до 2000 мм',
+      description: 'Финишная доводка прецизионных шпиндельных шеек, конусов ISO/HSK, калибров и посадочных шеек под подшипники P4/P2.',
+      image: '/images/landing_img_4.jpg',
       tags: ['Суперфиниш', 'Шпиндели', 'Ra 0.1']
+    },
+    {
+      id: 'eq-8',
+      name: 'Плоскошлифовальные и продольно-шлифовальные станки',
+      category: 'Шлифовальная группа',
+      precision: '±0,003 мм / 1000 мм',
+      capacity: 'Магнитный стол до 2000 × 630 мм',
+      description: 'Высокоточная шлифовка базовых плоскостей станин, призматических направляющих скольжения и закаленных плит штампов.',
+      image: '/images/bzal_gears.jpg',
+      tags: ['Плоская шлифовка', 'Направляющие станин', 'Плоскопараллельность']
     }
   ],
   en: [
@@ -1249,39 +1289,79 @@ export const equipmentList: Record<'ru' | 'en' | 'zh', EquipmentItem[]> = {
       category: 'Milling CNC Group',
       precision: '±0.005 mm',
       capacity: 'Travel envelope up to 2,000 × 1,200 × 1,000 mm',
-      description: 'High-speed continuous machining of complex spatial housings, stamping dies, and turbine impellers in a single setup.',
+      description: 'High-speed continuous machining of complex spatial housings, stamping dies, and contoured components in a single setup.',
       image: '/images/bzal_gears.jpg',
       tags: ['5-Axis', 'Ultra Precision', 'Prismatic Parts']
     },
     {
+      id: 'eq-5',
+      name: 'Vertical & Portal CNC Milling Centers',
+      category: 'Milling CNC Group',
+      precision: '±0.008 mm',
+      capacity: 'Table up to 1,600 × 800 mm, spindle up to 12,000 rpm',
+      description: 'Serial CNC milling of mounting plates, brackets, gearbox covers, precision slots, and bearing seats.',
+      image: '/images/landing_img_2.jpg',
+      tags: ['Serial CNC Milling', 'Plates & Covers', 'Fanuc / Siemens']
+    },
+    {
       id: 'eq-2',
-      name: 'Heavy Horizontal Boring Machine Tools',
+      name: 'Heavy Horizontal CNC Boring Machine Tools',
       category: 'Boring Group',
       precision: '±0.01 mm',
       capacity: 'Table up to 2,500 × 2,000 mm, table load up to 5,000 kg',
-      description: 'Precision coaxial hole boring and planar milling of heavy cast iron and welded machine tool beds and frames.',
+      description: 'Precision coaxial hole boring and planar milling of heavy machine tool beds, frames, and reducer housings.',
       image: '/images/bzal_lines.jpg',
       tags: ['Heavy Frame', 'Beds up to 5 tons', 'Coaxial Line Boring']
     },
     {
+      id: 'eq-6',
+      name: 'Precision Jig Boring Machines',
+      category: 'Boring Group',
+      precision: '±0.004 mm',
+      capacity: 'Working envelope up to 1,120 × 630 × 600 mm',
+      description: 'Finish boring of ultra-accurate center distances in spindle headstocks, drilling jigs, and high-precision tooling.',
+      image: '/images/landing_img_1.jpg',
+      tags: ['IT5–IT6 Accuracy', 'Jigs & Fixtures', 'Spindle Headstocks']
+    },
+    {
       id: 'eq-3',
-      name: 'CNC Vertical Turning & Heavy Engine Lathes',
+      name: 'CNC Vertical Turning & Heavy Lathes',
       category: 'Turning CNC Group',
       precision: '±0.008 mm',
       capacity: 'Turning diameter up to Ø1,600 mm, length up to 3,000 mm',
-      description: 'Machining of heavy rotor shafts, flanges, gear wheels, and railway wheelsets with driven live tooling.',
-      image: '/images/bzal_wheel_sparks.jpg',
+      description: 'Machining of heavy rotor shafts, flanges, gear rings, and railway wheelsets with driven live tooling.',
+      image: '/images/landing_img_3.jpg',
       tags: ['Turning', 'Shafts up to 3 m', 'Flanges Ø1,600 mm']
+    },
+    {
+      id: 'eq-7',
+      name: 'CNC Turning-Milling Centers with Y-Axis',
+      category: 'Turning CNC Group',
+      precision: '±0.005 mm',
+      capacity: 'Swing over bed Ø650 mm, center distance up to 1,500 mm',
+      description: 'Complete turn-mill machining of stepped shafts, spindles, sleeves, and precision threads in a single clamping.',
+      image: '/images/bzal_sparks.jpg',
+      tags: ['Live Tooling', 'Y-Axis', 'Serial Turned Parts']
     },
     {
       id: 'eq-4',
       name: 'Coordinate & Cylindrical Precision Grinders',
       category: 'Grinding Group',
       precision: '±0.002 mm',
-      capacity: 'Surface roughness down to Ra 0.1 µm',
-      description: 'Superfinishing of high-precision spindle journals, machine slideways, gauges, and critical bearing surfaces.',
-      image: '/images/bzal_lathe.jpg',
+      capacity: 'Surface roughness down to Ra 0.1 µm, length up to 2,000 mm',
+      description: 'Superfinishing of high-precision spindle journals, ISO/HSK tapers, gauges, and P4/P2 bearing seats.',
+      image: '/images/landing_img_4.jpg',
       tags: ['Superfinish', 'Spindles', 'Ra 0.1']
+    },
+    {
+      id: 'eq-8',
+      name: 'Surface & Guideway Grinding Machines',
+      category: 'Grinding Group',
+      precision: '±0.003 mm / 1,000 mm',
+      capacity: 'Magnetic table up to 2,000 × 630 mm',
+      description: 'Precision grinding of datum surfaces, prismatic machine bed slideways, and hardened die plates.',
+      image: '/images/bzal_gears.jpg',
+      tags: ['Surface Grinding', 'Bed Slideways', 'Flatness & Parallelism']
     }
   ],
   zh: [
@@ -1291,9 +1371,19 @@ export const equipmentList: Record<'ru' | 'en' | 'zh', EquipmentItem[]> = {
       category: '数控铣削机床组',
       precision: '±0.005 毫米',
       capacity: '加工行程最高达 2000 × 1200 × 1000 毫米',
-      description: '一次装夹完成复杂空间箱体件、冲压模具及叶轮叶片的高速高精多轴切削。',
+      description: '一次装夹完成复杂空间箱体件、冲压模具及复杂曲面零件的高速高精多轴切削。',
       image: '/images/bzal_gears.jpg',
       tags: ['五轴联动', '微米级高精', '复杂箱体件']
+    },
+    {
+      id: 'eq-5',
+      name: '立式与龙门数控铣削加工中心',
+      category: '数控铣削机床组',
+      precision: '±0.008 毫米',
+      capacity: '工作台达 1600 × 800 毫米，主轴转速 12,000 转/分',
+      description: '批量精密铣削安装底板、支架、减速机端盖、精密键槽及轴承配合面。',
+      image: '/images/landing_img_2.jpg',
+      tags: ['批量数控铣', '底板与箱盖', 'Fanuc / 西门子']
     },
     {
       id: 'eq-2',
@@ -1301,9 +1391,19 @@ export const equipmentList: Record<'ru' | 'en' | 'zh', EquipmentItem[]> = {
       category: '精密镗床组',
       precision: '±0.01 毫米',
       capacity: '工作台达 2500 × 2000 毫米，承重最高 5,000 公斤',
-      description: '大型铸铁与焊接机床床身、底座与横梁的高精同轴孔系镗削及大平面铣削。',
+      description: '大型机床床身、底座与减速器箱体的高精同轴孔系镗削及大平面铣削。',
       image: '/images/bzal_lines.jpg',
       tags: ['重型床身', '承重5吨', '同轴孔系加工']
+    },
+    {
+      id: 'eq-6',
+      name: '高精度坐标镗床',
+      category: '精密镗床组',
+      precision: '±0.004 毫米',
+      capacity: '加工范围达 1120 × 630 × 600 毫米',
+      description: '主轴箱体、精密钻模夹具及工装模具极严苛孔距公差(IT5–IT6)的精镗加工。',
+      image: '/images/landing_img_1.jpg',
+      tags: ['IT5–IT6高精孔距', '工装夹具', '主轴箱体']
     },
     {
       id: 'eq-3',
@@ -1311,19 +1411,39 @@ export const equipmentList: Record<'ru' | 'en' | 'zh', EquipmentItem[]> = {
       category: '数控车削机床组',
       precision: '±0.008 毫米',
       capacity: '最大回转直径 Ø1600 毫米，车削长度达 3000 毫米',
-      description: '重载阶梯轴、法兰盘、大齿轮与铁路轮对的车削、铣槽及钻孔复合加工。',
-      image: '/images/bzal_wheel_sparks.jpg',
+      description: '重载阶梯轴、法兰盘、大齿圈与铁路轮对的车削、铣槽及钻孔复合加工。',
+      image: '/images/landing_img_3.jpg',
       tags: ['车铣复合', '轴类最长3米', '法兰Ø1600']
+    },
+    {
+      id: 'eq-7',
+      name: '带Y轴车铣复合数控车削中心',
+      category: '数控车削机床组',
+      precision: '±0.005 毫米',
+      capacity: '回转直径达 Ø650 毫米，顶尖距达 1500 毫米',
+      description: '精密阶梯轴、主轴芯轴、衬套及复杂螺纹零件的一次装夹车铣复合加工。',
+      image: '/images/bzal_sparks.jpg',
+      tags: ['动力刀塔', 'Y轴复合', '精密回转体']
     },
     {
       id: 'eq-4',
       name: '高精度坐标磨床与外圆磨床',
       category: '精密磨削机床组',
       precision: '±0.002 毫米',
-      capacity: '表面粗糙度达 Ra 0.1 微米',
-      description: '高精机床主轴轴颈、精密导轨面、量检具关键表面的超精镜面研磨。',
-      image: '/images/bzal_lathe.jpg',
+      capacity: '表面粗糙度达 Ra 0.1 微米，长度达 2000 毫米',
+      description: '高精机床主轴轴颈、ISO/HSK锥孔、量检具及P4/P2级轴承位超精镜面研磨。',
+      image: '/images/landing_img_4.jpg',
       tags: ['超精研磨', '主轴部件', 'Ra 0.1微米']
+    },
+    {
+      id: 'eq-8',
+      name: '精密平面磨床与导轨磨床',
+      category: '精密磨削机床组',
+      precision: '±0.003 毫米 / 1000 毫米',
+      capacity: '电磁工作台达 2000 × 630 毫米',
+      description: '机床床身基准面、精密滑动导轨面及淬火模具钢板的平面度与平行度精磨。',
+      image: '/images/bzal_gears.jpg',
+      tags: ['平面与导轨精磨', '床身导轨', '高平行度']
     }
   ]
 };
@@ -1332,7 +1452,7 @@ export const comparisonData: Record<'ru' | 'en' | 'zh', ComparisonRow[]> = {
   ru: [
     {
       criterion: 'Юридическая форма и ответственность',
-      bzalTechnopark: 'Официальный завод ОАО «БЗАЛ» с 50-летней репутацией, прямым договором и гарантией',
+      bzalTechnopark: 'Официальный завод ОАО БЗАЛ с 50-летней репутацией, прямым договором и гарантией',
       typicalBrokers: 'Фирмы-посредники без собственных производственных активов и оборудования',
       isPositive: true
     },
@@ -1356,7 +1476,7 @@ export const comparisonData: Record<'ru' | 'en' | 'zh', ComparisonRow[]> = {
     },
     {
       criterion: 'Производственные масштабы',
-      bzalTechnopark: '30 000+ м² цехов, литье, термообработка, гальваника, шлифовка, краны до 20 т',
+      bzalTechnopark: '30 000+ м² цехов, мехобработка ЧПУ, термообработка, шлифовка, сборка, краны до 20 т',
       typicalBrokers: 'Ограничены возможностями разрозненных мелких мастерских',
       isPositive: true
     },
@@ -1394,7 +1514,7 @@ export const comparisonData: Record<'ru' | 'en' | 'zh', ComparisonRow[]> = {
     },
     {
       criterion: 'Manufacturing Footprint & Fleet',
-      bzalTechnopark: '30,000+ m² halls, foundry, heat treatment, plating, grinding, 20-ton cranes',
+      bzalTechnopark: '30,000+ m² halls, CNC machining, heat treatment, grinding, assembly, 20-ton cranes',
       typicalBrokers: 'Constrained by disjointed small workshops',
       isPositive: true
     },
@@ -1432,7 +1552,7 @@ export const comparisonData: Record<'ru' | 'en' | 'zh', ComparisonRow[]> = {
     },
     {
       criterion: '重工制造承载能力',
-      bzalTechnopark: '30,000+平方米重工车间，下料、铸造、热处理、表面喷涂及20吨吊运齐全',
+      bzalTechnopark: '30,000+平方米重工车间，数控机加工、热处理、精密磨削、装配及20吨吊运齐全',
       typicalBrokers: '受制于分散零散的小加工作坊，难以承接大型复杂构件',
       isPositive: true
     },
@@ -1449,11 +1569,11 @@ export const processSteps: Record<'ru' | 'en' | 'zh', ProcessStep[]> = {
   ru: [
     {
       step: '01',
-      title: 'Обращение в отдел маркетинга',
+      title: 'Обращение в отдел маркетинга и продаж',
       subtitle: 'Приём заявки, чертежей и регистрация ТЗ',
-      desc: 'Вы связываетесь с отделом маркетинга по телефону, почте sales@bzal.by или через форму на сайте. Специалисты регистрируют заявку и передают документацию в инженерные и производственные службы завода.',
-      department: 'Отдел маркетинга и сбыта',
-      duration: 'Пн–Пт 08:00–16:45',
+      desc: 'Вы связываетесь с отделом маркетинга и продаж по телефону, почте sales@bzal.by или через форму на сайте. Специалисты регистрируют заявку и передают документацию в инженерные и производственные службы завода.',
+      department: 'Отдел маркетинга и продаж',
+      duration: 'Пн–Пт 08:00–16:30',
       deliverables: ['Регистрация обращения', 'Передача ТЗ в службы завода', 'Первичное согласование']
     },
     {
@@ -1491,7 +1611,7 @@ export const processSteps: Record<'ru' | 'en' | 'zh', ProcessStep[]> = {
       subtitle: 'Inquiry intake, drawing registration & routing',
       desc: 'You contact our Marketing Department via phone, email (sales@bzal.by), or the website form. Our specialists register your request and forward the files to the relevant engineering and plant services.',
       department: 'Marketing & Sales Department',
-      duration: 'Mon–Fri 08:00–16:45',
+      duration: 'Mon–Fri 08:00–16:30',
       deliverables: ['Inquiry Registration', 'Routing to Plant Divisions', 'Initial Consultation']
     },
     {
@@ -1529,7 +1649,7 @@ export const processSteps: Record<'ru' | 'en' | 'zh', ProcessStep[]> = {
       subtitle: '询价登记、图纸接收与部门分派',
       desc: '您通过电话、邮箱(sales@bzal.by)或网站表单联系市场营销部。市场专员登记您的需求并将技术资料转交总设计师部、工艺部及相关生产部门。',
       department: '市场营销与销售部',
-      duration: '周一至周五 08:00–16:45',
+      duration: '周一至周五 08:00–16:30',
       deliverables: ['询价正式登记', '转交工厂各技术部门', '初步商务对接']
     },
     {

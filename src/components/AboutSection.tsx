@@ -11,7 +11,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ currentLang }) => {
   const t = content[currentLang];
 
   return (
-    <section id="about" className="py-20 sm:py-24 bg-white border-b border-[#D5D9DE] relative overflow-hidden">
+    <section id="about" className="py-8 sm:py-10 bg-white border-b border-[#D5D9DE] relative overflow-hidden">
       
       {/* Background Watermark from Brandbook */}
       <div className="absolute left-8 bottom-0 text-[160px] sm:text-[240px] font-dela text-[#2B3340]/[0.02] select-none pointer-events-none leading-none z-0">
@@ -21,7 +21,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ currentLang }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Header */}
-        <div className="max-w-3xl mb-12 sm:mb-16">
+        <div className="max-w-3xl mb-6 sm:mb-8">
           <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#ECEEF0] rounded-md border border-[#D5D9DE] text-[#E71B26] text-xs font-dela uppercase tracking-wider mb-3">
             <span className="w-2 h-2 rounded-full bg-[#E71B26]" />
             <span>{t.about.eyebrow}</span>
@@ -81,7 +81,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ currentLang }) => {
             <div className="rounded-xl overflow-hidden border border-[#D5D9DE] bg-white shadow-md">
               <div className="relative aspect-[16/10] overflow-hidden">
                 <img
-                  src="/images/bzal_lines.jpg"
+                  src={((t.about as Record<string, unknown>).photoImage as string) || '/images/bzal_lines.jpg'}
                   alt="Автоматические линии ОАО БЗАЛ"
                   className="w-full h-full object-cover"
                 />

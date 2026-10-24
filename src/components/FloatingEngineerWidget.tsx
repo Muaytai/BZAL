@@ -31,13 +31,13 @@ export const FloatingEngineerWidget: React.FC<FloatingEngineerWidgetProps> = ({
   };
 
   return (
-    <div className="fixed bottom-5 right-5 z-40 flex flex-col items-end gap-3 select-none">
+    <div className="fixed bottom-20 sm:bottom-24 right-3 sm:right-5 z-40 flex flex-col items-end gap-2.5 select-none">
       
       {/* Scroll to Top Button */}
       {showScrollTop && (
         <button
           onClick={scrollToTop}
-          className="w-10 h-10 rounded-full bg-white hover:bg-[#2B3340] text-[#2B3340] hover:text-white border border-[#D5D9DE] shadow-md flex items-center justify-center transition-all cursor-pointer hover:-translate-y-0.5 active:translate-y-0"
+          className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white hover:bg-[#2B3340] text-[#2B3340] hover:text-white border border-[#D5D9DE] shadow-md flex items-center justify-center transition-all cursor-pointer hover:-translate-y-0.5 active:translate-y-0"
           aria-label={t.backToTop}
           title={t.backToTop}
         >
@@ -47,7 +47,7 @@ export const FloatingEngineerWidget: React.FC<FloatingEngineerWidgetProps> = ({
 
       {/* Expanded Quick Options Menu */}
       {isExpanded && (
-        <div className="bg-white rounded-2xl shadow-2xl border-2 border-[#2B3340] p-4 w-80 mb-1 animate-in fade-in slide-in-from-bottom-5 duration-200">
+        <div className="bg-white rounded-2xl shadow-2xl border-2 border-[#2B3340] p-4 w-[calc(100vw-24px)] max-w-80 mb-1 animate-in fade-in slide-in-from-bottom-5 duration-200">
           <div className="flex items-start justify-between pb-3 border-b border-[#ECEEF0] mb-3">
             <div className="flex items-start gap-2">
               <Clock className="w-4 h-4 text-[#E71B26] shrink-0 mt-0.5" />
@@ -64,7 +64,7 @@ export const FloatingEngineerWidget: React.FC<FloatingEngineerWidgetProps> = ({
             <button
               onClick={() => setIsExpanded(false)}
               className="p-1 rounded-md text-[#647082] hover:text-[#2B3340] hover:bg-[#ECEEF0] cursor-pointer"
-              aria-label="Закрыть"
+              aria-label="Close"
             >
               <X className="w-4 h-4" />
             </button>
@@ -133,11 +133,11 @@ export const FloatingEngineerWidget: React.FC<FloatingEngineerWidgetProps> = ({
       {/* Main Floating Trigger Button */}
       <button
         onClick={() => setIsExpanded(!isExpanded)}
-        className="group relative inline-flex items-center gap-2.5 pl-3.5 pr-4 py-2.5 rounded-full bg-[#E71B26] hover:bg-[#C9141E] text-white font-extrabold text-xs uppercase tracking-wider shadow-xl hover:shadow-2xl transition-all cursor-pointer hover:scale-105 active:scale-95 border-2 border-white"
+        className="group relative inline-flex items-center gap-2 px-3 sm:pl-3.5 sm:pr-4 py-2 sm:py-2.5 rounded-full bg-[#E71B26] hover:bg-[#C9141E] text-white font-extrabold text-[11px] sm:text-xs uppercase tracking-wider shadow-xl hover:shadow-2xl transition-all cursor-pointer hover:scale-105 active:scale-95 border-2 border-white"
         aria-label={t.label}
       >
-        <Mail className="w-4 h-4 text-white" />
-        <span className="font-dela tracking-wide">{t.label}</span>
+        <Mail className="w-4 h-4 text-white shrink-0" />
+        <span className="font-dela tracking-wide hidden sm:inline">{t.label}</span>
       </button>
 
     </div>

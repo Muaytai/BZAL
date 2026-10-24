@@ -27,11 +27,11 @@ export const ProcessPipeline: React.FC<ProcessPipelineProps> = ({ currentLang })
   };
 
   return (
-    <section id="process" className="py-20 sm:py-24 bg-white border-b border-[#D5D9DE] relative">
+    <section id="process" className="py-8 sm:py-10 bg-white border-b border-[#D5D9DE] relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header */}
-        <div className="max-w-3xl mb-12 sm:mb-16">
+        <div className="max-w-3xl mb-6 sm:mb-8">
           <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#ECEEF0] rounded-md border border-[#D5D9DE] text-[#E71B26] text-xs font-dela uppercase tracking-wider mb-3">
             <span className="w-2 h-2 rounded-full bg-[#E71B26]" />
             <span>{t.process.eyebrow}</span>

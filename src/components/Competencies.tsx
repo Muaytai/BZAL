@@ -33,11 +33,11 @@ export const Competencies: React.FC<CompetenciesProps> = ({ currentLang, onSelec
   };
 
   return (
-    <section id="services" className="py-20 sm:py-24 bg-tech-grid border-b border-[#D5D9DE] relative">
+    <section id="services" className="py-8 sm:py-10 bg-tech-grid border-b border-[#D5D9DE] relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-6 sm:mb-8">
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 bg-white rounded-md border border-[#D5D9DE] text-[#E71B26] text-xs font-dela uppercase tracking-wider mb-3">
               <span className="w-2 h-2 rounded-full bg-[#E71B26]" />

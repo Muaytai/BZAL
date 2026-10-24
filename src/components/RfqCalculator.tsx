@@ -9,6 +9,7 @@ interface RfqCalculatorProps {
   preselectedService?: string;
   onInquiryCreated?: () => void;
   onOpenCrm?: () => void;
+  onOpenPrivacyPolicy?: () => void;
 }
 
 export const RfqCalculator: React.FC<RfqCalculatorProps> = ({
@@ -16,6 +17,7 @@ export const RfqCalculator: React.FC<RfqCalculatorProps> = ({
   preselectedService,
   onInquiryCreated,
   onOpenCrm,
+  onOpenPrivacyPolicy,
 }) => {
   const t = content[currentLang];
 
@@ -146,11 +148,11 @@ export const RfqCalculator: React.FC<RfqCalculatorProps> = ({
   );
 
   return (
-    <section id="calculator" className="py-20 sm:py-24 bg-tech-grid border-b border-[#D5D9DE] relative">
+    <section id="calculator" className="py-8 sm:py-10 bg-tech-grid border-b border-[#D5D9DE] relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header */}
-        <div className="max-w-3xl mb-12 sm:mb-16">
+        <div className="max-w-3xl mb-6 sm:mb-8">
           <div className="inline-flex items-center gap-2 px-3 py-1 bg-white rounded-md border border-[#D5D9DE] text-[#E71B26] text-xs font-dela uppercase tracking-wider mb-3">
             <span className="w-2 h-2 rounded-full bg-[#E71B26]" />
             <span>{t.calculator.eyebrow}</span>
@@ -479,11 +481,48 @@ export const RfqCalculator: React.FC<RfqCalculatorProps> = ({
                         className="w-full bg-[#1B222C] border border-white/15 rounded-lg px-3.5 py-2 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-[#E71B26]"
                       />
                     </div>
+                    {/* Personal Data Consent (Law of RB No. 99-Z) */}
+                    <label className="flex items-start gap-2 pt-1 text-[11px] text-[#BAC5CF] cursor-pointer">
+                      <input
+                        type="checkbox"
+                        required
+                        defaultChecked
+                        className="mt-0.5 accent-[#E71B26] shrink-0"
+                      />
+                      <span>
+                        {currentLang === 'ru' ? (
+                          <>
+                            Согласен на обработку персональных данных согласно{' '}
+                            <button
+                              type="button"
+                              onClick={onOpenPrivacyPolicy}
+                              className="text-white font-bold underline hover:text-[#E71B26] cursor-pointer"
+                            >
+                              Закону РБ № 99-З «О защите персональных данных»
+                            </button>
+                          </>
+                        ) : currentLang === 'en' ? (
+                          <>
+                            I agree to personal data processing under{' '}
+                            <button
+                              type="button"
+                              onClick={onOpenPrivacyPolicy}
+                              className="text-white font-bold underline hover:text-[#E71B26] cursor-pointer"
+                            >
+                              Law of Belarus No. 99-Z
+                            </button>
+                          </>
+                        ) : (
+                          <>同意根据白俄罗斯第99-Z号法律处理个人数据</>
+                        )}
+                      </span>
+                    </label>
                   </div>
 
                   {/* Submission Button */}
                   <button
                     type="submit"
+                    disabled={isSubmitting}
                     className="w-full inline-flex items-center justify-center gap-2 px-6 py-4 rounded-lg bg-[#E71B26] hover:bg-[#C9141E] text-white font-extrabold text-xs uppercase tracking-wider shadow-lg shadow-red-900/40 hover:-translate-y-0.5 transition-all cursor-pointer"
                   >
                     <span>{t.calculator.submitBtn}</span>

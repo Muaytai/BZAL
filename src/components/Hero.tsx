@@ -1,42 +1,53 @@
 import React from 'react';
-import { ArrowUpRight, CheckCircle2, ShieldCheck, Factory, Clock, ChevronDown, PhoneCall, Award } from 'lucide-react';
+import { ArrowUpRight, CheckCircle2, ShieldCheck, Factory, Clock, ChevronDown, PhoneCall, Award, Scale, Search, ArrowRight } from 'lucide-react';
 import { Language } from '../types';
 import { content } from '../data/content';
+import { SitePageId } from './Navbar';
+import { GovLinksBanner } from './GovComplianceSection';
 
 interface HeroProps {
   currentLang: Language;
   onOpenRfq: () => void;
+  onOpenEngineeringTool?: (tool: 'metal' | 'status') => void;
+  onSelectPage?: (page: SitePageId) => void;
+  onOpenGovSection?: () => void;
 }
 
-export const Hero: React.FC<HeroProps> = ({ currentLang, onOpenRfq }) => {
+export const Hero: React.FC<HeroProps> = ({
+  currentLang,
+  onOpenRfq,
+  onOpenEngineeringTool,
+  onSelectPage,
+  onOpenGovSection,
+}) => {
   const t = content[currentLang];
 
   return (
-    <section className="relative pt-32 pb-16 lg:pt-40 lg:pb-24 overflow-hidden bg-tech-grid border-b border-[#D5D9DE]">
+    <section className="relative py-8 lg:py-12 overflow-hidden bg-tech-grid border-b border-[#D5D9DE]">
       {/* Decorative Watermark Number from Brandbook Heritage (1974) */}
-      <div className="absolute right-6 top-24 text-[140px] sm:text-[220px] font-dela text-[#2B3340]/[0.03] select-none pointer-events-none leading-none z-0">
+      <div className="absolute right-6 top-12 text-[140px] sm:text-[220px] font-dela text-[#2B3340]/[0.03] select-none pointer-events-none leading-none z-0">
         1974
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
           
           {/* Left Column: Commercial Offer & High-Converting Industrial Copy */}
           <div className="lg:col-span-7 flex flex-col items-start">
             
             {/* Brand Eyebrow Badge strictly per Brandbook */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-md bg-white border border-[#D5D9DE] shadow-sm mb-5">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#E71B26] animate-pulse" />
-              <span className="text-[#E71B26] font-dela text-xs tracking-wider uppercase">
+            <div className="inline-flex flex-wrap items-center gap-2 px-3 py-1.5 rounded-md bg-white border border-[#D5D9DE] shadow-sm mb-4">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#E71B26] animate-pulse shrink-0" />
+              <span className="text-[#E71B26] font-dela text-[10px] sm:text-xs tracking-wider uppercase">
                 {t.hero.badge}
               </span>
-              <span className="text-[#647082] text-xs font-semibold pl-1 border-l border-[#D5D9DE]">
+              <span className="text-[#647082] text-[10px] sm:text-xs font-semibold pl-1 border-l border-[#D5D9DE]">
                 {t.hero.sinceTag}
               </span>
             </div>
 
-            {/* Main Headline in Brand Dela Gothic One & Montserrat */}
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[46px] font-black text-[#2B3340] leading-[1.12] tracking-tight mb-5">
+            {/* Main Headline in Brand Dela Gothic One & Montserrat (responsive for 320px-360px mobile screens) */}
+            <h1 className="text-xl sm:text-3xl md:text-4xl lg:text-[42px] font-black text-[#2B3340] leading-[1.15] tracking-tight mb-4 break-words max-w-full">
               <span className="text-[#E71B26] font-dela block mb-1">
                 {t.hero.titleHighlight}
               </span>
@@ -46,7 +57,7 @@ export const Hero: React.FC<HeroProps> = ({ currentLang, onOpenRfq }) => {
             </h1>
 
             {/* Official Slogan from Brandbook Poster / Catalog */}
-            <div className="p-3.5 bg-white rounded-lg border-l-4 border-[#E71B26] shadow-sm mb-6 w-full max-w-2xl">
+            <div className="p-3.5 bg-white rounded-lg border-l-4 border-[#E71B26] shadow-sm mb-5 w-full max-w-2xl">
               <p className="font-dela text-[#E71B26] text-xs sm:text-sm tracking-wide uppercase">
                 {t.hero.sloganTitle}
               </p>
@@ -56,49 +67,85 @@ export const Hero: React.FC<HeroProps> = ({ currentLang, onOpenRfq }) => {
             </div>
 
             {/* Action Buttons */}
-            <div className="flex flex-wrap items-center gap-3.5 w-full sm:w-auto mb-8">
+            <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto mb-4">
               <button
+                type="button"
                 onClick={onOpenRfq}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-lg bg-[#E71B26] hover:bg-[#C9141E] text-white font-extrabold text-sm uppercase tracking-wider shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all cursor-pointer active:translate-y-0"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg bg-[#E71B26] hover:bg-[#C9141E] text-white font-extrabold text-xs sm:text-sm uppercase tracking-wider shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all cursor-pointer active:translate-y-0"
               >
-                <span>{t.hero.primaryCta}</span>
-                <ArrowUpRight className="w-4 h-4 stroke-[2.5]" />
+                <span>{t.hero.primaryCta.replace('↗', '').trim()}</span>
+                <ArrowUpRight className="w-4 h-4 stroke-[2.5] shrink-0" />
               </button>
 
-              <a
-                href="#equipment"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-4 rounded-lg bg-white hover:bg-[#ECEEF0] border border-[#D5D9DE] text-[#2B3340] font-bold text-sm tracking-wide transition-all shadow-sm hover:-translate-y-0.5"
+              <button
+                type="button"
+                onClick={() => onSelectPage?.('equipment')}
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-lg bg-white hover:bg-[#ECEEF0] border border-[#D5D9DE] text-[#2B3340] font-bold text-xs sm:text-sm tracking-wide transition-all shadow-sm hover:-translate-y-0.5 cursor-pointer"
               >
-                <span>{t.hero.secondaryCta}</span>
-                <ChevronDown className="w-4 h-4 text-[#647082]" />
-              </a>
+                <span>{t.hero.secondaryCta.replace('↓', '').trim()}</span>
+                <ArrowRight className="w-4 h-4 text-[#E71B26] shrink-0" />
+              </button>
             </div>
 
+            {/* Quick Engineering Tools Bar (GOST Metal Calculator + Inquiry Status Tracker) */}
+            {onOpenEngineeringTool && (
+              <div className="flex flex-wrap items-center gap-2.5 w-full mb-5">
+                <button
+                  type="button"
+                  onClick={() => onOpenEngineeringTool('metal')}
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-[#2B3340] hover:bg-[#1B222C] text-white text-xs font-extrabold uppercase tracking-wider transition-all cursor-pointer shadow-xs"
+                >
+                  <Scale className="w-4 h-4 text-[#E71B26] shrink-0" />
+                  <span>
+                    {currentLang === 'ru'
+                      ? 'Металлокалькулятор заготовок ГОСТ'
+                      : currentLang === 'en'
+                        ? 'GOST Blank Weight Calculator'
+                        : 'GOST毛坯重量计算器'}
+                  </span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onOpenEngineeringTool('status')}
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-white hover:bg-[#ECEEF0] border border-[#2B3340] text-[#2B3340] text-xs font-extrabold uppercase tracking-wider transition-all cursor-pointer shadow-xs"
+                >
+                  <Search className="w-4 h-4 text-[#E71B26] shrink-0" />
+                  <span>
+                    {currentLang === 'ru'
+                      ? 'Проверить статус заявки по №'
+                      : currentLang === 'en'
+                        ? 'Check Inquiry Status by #'
+                        : '按编号查询询价状态'}
+                  </span>
+                </button>
+              </div>
+            )}
+
             {/* Direct Line with Marketing & Sales Department */}
-            <div className="flex flex-wrap items-center gap-3.5 text-xs font-semibold text-[#444E60] mb-8 pb-6 border-b border-[#D5D9DE] w-full">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs font-semibold text-[#444E60] mb-6 pb-5 border-b border-[#D5D9DE] w-full">
               <span className="flex items-center gap-1.5 text-[#2B3340] font-bold">
-                <PhoneCall className="w-4 h-4 text-[#E71B26]" />
+                <PhoneCall className="w-4 h-4 text-[#E71B26] shrink-0" />
                 <span>{t.hero.salesLeadLabel}</span>
               </span>
-              <a href="tel:+375447514477" className="text-[#E71B26] font-extrabold hover:underline">
-                +375 44 751 44 77
+              <a href={`tel:${t.brand.phoneRaw}`} className="text-[#E71B26] font-extrabold hover:underline">
+                {t.brand.phone}
               </a>
               <span className="text-[#D5D9DE]">•</span>
-              <a href="tel:+375163672041" className="text-[#2B3340] hover:text-[#E71B26]">
-                +375 (163) 67-20-41
+              <a href={`tel:${t.brand.phoneMarket.replace(/[^+\d]/g, '')}`} className="text-[#2B3340] hover:text-[#E71B26]">
+                {t.brand.phoneMarket}
               </a>
               <span className="text-[#D5D9DE]">•</span>
-              <a href="mailto:sales@bzal.by" className="text-[#2B3340] font-bold hover:text-[#E71B26] underline">
-                sales@bzal.by
+              <a href={`mailto:${t.brand.email}`} className="text-[#2B3340] font-bold hover:text-[#E71B26] underline">
+                {t.brand.email}
               </a>
             </div>
 
             {/* 4 Trust Guarantee Badges */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 w-full">
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-2.5 w-full">
               {t.hero.trustBadges.map((badge, idx) => (
                 <div key={idx} className="flex items-center gap-2 text-xs font-bold text-[#2B3340] bg-white p-2.5 rounded-md border border-[#E2E5E8] shadow-xs">
                   <CheckCircle2 className="w-4 h-4 text-[#E71B26] shrink-0" />
-                  <span className="truncate">{badge}</span>
+                  <span className="leading-snug">{badge}</span>
                 </div>
               ))}
             </div>
@@ -110,11 +157,11 @@ export const Hero: React.FC<HeroProps> = ({ currentLang, onOpenRfq }) => {
             {/* The Signature Red-and-White Chevron Ribbon at 45 Degrees */}
             <div className="relative rounded-2xl overflow-hidden border-2 border-[#2B3340] bg-white shadow-xl">
               
-              {/* Photo with Machining Sparks from Brandbook */}
+              {/* Clean Workshop Photo of Automatic Transfer Line */}
               <div className="relative aspect-[4/3] sm:aspect-[16/11] overflow-hidden bg-[#1B222C]">
                 <img
-                  src="/images/bzal_wheel_sparks.jpg"
-                  alt="Обработка колесных пар со снопом искр ОАО БЗАЛ"
+                  src={((t.hero as Record<string, unknown>).heroImage as string) || '/images/landing_img_1.jpg'}
+                  alt="Производственный комплекс и автоматические линии ОАО БЗАЛ"
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#1B222C]/90 via-transparent to-transparent" />
@@ -170,7 +217,11 @@ export const Hero: React.FC<HeroProps> = ({ currentLang, onOpenRfq }) => {
           </div>
 
         </div>
+
+        {/* Mandatory State Portals & Electronic Appeals Banner on the Main Page */}
+        <GovLinksBanner currentLang={currentLang} onOpenGovSection={onOpenGovSection} />
       </div>
     </section>
   );
 };
+
