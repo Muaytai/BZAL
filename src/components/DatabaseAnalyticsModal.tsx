@@ -142,7 +142,7 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
   const [specialistEmail, setSpecialistEmail] = useState<string>(
     getSavedAdminEmail() || 'makc.kuxta@gmail.com'
   );
-  const [loginEmail, setLoginEmail] = useState('makc.kuxta@gmail.com');
+  const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
   const [loginError, setLoginError] = useState<string | null>(null);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
@@ -227,18 +227,6 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
     setSpecialistEmail(res.email || loginEmail);
     setIsAuthorized(true);
     loadAllData();
-  };
-
-  const handleQuickSpecialistLogin = async () => {
-    setLoginError(null);
-    setIsLoggingIn(true);
-    const res = await loginSpecialistApi('makc.kuxta@gmail.com', '1974');
-    setIsLoggingIn(false);
-    if (res.success) {
-      setSpecialistEmail('makc.kuxta@gmail.com');
-      setIsAuthorized(true);
-      loadAllData();
-    }
   };
 
   const handleLogout = () => {
@@ -398,7 +386,7 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
                   required
                   value={loginEmail}
                   onChange={(e) => setLoginEmail(e.target.value)}
-                  placeholder="makc.kuxta@gmail.com или sales@bzal.by"
+                  placeholder="Введите корпоративный Email"
                   className="w-full px-3.5 py-2.5 rounded-lg bg-[#ECEEF0] border border-[#D5D9DE] text-xs font-semibold text-[#2B3340] focus:outline-none focus:border-[#E71B26]"
                 />
               </div>
@@ -412,7 +400,7 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
                   required
                   value={loginPassword}
                   onChange={(e) => setLoginPassword(e.target.value)}
-                  placeholder="Введите служебный код (по умолчанию: 1974)"
+                  placeholder="Введите служебный код доступа"
                   className="w-full px-3.5 py-2.5 rounded-lg bg-[#ECEEF0] border border-[#D5D9DE] text-xs font-semibold text-[#2B3340] focus:outline-none focus:border-[#E71B26]"
                 />
               </div>
@@ -431,16 +419,7 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
               </button>
             </form>
 
-            <div className="pt-4 border-t border-[#ECEEF0] space-y-3">
-              <button
-                type="button"
-                onClick={handleQuickSpecialistLogin}
-                className="w-full py-2.5 px-3 rounded-lg bg-[#2B3340] hover:bg-[#1B222C] text-white text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer flex items-center justify-center gap-2"
-              >
-                <ShieldCheck className="w-4 h-4 text-[#E71B26]" />
-                <span>Быстрый вход владельца (makc.kuxta@gmail.com)</span>
-              </button>
-
+            <div className="pt-4 border-t border-[#ECEEF0]">
               <button
                 type="button"
                 onClick={onClose}

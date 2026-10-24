@@ -440,7 +440,7 @@ export async function createRfqInquiry(params: {
       }),
     });
 
-    if (response.ok) {
+    if (response.ok && response.headers.get('content-type')?.includes('application/json')) {
       const json = await response.json();
       return {
         inquiry: { inquiry_number: json.inquiry_number || fallbackNumber },
@@ -448,7 +448,19 @@ export async function createRfqInquiry(params: {
       };
     }
   } catch {
-    // Fallback
+    // Fallback to direct Supabase cloud insert on Vercel
+  }
+
+  try {
+    const { error } = await supabase.from('rfq_inquiries').insert([localItem]);
+    if (!error) {
+      return {
+        inquiry: { inquiry_number: fallbackNumber },
+        savedToCloud: true,
+      };
+    }
+  } catch {
+    // Local storage already saved
   }
 
   return {
@@ -521,7 +533,7 @@ export async function loginSpecialistApi(
   return {
     success: false,
     error:
-      'Неверный Email специалиста или код доступа. Используйте makc.kuxta@gmail.com и код 1974.',
+      'Неверный Email специалиста или код доступа. Доступ разрешён только уполномоченным сотрудникам ОАО «БЗАЛ».',
   };
 }
 
@@ -558,7 +570,7 @@ export async function fetchAdminDashboardData(): Promise<{
         Authorization: `Bearer ${token}`,
       },
     });
-    if (res.ok) {
+    if (res.ok && res.headers.get('content-type')?.includes('application/json')) {
       const json = await res.json();
       if (Array.isArray(json.inquiries) && json.inquiries.length > 0) {
         saveLocalInquiries(json.inquiries);
@@ -575,7 +587,32 @@ export async function fetchAdminDashboardData(): Promise<{
       };
     }
   } catch {
-    // Fallback to local if server route unavailable
+    // Fallback to direct Supabase cloud / local if server route unavailable (e.g. on Vercel)
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from('rfq_inquiries')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (!error && Array.isArray(data)) {
+      if (data.length > 0) {
+        saveLocalInquiries(data as BzalRfqInquiry[]);
+      }
+      return {
+        authorized: true,
+        inquiries: data.length > 0 ? (data as BzalRfqInquiry[]) : getLocalInquiries(),
+        passportLeads: getLocalLeads(),
+        supabaseStatus: {
+          connected: true,
+          tablesReady: true,
+          message: 'Подключено напрямую к облаку Supabase (htwkoxioebrgysccoomg.supabase.co)',
+        },
+      };
+    }
+  } catch {
+    // Fallback to local
   }
 
   return {
