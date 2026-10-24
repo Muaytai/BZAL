@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Language } from './types';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
@@ -16,12 +16,50 @@ import { Footer } from './components/Footer';
 import { RfqModal } from './components/RfqModal';
 import { PlantPassportModal } from './components/PlantPassportModal';
 import { FloatingEngineerWidget } from './components/FloatingEngineerWidget';
+import { DatabaseAnalyticsModal } from './components/DatabaseAnalyticsModal';
+
+function checkIsAdminRoute(): boolean {
+  if (typeof window === 'undefined') return false;
+  return (
+    window.location.hash === '#admin' ||
+    window.location.pathname === '/admin' ||
+    window.location.pathname.startsWith('/admin/')
+  );
+}
 
 export default function App() {
   const [currentLang, setCurrentLang] = useState<Language>('ru');
   const [isRfqOpen, setIsRfqOpen] = useState(false);
   const [isPassportOpen, setIsPassportOpen] = useState(false);
+  const [isCrmOpen, setIsCrmOpen] = useState<boolean>(checkIsAdminRoute);
+  const [crmRefreshCount, setCrmRefreshCount] = useState(0);
   const [selectedService, setSelectedService] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    const syncRoute = () => {
+      setIsCrmOpen(checkIsAdminRoute());
+    };
+    window.addEventListener('hashchange', syncRoute);
+    window.addEventListener('popstate', syncRoute);
+    return () => {
+      window.removeEventListener('hashchange', syncRoute);
+      window.removeEventListener('popstate', syncRoute);
+    };
+  }, []);
+
+  const handleOpenAdmin = () => {
+    window.location.hash = 'admin';
+    setIsCrmOpen(true);
+  };
+
+  const handleCloseAdmin = () => {
+    if (window.location.hash === '#admin') {
+      history.pushState('', document.title, window.location.pathname + window.location.search);
+    } else if (window.location.pathname.startsWith('/admin')) {
+      history.pushState('', document.title, '/');
+    }
+    setIsCrmOpen(false);
+  };
 
   const handleOpenRfq = (serviceTitle?: string) => {
     setSelectedService(serviceTitle);
@@ -38,6 +76,10 @@ export default function App() {
     }
   };
 
+  const triggerCrmRefresh = () => {
+    setCrmRefreshCount((c) => c + 1);
+  };
+
   return (
     <div id="top" className="min-h-screen bg-[#ECEEF0] text-[#2B3340] flex flex-col font-montserrat">
       {/* 1. Navigation */}
@@ -45,6 +87,7 @@ export default function App() {
         currentLang={currentLang}
         onLanguageChange={setCurrentLang}
         onOpenRfq={() => handleOpenRfq()}
+        onOpenAdmin={handleOpenAdmin}
       />
 
       {/* Main Content */}
@@ -106,6 +149,7 @@ export default function App() {
         <RfqCalculator
           currentLang={currentLang}
           preselectedService={selectedService}
+          onInquiryCreated={triggerCrmRefresh}
         />
 
         {/* 12. Official Contacts & Location */}
@@ -118,6 +162,7 @@ export default function App() {
       {/* Footer */}
       <Footer
         currentLang={currentLang}
+        onOpenCrm={handleOpenAdmin}
       />
 
       {/* Quick RFQ Modal Dialog */}
@@ -126,6 +171,7 @@ export default function App() {
         onClose={() => setIsRfqOpen(false)}
         currentLang={currentLang}
         initialService={selectedService}
+        onInquiryCreated={triggerCrmRefresh}
       />
 
       {/* Plant Capability Passport Lead Magnet Modal */}
@@ -133,12 +179,20 @@ export default function App() {
         isOpen={isPassportOpen}
         onClose={() => setIsPassportOpen(false)}
         currentLang={currentLang}
+        onLeadCreated={triggerCrmRefresh}
       />
 
-      {/* Floating Quick Action Engineer Widget */}
+      {/* Separate Protected Specialist Admin Panel (/admin or #admin) */}
+      <DatabaseAnalyticsModal
+        isOpen={isCrmOpen}
+        onClose={handleCloseAdmin}
+        refreshTrigger={crmRefreshCount}
+      />
+
+      {/* Floating Quick Action Marketing & Sales Widget */}
       <FloatingEngineerWidget
         currentLang={currentLang}
-        onOpenRfq={() => handleOpenRfq('Консультация с дежурным инженером ОГК/ОГТ')}
+        onOpenRfq={() => handleOpenRfq('Обращение в отдел маркетинга и сбыта')}
         onOpenPassport={() => setIsPassportOpen(true)}
       />
     </div>

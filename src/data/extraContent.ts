@@ -349,20 +349,20 @@ export const extraContent: Record<Language, ExtraContentLanguage> = {
       companyPlaceholder: 'ПАО «Машиностроительный завод»',
       btnDownload: 'Скачать технический паспорт PDF',
       downloadSuccessTitle: 'Паспорт сформирован для загрузки',
-      downloadSuccessDesc: 'Благодарим за интерес к мощностям ОАО «БЗАЛ». Документ готов к скачиванию. Копия паспорта с контактными данными ответственных специалистов ОГК/ОГТ направлена на ваш email.',
+      downloadSuccessDesc: 'Благодарим за интерес к мощностям ОАО «БЗАЛ». Документ готов к скачиванию. По вопросам размещения заказов обращайтесь в отдел маркетинга (Пн–Пт 08:00–16:45) по тел. +375 44 751 44 77 или на почту sales@bzal.by.',
       btnDirectDownload: 'Открыть PDF-документ прямо сейчас',
       btnClose: 'Закрыть',
       securityNote: 'Конфиденциальность гарантируется. Ваши контакты не передаются третьим лицам.'
     },
     engineerWidget: {
-      label: 'Инженерная консультация',
-      dutyEngineer: 'ДЕЖУРНЫЙ ИНЖЕНЕР ОГТ / ОГК',
-      dutyStatus: 'На связи на производстве',
-      callNow: 'Позвонить дежурному инженеру',
-      sendBrief: 'Задать технический вопрос / Отправить ТЗ',
+      label: 'Отдел маркетинга',
+      dutyEngineer: 'ОТДЕЛ МАРКЕТИНГА И СБЫТА',
+      dutyStatus: 'Пн–Пт: 08:00 – 16:45 (приём заявок)',
+      callNow: 'Позвонить в отдел маркетинга',
+      sendBrief: 'Оставить заявку / Отправить чертежи',
       downloadPassport: 'Скачать паспорт оборудования (PDF)',
       backToTop: 'Наверх',
-      quickHelp: 'Техническая консультация по чертежам'
+      quickHelp: 'Приём заявок, передача в ОГК/ОГТ и обратная связь'
     }
   },
 
@@ -619,20 +619,20 @@ export const extraContent: Record<Language, ExtraContentLanguage> = {
       companyPlaceholder: 'Heavy Machinery Plant Ltd.',
       btnDownload: 'Download Technical Passport PDF',
       downloadSuccessTitle: 'Technical Passport Ready for Download',
-      downloadSuccessDesc: 'Thank you for your interest in JSC "BZAL" capacities. Your file has been generated. A copy with direct engineer contact lines has been sent to your email.',
+      downloadSuccessDesc: 'Thank you for your interest in JSC "BZAL" capacities. Your file has been generated. For order inquiries, please contact our Marketing Department (Mon–Fri 08:00–16:45) at +375 44 751 44 77 or sales@bzal.by.',
       btnDirectDownload: 'Open PDF Dossier Now',
       btnClose: 'Close Window',
       securityNote: 'Enterprise privacy guaranteed. Data is strictly confidential.'
     },
     engineerWidget: {
-      label: 'Engineering Support',
-      dutyEngineer: 'DUTY CHIEF PROCESS ENGINEER',
-      dutyStatus: 'Online on shop floor',
-      callNow: 'Direct Phone Line',
-      sendBrief: 'Submit Technical Drawing / Scope',
+      label: 'Marketing & Sales',
+      dutyEngineer: 'MARKETING & SALES DEPARTMENT',
+      dutyStatus: 'Mon–Fri: 08:00 – 16:45 (UTC+3)',
+      callNow: 'Call Marketing Department',
+      sendBrief: 'Submit Inquiry / Send Drawings',
       downloadPassport: 'Download Equipment Passport (PDF)',
       backToTop: 'Scroll to Top',
-      quickHelp: 'Drawing & DFM consultation'
+      quickHelp: 'Inquiry intake, engineering review & feedback'
     }
   },
 
@@ -889,20 +889,20 @@ export const extraContent: Record<Language, ExtraContentLanguage> = {
       companyPlaceholder: '重型装备制造集团',
       btnDownload: '立即获取装备技术白皮书 PDF',
       downloadSuccessTitle: '白皮书已生成就绪',
-      downloadSuccessDesc: '感谢您关注BZAL工业科技园区制造实力。文件已生成完毕，可立即下载。同时我们已将附有总设计师及总工艺师直通电话的名录副本发送至您的邮箱。',
+      downloadSuccessDesc: '感谢您关注BZAL工业科技园区制造实力。文件已生成完毕，可立即下载。如有合作需求，请在工作时间(周一至周五 08:00–16:45)联系市场营销部：+375 44 751 44 77 或发送邮件至 sales@bzal.by。',
       btnDirectDownload: '立即在线查阅 PDF 卷宗',
       btnClose: '关闭窗口',
       securityNote: '我们严格恪守企业信息保密承诺，绝不向第三方透露您的任何联络资讯。'
     },
     engineerWidget: {
-      label: '总师在线支持',
-      dutyEngineer: '值班总工艺师 / 总设计师',
-      dutyStatus: '车间一线在线',
-      callNow: '直接拨打总师热线',
-      sendBrief: '上传图纸 / 提交工艺咨询',
+      label: '市场与销售部',
+      dutyEngineer: '市场营销与销售部',
+      dutyStatus: '周一至周五: 08:00 – 16:45',
+      callNow: '拨打市场营销部电话',
+      sendBrief: '提交询价申请 / 发送图纸',
       downloadPassport: '下载设备技术白皮书 (PDF)',
       backToTop: '返回顶部',
-      quickHelp: '图纸可行性即时咨询'
+      quickHelp: '受理询价、转交工程部门评估并反馈结果'
     }
   }
 };

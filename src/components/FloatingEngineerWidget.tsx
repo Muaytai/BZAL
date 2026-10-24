@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Phone, FileText, ArrowUp, MessageSquare, ChevronUp, X, Sparkles, ShieldCheck } from 'lucide-react';
+import { Phone, Mail, FileText, ArrowUp, MessageSquare, Clock, X } from 'lucide-react';
 import { Language } from '../types';
 import { extraContent } from '../data/extraContent';
 
@@ -47,15 +47,15 @@ export const FloatingEngineerWidget: React.FC<FloatingEngineerWidgetProps> = ({
 
       {/* Expanded Quick Options Menu */}
       {isExpanded && (
-        <div className="bg-white rounded-2xl shadow-2xl border-2 border-[#2B3340] p-4 w-72 mb-1 animate-in fade-in slide-in-from-bottom-5 duration-200">
-          <div className="flex items-center justify-between pb-3 border-b border-[#ECEEF0] mb-3">
-            <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse" />
+        <div className="bg-white rounded-2xl shadow-2xl border-2 border-[#2B3340] p-4 w-80 mb-1 animate-in fade-in slide-in-from-bottom-5 duration-200">
+          <div className="flex items-start justify-between pb-3 border-b border-[#ECEEF0] mb-3">
+            <div className="flex items-start gap-2">
+              <Clock className="w-4 h-4 text-[#E71B26] shrink-0 mt-0.5" />
               <div>
                 <div className="font-dela text-[10px] text-[#2B3340] uppercase">
                   {t.dutyEngineer}
                 </div>
-                <div className="text-[10px] text-[#647082] font-semibold">
+                <div className="text-[10px] text-[#647082] font-semibold mt-0.5">
                   {t.dutyStatus}
                 </div>
               </div>
@@ -64,13 +64,22 @@ export const FloatingEngineerWidget: React.FC<FloatingEngineerWidgetProps> = ({
             <button
               onClick={() => setIsExpanded(false)}
               className="p-1 rounded-md text-[#647082] hover:text-[#2B3340] hover:bg-[#ECEEF0] cursor-pointer"
+              aria-label="Закрыть"
             >
               <X className="w-4 h-4" />
             </button>
           </div>
 
+          <p className="text-[11px] text-[#444E60] leading-snug mb-3 bg-[#ECEEF0] p-2.5 rounded-lg border border-[#D5D9DE] font-medium">
+            {currentLang === 'ru'
+              ? 'Отдел маркетинга принимает заявку, передаёт в ОГК, ОГТ и другие службы завода, после чего сообщает ответ по телефону или в ответ на заявку.'
+              : currentLang === 'en'
+              ? 'Marketing receives your request, forwards it to OGK/OGT & plant services, and replies by phone or email.'
+              : '市场部统一接收申请，转交工程师及各部门评估后，通过电话或回复申请反馈。'}
+          </p>
+
           <div className="space-y-2">
-            {/* Quick Consultation / RFQ */}
+            {/* Quick Application / RFQ */}
             <button
               onClick={() => {
                 setIsExpanded(false);
@@ -82,7 +91,7 @@ export const FloatingEngineerWidget: React.FC<FloatingEngineerWidgetProps> = ({
               <span>{t.sendBrief}</span>
             </button>
 
-            {/* Direct Telephone Call */}
+            {/* Direct Telephone Call to Marketing */}
             <a
               href="tel:+375447514477"
               className="w-full p-2.5 rounded-lg bg-[#ECEEF0] hover:bg-[#D5D9DE] text-[#2B3340] flex items-center gap-2.5 text-xs font-bold transition-colors text-left"
@@ -90,7 +99,19 @@ export const FloatingEngineerWidget: React.FC<FloatingEngineerWidgetProps> = ({
               <Phone className="w-4 h-4 text-[#E71B26] shrink-0" />
               <div>
                 <div>{t.callNow}</div>
-                <div className="text-[10px] font-mono text-[#647082]">+375 44 751 44 77</div>
+                <div className="text-[10px] font-mono text-[#647082]">+375 44 751 44 77 / (163) 67-20-41</div>
+              </div>
+            </a>
+
+            {/* Direct Email to Marketing */}
+            <a
+              href="mailto:sales@bzal.by"
+              className="w-full p-2.5 rounded-lg bg-[#ECEEF0] hover:bg-[#D5D9DE] text-[#2B3340] flex items-center gap-2.5 text-xs font-bold transition-colors text-left"
+            >
+              <Mail className="w-4 h-4 text-[#E71B26] shrink-0" />
+              <div>
+                <div>sales@bzal.by</div>
+                <div className="text-[10px] text-[#647082] font-medium">{t.quickHelp}</div>
               </div>
             </a>
 
@@ -109,19 +130,17 @@ export const FloatingEngineerWidget: React.FC<FloatingEngineerWidgetProps> = ({
         </div>
       )}
 
-      {/* Main Floating Trigger Pill */}
+      {/* Main Floating Trigger Button */}
       <button
         onClick={() => setIsExpanded(!isExpanded)}
-        className="group relative inline-flex items-center gap-2.5 pl-3 pr-4 py-2.5 rounded-full bg-[#E71B26] hover:bg-[#C9141E] text-white font-extrabold text-xs uppercase tracking-wider shadow-xl hover:shadow-2xl transition-all cursor-pointer hover:scale-105 active:scale-95 border-2 border-white"
+        className="group relative inline-flex items-center gap-2.5 pl-3.5 pr-4 py-2.5 rounded-full bg-[#E71B26] hover:bg-[#C9141E] text-white font-extrabold text-xs uppercase tracking-wider shadow-xl hover:shadow-2xl transition-all cursor-pointer hover:scale-105 active:scale-95 border-2 border-white"
         aria-label={t.label}
       >
-        <span className="relative flex h-3 w-3">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75" />
-          <span className="relative inline-flex rounded-full h-3 w-3 bg-white" />
-        </span>
+        <Mail className="w-4 h-4 text-white" />
         <span className="font-dela tracking-wide">{t.label}</span>
       </button>
 
     </div>
   );
 };
+

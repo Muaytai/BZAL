@@ -74,8 +74,8 @@ export const Hero: React.FC<HeroProps> = ({ currentLang, onOpenRfq }) => {
               </a>
             </div>
 
-            {/* Direct Line with Engineering Chief */}
-            <div className="flex flex-wrap items-center gap-4 text-xs font-semibold text-[#444E60] mb-8 pb-6 border-b border-[#D5D9DE] w-full">
+            {/* Direct Line with Marketing & Sales Department */}
+            <div className="flex flex-wrap items-center gap-3.5 text-xs font-semibold text-[#444E60] mb-8 pb-6 border-b border-[#D5D9DE] w-full">
               <span className="flex items-center gap-1.5 text-[#2B3340] font-bold">
                 <PhoneCall className="w-4 h-4 text-[#E71B26]" />
                 <span>{t.hero.salesLeadLabel}</span>
@@ -84,8 +84,12 @@ export const Hero: React.FC<HeroProps> = ({ currentLang, onOpenRfq }) => {
                 +375 44 751 44 77
               </a>
               <span className="text-[#D5D9DE]">•</span>
-              <a href="tel:+375163672048" className="text-[#2B3340] hover:text-[#E71B26]">
-                +375 (163) 67-20-48
+              <a href="tel:+375163672041" className="text-[#2B3340] hover:text-[#E71B26]">
+                +375 (163) 67-20-41
+              </a>
+              <span className="text-[#D5D9DE]">•</span>
+              <a href="mailto:sales@bzal.by" className="text-[#2B3340] font-bold hover:text-[#E71B26] underline">
+                sales@bzal.by
               </a>
             </div>
 

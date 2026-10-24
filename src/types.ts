@@ -115,7 +115,7 @@ export interface RfqFormData {
   company: string;
   email: string;
   phone: string;
-  preferredContact: 'phone' | 'telegram' | 'whatsapp' | 'email';
+  preferredContact: 'phone' | 'email' | 'both';
   comments: string;
   fileNames: string[];
 }

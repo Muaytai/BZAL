@@ -2,17 +2,20 @@ import React, { useState } from 'react';
 import { X, Download, FileText, CheckCircle2, ShieldCheck, ArrowRight, Building, Printer } from 'lucide-react';
 import { Language } from '../types';
 import { extraContent } from '../data/extraContent';
+import { createPassportLead } from '../utils/supabase';
 
 interface PlantPassportModalProps {
   isOpen: boolean;
   onClose: () => void;
   currentLang: Language;
+  onLeadCreated?: () => void;
 }
 
 export const PlantPassportModal: React.FC<PlantPassportModalProps> = ({
   isOpen,
   onClose,
-  currentLang
+  currentLang,
+  onLeadCreated,
 }) => {
   const [formData, setFormData] = useState({
     name: '',
@@ -25,8 +28,14 @@ export const PlantPassportModal: React.FC<PlantPassportModalProps> = ({
 
   const t = extraContent[currentLang]?.passportModal || extraContent.ru.passportModal;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    await createPassportLead({
+      contact_name: formData.name,
+      company: formData.company,
+      email: formData.email,
+    });
+    onLeadCreated?.();
     setIsSubmitted(true);
   };
 
@@ -37,7 +46,7 @@ export const PlantPassportModal: React.FC<PlantPassportModalProps> = ({
 Барановичский завод автоматических линий (Основан 14.03.1974)
 Адрес: Республика Беларусь, 225410, г. Барановичи, ул. Королика, 8
 Тел. сбыта: +375 44 751 44 77, +375 (163) 67-20-48
-Email: bzal_market@mail.ru | Сайт: www.bzal.by
+Email: sales@bzal.by | Сайт: www.bzal.by
 Сертификация: СТБ ISO 9001-2015 | Аккредитованная лаборатория ОТК
 ========================================================================
 

@@ -62,6 +62,9 @@ export const ProcessPipeline: React.FC<ProcessPipelineProps> = ({ currentLang })
               </div>
 
               <div>
+                <div className="inline-block px-2 py-0.5 rounded bg-[#ECEEF0] border border-[#D5D9DE] text-[10px] font-bold text-[#2B3340] uppercase tracking-wider mb-2">
+                  {item.department}
+                </div>
                 <h3 className="text-base font-black text-[#2B3340] mb-1 font-dela uppercase">
                   {item.title}
                 </h3>

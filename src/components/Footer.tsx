@@ -1,13 +1,14 @@
 import React from 'react';
-import { ArrowUp, Phone, Mail, MapPin, ShieldCheck, Globe } from 'lucide-react';
+import { ArrowUp, Phone, Mail, MapPin, ShieldCheck, Database } from 'lucide-react';
 import { Language } from '../types';
 import { content } from '../data/content';
 
 interface FooterProps {
   currentLang: Language;
+  onOpenCrm?: () => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ currentLang }) => {
+export const Footer: React.FC<FooterProps> = ({ currentLang, onOpenCrm }) => {
   const t = content[currentLang];
 
   const scrollToTop = () => {
@@ -103,8 +104,8 @@ export const Footer: React.FC<FooterProps> = ({ currentLang }) => {
               </div>
               <div className="flex items-center gap-2">
                 <Mail className="w-4 h-4 text-[#E71B26] shrink-0" />
-                <a href="mailto:bzal_market@mail.ru" className="text-white hover:text-[#E71B26]">
-                  bzal_market@mail.ru
+                <a href="mailto:sales@bzal.by" className="text-white hover:text-[#E71B26]">
+                  sales@bzal.by
                 </a>
               </div>
               <div className="pt-2 text-[11px] text-[#8E9BAE]">
@@ -121,7 +122,7 @@ export const Footer: React.FC<FooterProps> = ({ currentLang }) => {
             © 1974 – {new Date().getFullYear()} {t.footer.allRightsReserved}
           </div>
 
-          <div className="flex items-center gap-6">
+          <div className="flex flex-wrap items-center gap-5">
             <a
               href="http://www.bzal.by"
               target="_blank"
@@ -138,6 +139,19 @@ export const Footer: React.FC<FooterProps> = ({ currentLang }) => {
             >
               {t.footer.servicesLink}
             </a>
+            {onOpenCrm && (
+              <a
+                href="#admin"
+                onClick={(e) => {
+                  e.preventDefault();
+                  onOpenCrm();
+                }}
+                className="text-[#8E9BAE]/60 hover:text-white transition-colors text-[10px]"
+                title="Служебный вход для специалистов ОАО «БЗАЛ»"
+              >
+                Служебный вход
+              </a>
+            )}
             <button
               onClick={scrollToTop}
               className="p-2 rounded-lg bg-[#1B222C] hover:bg-[#E71B26] text-white transition-colors cursor-pointer"

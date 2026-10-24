@@ -76,7 +76,7 @@ export const QualityMetrology: React.FC<QualityMetrologyProps> = ({ currentLang,
                 <FileText className="w-4 h-4 text-[#E71B26]" />
                 <span>{t.docsTitle}</span>
               </h4>
-              <ul className="space-y-2 text-[11px] sm:text-xs text-[#BAC5CF]">
+              <ul className="space-y-2 text-[11px] sm:text-xs text-[#BAC5CF] mb-4">
                 {t.docsList.map((doc, dIdx) => (
                   <li key={dIdx} className="flex items-start gap-2">
                     <CheckCircle2 className="w-3.5 h-3.5 text-[#E71B26] shrink-0 mt-0.5" />
@@ -84,6 +84,16 @@ export const QualityMetrology: React.FC<QualityMetrologyProps> = ({ currentLang,
                   </li>
                 ))}
               </ul>
+              <button
+                onClick={onOpenRfq}
+                className="w-full py-2.5 px-4 rounded-lg bg-[#E71B26] hover:bg-[#C9141E] text-white font-bold text-xs uppercase tracking-wider transition-colors cursor-pointer"
+              >
+                {currentLang === 'ru'
+                  ? 'Запросить образцы паспортов и сертификатов'
+                  : currentLang === 'en'
+                  ? 'Request Sample QC Certificates'
+                  : '索取质检合格证与报告样本'}
+              </button>
             </div>
 
           </div>

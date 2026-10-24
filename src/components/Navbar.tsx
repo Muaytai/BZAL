@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Phone, Mail, Globe, Menu, X, ArrowUpRight, Clock, MapPin } from 'lucide-react';
+import { Phone, Mail, Globe, Menu, X, ArrowUpRight, Clock, MapPin, Lock } from 'lucide-react';
 import { Language } from '../types';
 import { content } from '../data/content';
 
@@ -7,9 +7,15 @@ interface NavbarProps {
   currentLang: Language;
   onLanguageChange: (lang: Language) => void;
   onOpenRfq: () => void;
+  onOpenAdmin?: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ currentLang, onLanguageChange, onOpenRfq }) => {
+export const Navbar: React.FC<NavbarProps> = ({
+  currentLang,
+  onLanguageChange,
+  onOpenRfq,
+  onOpenAdmin,
+}) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const t = content[currentLang];
@@ -38,7 +44,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentLang, onLanguageChange, o
             </span>
           </div>
 
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-5">
             <a
               href="tel:+375447514477"
               className="flex items-center gap-1.5 text-white font-bold hover:text-[#E71B26] transition-colors"
@@ -48,12 +54,26 @@ export const Navbar: React.FC<NavbarProps> = ({ currentLang, onLanguageChange, o
             </a>
             <span className="text-white/20">|</span>
             <a
-              href="mailto:bzal_market@mail.ru"
+              href="mailto:sales@bzal.by"
               className="flex items-center gap-1.5 text-[#BAC5CF] hover:text-white transition-colors"
             >
               <Mail className="w-3.5 h-3.5 text-[#E71B26]" />
-              <span>bzal_market@mail.ru</span>
+              <span>sales@bzal.by</span>
             </a>
+            {onOpenAdmin && (
+              <>
+                <span className="text-white/20">|</span>
+                <button
+                  type="button"
+                  onClick={onOpenAdmin}
+                  className="inline-flex items-center gap-1 text-[#8E9BAE] hover:text-white transition-colors cursor-pointer"
+                  title="Закрытый служебный вход для специалиста ОАО «БЗАЛ»"
+                >
+                  <Lock className="w-3 h-3 text-[#E71B26]" />
+                  <span>Кабинет специалиста</span>
+                </button>
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -174,19 +194,30 @@ export const Navbar: React.FC<NavbarProps> = ({ currentLang, onLanguageChange, o
             ))}
 
             <div className="pt-3 border-t border-[#ECEEF0] flex flex-col gap-2">
+              <div className="flex items-center gap-2 px-3 py-1 text-xs font-semibold text-[#647082]">
+                <Clock className="w-3.5 h-3.5 text-[#E71B26]" />
+                <span>{t.brand.workingHours}</span>
+              </div>
               <a
                 href="tel:+375447514477"
-                className="flex items-center gap-2 px-3 py-2 text-sm font-bold text-[#2B3340]"
+                className="flex items-center gap-2 px-3 py-1.5 text-sm font-bold text-[#2B3340]"
               >
                 <Phone className="w-4 h-4 text-[#E71B26]" />
                 <span>+375 44 751 44 77</span>
+              </a>
+              <a
+                href="mailto:sales@bzal.by"
+                className="flex items-center gap-2 px-3 py-1.5 text-sm font-bold text-[#E71B26]"
+              >
+                <Mail className="w-4 h-4 text-[#E71B26]" />
+                <span>sales@bzal.by</span>
               </a>
               <button
                 onClick={() => {
                   setMobileMenuOpen(false);
                   onOpenRfq();
                 }}
-                className="w-full flex items-center justify-center gap-2 py-3 rounded-lg bg-[#E71B26] text-white font-bold text-sm uppercase tracking-wider"
+                className="w-full flex items-center justify-center gap-2 py-3 mt-1 rounded-lg bg-[#E71B26] text-white font-bold text-sm uppercase tracking-wider"
               >
                 <span>{t.brand.btnRfq}</span>
                 <ArrowUpRight className="w-4 h-4" />

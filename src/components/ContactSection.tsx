@@ -90,10 +90,10 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ currentLang, onO
                     <span>{t.contacts.emailLabel}</span>
                   </div>
                   <a
-                    href="mailto:bzal_market@mail.ru"
+                    href="mailto:sales@bzal.by"
                     className="text-base sm:text-lg font-black text-[#E71B26] hover:underline transition-colors block"
                   >
-                    bzal_market@mail.ru
+                    sales@bzal.by
                   </a>
                   <div className="text-xs text-[#647082] font-semibold">
                     {t.contacts.emailDesc}
