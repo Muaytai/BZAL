@@ -22,8 +22,8 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ currentLang }) => {
         
         {/* Section Header */}
         <div className="max-w-3xl mb-6 sm:mb-8">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#ECEEF0] rounded-md border border-[#D5D9DE] text-[#E71B26] text-xs font-dela uppercase tracking-wider mb-3">
-            <span className="w-2 h-2 rounded-full bg-[#E71B26]" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#ECEEF0] rounded-md border border-[#D5D9DE] text-[#E95A0C] text-xs font-dela uppercase tracking-wider mb-3">
+            <span className="w-2 h-2 rounded-full bg-[#E95A0C]" />
             <span>{t.about.eyebrow}</span>
           </div>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#2B3340] tracking-tight leading-tight uppercase font-dela">
@@ -39,13 +39,13 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ currentLang }) => {
           
           {/* Text Content */}
           <div className="lg:col-span-7 space-y-6 text-sm sm:text-base text-[#444E60] leading-relaxed">
-            <div className="p-6 rounded-xl bg-[#ECEEF0] border-l-4 border-[#E71B26] border-y border-r border-[#D5D9DE]">
+            <div className="p-6 rounded-xl bg-[#ECEEF0] border-l-4 border-[#E95A0C] border-y border-r border-[#D5D9DE]">
               <p className="text-base sm:text-lg font-bold text-[#2B3340] leading-snug">
                 {t.about.quote}
               </p>
               <div className="mt-3 flex items-center justify-between text-xs font-semibold text-[#647082]">
                 <span>{t.about.quoteAuthor}</span>
-                <span className="text-[#E71B26] font-bold">{t.about.quoteBadge}</span>
+                <span className="text-[#E95A0C] font-bold">{t.about.quoteBadge}</span>
               </div>
             </div>
 
@@ -56,7 +56,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ currentLang }) => {
             {/* Core Infrastructure Strengths */}
             <div className="pt-2">
               <h3 className="text-base font-dela text-[#2B3340] uppercase tracking-wide mb-4 flex items-center gap-2">
-                <Building2 className="w-5 h-5 text-[#E71B26]" />
+                <Building2 className="w-5 h-5 text-[#E95A0C]" />
                 <span>{t.about.bulletTitle}</span>
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
@@ -65,7 +65,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ currentLang }) => {
                     key={idx}
                     className="p-4 rounded-lg bg-white border border-[#D5D9DE] shadow-xs flex items-start gap-3 text-xs sm:text-sm text-[#2B3340] font-medium leading-relaxed"
                   >
-                    <CheckCircle className="w-4 h-4 text-[#E71B26] shrink-0 mt-0.5" />
+                    <CheckCircle className="w-4 h-4 text-[#E95A0C] shrink-0 mt-0.5" />
                     <span>{bullet}</span>
                   </div>
                 ))}
@@ -87,7 +87,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ currentLang }) => {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#2B3340]/90 via-transparent to-transparent" />
                 <div className="absolute bottom-3 left-4 right-4 text-white">
-                  <span className="text-[10px] font-dela uppercase tracking-wider text-[#E71B26] bg-[#2B3340] px-2 py-0.5 rounded">
+                  <span className="text-[10px] font-dela uppercase tracking-wider text-[#E95A0C] bg-[#2B3340] px-2 py-0.5 rounded">
                     {t.about.photoTag}
                   </span>
                   <p className="text-sm font-bold mt-1 text-white">
@@ -104,14 +104,14 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ currentLang }) => {
                 <span className="text-xs font-dela uppercase tracking-wider text-[#2B3340]">
                   {t.about.projectsEyebrow}
                 </span>
-                <span className="text-[11px] font-bold text-[#E71B26]">{t.about.projectsSub}</span>
+                <span className="text-[11px] font-bold text-[#E95A0C]">{t.about.projectsSub}</span>
               </div>
 
               <div className="space-y-2.5">
                 {t.about.projects.map((p, idx) => (
                   <div key={idx} className="p-3 bg-white rounded-lg border border-[#D5D9DE] shadow-xs">
                     <div className="flex items-center justify-between">
-                      <span className="font-dela text-xs text-[#E71B26]">{p.code}</span>
+                      <span className="font-dela text-xs text-[#E95A0C]">{p.code}</span>
                       <span className="text-[11px] font-semibold text-[#647082]">{p.location}</span>
                     </div>
                     <div className="text-xs font-bold text-[#2B3340] mt-0.5">{p.title}</div>
@@ -137,9 +137,9 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ currentLang }) => {
             {t.about.clients.map((client, idx) => (
               <div
                 key={idx}
-                className="p-3.5 rounded-lg bg-[#ECEEF0] border border-[#D5D9DE] hover:border-[#E71B26] transition-colors flex flex-col items-center justify-center text-center group"
+                className="p-3.5 rounded-lg bg-[#ECEEF0] border border-[#D5D9DE] hover:border-[#E95A0C] transition-colors flex flex-col items-center justify-center text-center group"
               >
-                <span className="font-dela text-base sm:text-lg text-[#2B3340] group-hover:text-[#E71B26] transition-colors">
+                <span className="font-dela text-base sm:text-lg text-[#2B3340] group-hover:text-[#E95A0C] transition-colors">
                   {client.name}
                 </span>
                 <span className="text-[9px] font-semibold text-[#647082] mt-0.5 truncate w-full">

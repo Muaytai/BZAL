@@ -43,6 +43,7 @@ import {
   deleteRfqInquiry,
   syncAllRecordsToSupabase,
   loginSpecialistApi,
+  changeSpecialistPasswordApi,
   clearAdminSession,
   getSavedAdminToken,
   getSavedAdminEmail,
@@ -154,6 +155,17 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
   const [loginPassword, setLoginPassword] = useState('');
   const [loginError, setLoginError] = useState<string | null>(null);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
+
+  // Change Password Modal State
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [currentPwdInput, setCurrentPwdInput] = useState('');
+  const [newPwdInput, setNewPwdInput] = useState('');
+  const [confirmPwdInput, setConfirmPwdInput] = useState('');
+  const [pwdStatus, setPwdStatus] = useState<{
+    type: 'success' | 'error';
+    text: string;
+  } | null>(null);
+  const [isChangingPwd, setIsChangingPwd] = useState(false);
 
   const [activeTab, setActiveTab] = useState<
     'inquiries' | 'cms' | 'analytics' | 'executive' | 'architecture'
@@ -430,7 +442,7 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
               <X className="w-5 h-5" />
             </button>
 
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-[#E71B26] text-white text-[10px] font-dela uppercase tracking-wider mb-3">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-[#E95A0C] text-white text-[10px] font-dela uppercase tracking-wider mb-3">
               <Lock className="w-3 h-3" />
               <span>СЛУЖЕБНЫЙ ДОСТУП ОАО БЗАЛ</span>
             </div>
@@ -445,7 +457,7 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
 
           <div className="p-6 space-y-5">
             {loginError && (
-              <div className="p-3 rounded-lg bg-[#FDECEE] border border-[#E71B26] text-xs font-bold text-[#E71B26]">
+              <div className="p-3 rounded-lg bg-[#FFF2EB] border border-[#E95A0C] text-xs font-bold text-[#E95A0C]">
                 {loginError}
               </div>
             )}
@@ -461,7 +473,7 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
                   value={loginEmail}
                   onChange={(e) => setLoginEmail(e.target.value)}
                   placeholder="Введите корпоративный Email"
-                  className="w-full px-3.5 py-2.5 rounded-lg bg-[#ECEEF0] border border-[#D5D9DE] text-xs font-semibold text-[#2B3340] focus:outline-none focus:border-[#E71B26]"
+                  className="w-full px-3.5 py-2.5 rounded-lg bg-[#ECEEF0] border border-[#D5D9DE] text-xs font-semibold text-[#2B3340] focus:outline-none focus:border-[#E95A0C]"
                 />
               </div>
 
@@ -475,14 +487,14 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
                   value={loginPassword}
                   onChange={(e) => setLoginPassword(e.target.value)}
                   placeholder="Введите служебный код доступа"
-                  className="w-full px-3.5 py-2.5 rounded-lg bg-[#ECEEF0] border border-[#D5D9DE] text-xs font-semibold text-[#2B3340] focus:outline-none focus:border-[#E71B26]"
+                  className="w-full px-3.5 py-2.5 rounded-lg bg-[#ECEEF0] border border-[#D5D9DE] text-xs font-semibold text-[#2B3340] focus:outline-none focus:border-[#E95A0C]"
                 />
               </div>
 
               <button
                 type="submit"
                 disabled={isLoggingIn}
-                className="w-full inline-flex items-center justify-center gap-2 py-3.5 rounded-lg bg-[#E71B26] hover:bg-[#C9141E] text-white font-extrabold text-xs uppercase tracking-wider shadow-md transition-all cursor-pointer"
+                className="w-full inline-flex items-center justify-center gap-2 py-3.5 rounded-lg bg-[#E95A0C] hover:bg-[#CC4B06] text-white font-extrabold text-xs uppercase tracking-wider shadow-md transition-all cursor-pointer"
               >
                 <KeyRound className="w-4 h-4" />
                 <span>
@@ -636,7 +648,7 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
       {/* Top Specialist Admin Header */}
       <div className="bg-[#2B3340] text-white px-5 py-3.5 flex flex-wrap items-center justify-between gap-4 border-b border-white/10 shrink-0">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-[#E71B26] flex items-center justify-center text-white shrink-0 shadow-md">
+          <div className="w-10 h-10 rounded-lg bg-[#E95A0C] flex items-center justify-center text-white shrink-0 shadow-md">
             <Lock className="w-5 h-5" />
           </div>
           <div>
@@ -666,10 +678,25 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
 
           <button
             onClick={handleExportCsv}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#E71B26] hover:bg-[#C9141E] text-xs font-bold text-white transition-colors cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#E95A0C] hover:bg-[#CC4B06] text-xs font-bold text-white transition-colors cursor-pointer"
           >
             <Download className="w-3.5 h-3.5" />
             <span>Выгрузить в Excel (CSV)</span>
+          </button>
+
+          <button
+            onClick={() => {
+              setPwdStatus(null);
+              setCurrentPwdInput('');
+              setNewPwdInput('');
+              setConfirmPwdInput('');
+              setShowPasswordModal(true);
+            }}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-xs font-bold text-white transition-colors cursor-pointer"
+            title="Сменить пароль (код доступа) в админ-панель"
+          >
+            <KeyRound className="w-3.5 h-3.5 text-[#FFCC00]" />
+            <span>Сменить пароль</span>
           </button>
 
           <button
@@ -691,6 +718,140 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
         </div>
       </div>
 
+      {/* Change Password Modal */}
+      {showPasswordModal && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-xl border border-[#D5D9DE] shadow-2xl w-full max-w-md overflow-hidden">
+            <div className="bg-[#2B3340] text-white px-5 py-4 flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <KeyRound className="w-5 h-5 text-[#E95A0C]" />
+                <h3 className="font-dela text-sm uppercase tracking-wider">
+                  Смена пароля админ-панели
+                </h3>
+              </div>
+              <button
+                onClick={() => setShowPasswordModal(false)}
+                className="text-white/70 hover:text-white cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <form
+              onSubmit={async (e) => {
+                e.preventDefault();
+                setPwdStatus(null);
+                if (newPwdInput.trim() !== confirmPwdInput.trim()) {
+                  setPwdStatus({
+                    type: 'error',
+                    text: 'Новый пароль и подтверждение не совпадают.',
+                  });
+                  return;
+                }
+                if (newPwdInput.trim().length < 4) {
+                  setPwdStatus({
+                    type: 'error',
+                    text: 'Новый пароль должен содержать минимум 4 символа.',
+                  });
+                  return;
+                }
+                setIsChangingPwd(true);
+                const res = await changeSpecialistPasswordApi(
+                  currentPwdInput,
+                  newPwdInput
+                );
+                setIsChangingPwd(false);
+                if (res.success) {
+                  setPwdStatus({
+                    type: 'success',
+                    text: res.message || 'Пароль успешно изменён!',
+                  });
+                  setCurrentPwdInput('');
+                  setNewPwdInput('');
+                  setConfirmPwdInput('');
+                } else {
+                  setPwdStatus({
+                    type: 'error',
+                    text: res.error || 'Ошибка смены пароля.',
+                  });
+                }
+              }}
+              className="p-5 space-y-4"
+            >
+              {pwdStatus && (
+                <div
+                  className={`p-3 rounded-lg text-xs font-bold border ${
+                    pwdStatus.type === 'success'
+                      ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
+                      : 'bg-red-50 text-red-800 border-red-300'
+                  }`}
+                >
+                  {pwdStatus.text}
+                </div>
+              )}
+
+              <div>
+                <label className="block text-xs font-bold text-[#2B3340] uppercase tracking-wider mb-1">
+                  Текущий пароль (по умолчанию: 1974)
+                </label>
+                <input
+                  type="password"
+                  required
+                  value={currentPwdInput}
+                  onChange={(e) => setCurrentPwdInput(e.target.value)}
+                  placeholder="Введите текущий пароль"
+                  className="w-full px-3.5 py-2.5 rounded-lg bg-[#ECEEF0] border border-[#D5D9DE] text-xs font-semibold text-[#2B3340] focus:outline-none focus:border-[#E95A0C]"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-[#2B3340] uppercase tracking-wider mb-1">
+                  Новый пароль / ПИН-код (мин. 4 символа)
+                </label>
+                <input
+                  type="password"
+                  required
+                  value={newPwdInput}
+                  onChange={(e) => setNewPwdInput(e.target.value)}
+                  placeholder="Введите новый пароль"
+                  className="w-full px-3.5 py-2.5 rounded-lg bg-[#ECEEF0] border border-[#D5D9DE] text-xs font-semibold text-[#2B3340] focus:outline-none focus:border-[#E95A0C]"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-[#2B3340] uppercase tracking-wider mb-1">
+                  Повторите новый пароль
+                </label>
+                <input
+                  type="password"
+                  required
+                  value={confirmPwdInput}
+                  onChange={(e) => setConfirmPwdInput(e.target.value)}
+                  placeholder="Подтвердите новый пароль"
+                  className="w-full px-3.5 py-2.5 rounded-lg bg-[#ECEEF0] border border-[#D5D9DE] text-xs font-semibold text-[#2B3340] focus:outline-none focus:border-[#E95A0C]"
+                />
+              </div>
+
+              <div className="flex items-center justify-end gap-2 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setShowPasswordModal(false)}
+                  className="px-4 py-2 rounded-lg bg-[#ECEEF0] hover:bg-[#D5D9DE] text-xs font-bold text-[#2B3340] cursor-pointer"
+                >
+                  Закрыть
+                </button>
+                <button
+                  type="submit"
+                  disabled={isChangingPwd}
+                  className="px-4 py-2 rounded-lg bg-[#E95A0C] hover:bg-[#CC4B06] text-xs font-extrabold text-white cursor-pointer"
+                >
+                  {isChangingPwd ? 'Сохранение...' : 'Сохранить новый пароль'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
       {/* Navigation Tabs */}
       <div className="bg-white border-b border-[#D5D9DE] px-4 sm:px-6 flex flex-wrap items-center justify-between gap-2 shrink-0">
         <div className="flex flex-wrap gap-1.5 py-2">
@@ -698,8 +859,8 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
             onClick={() => setActiveTab('cms')}
             className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-extrabold transition-all cursor-pointer ${
               activeTab === 'cms'
-                ? 'bg-[#E71B26] text-white shadow-xs'
-                : 'bg-[#E71B26]/10 text-[#E71B26] hover:bg-[#E71B26]/20'
+                ? 'bg-[#E95A0C] text-white shadow-xs'
+                : 'bg-[#E95A0C]/10 text-[#E95A0C] hover:bg-[#E95A0C]/20'
             }`}
           >
             <Sparkles className="w-4 h-4" />
@@ -714,7 +875,7 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
                 : 'text-[#444E60] hover:bg-[#ECEEF0]'
             }`}
           >
-            <FolderKanban className="w-4 h-4 text-[#E71B26]" />
+            <FolderKanban className="w-4 h-4 text-[#E95A0C]" />
             <span>1. Заявки, чертежи и маршрутизация ({inquiries.length})</span>
           </button>
 
@@ -726,7 +887,7 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
                 : 'text-[#444E60] hover:bg-[#ECEEF0]'
             }`}
           >
-            <BarChart3 className="w-4 h-4 text-[#E71B26]" />
+            <BarChart3 className="w-4 h-4 text-[#E95A0C]" />
             <span>2. Аналитика для маркетинга, ОГК и ОГТ</span>
           </button>
 
@@ -738,7 +899,7 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
                 : 'text-[#444E60] hover:bg-[#ECEEF0]'
             }`}
           >
-            <FileSpreadsheet className="w-4 h-4 text-[#E71B26]" />
+            <FileSpreadsheet className="w-4 h-4 text-[#E95A0C]" />
             <span>3. Отчёты для руководства ОАО БЗАЛ</span>
           </button>
 
@@ -750,7 +911,7 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
                 : 'text-[#444E60] hover:bg-[#ECEEF0]'
             }`}
           >
-            <HardDrive className="w-4 h-4 text-[#E71B26]" />
+            <HardDrive className="w-4 h-4 text-[#E95A0C]" />
             <span>4. Схема хранения в БД Supabase (SQL)</span>
           </button>
         </div>
@@ -832,7 +993,7 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
               <div className="text-[10px] font-bold uppercase text-[#BAC5CF]">
                 КП и договоры (В работе)
               </div>
-              <div className="font-dela text-lg text-[#E71B26] mt-1">
+              <div className="font-dela text-lg text-[#E95A0C] mt-1">
                 {metrics.contractedBudgetByn.toLocaleString('ru-RU')} BYN
               </div>
               <div className="text-[10px] text-[#BAC5CF] mt-0.5">
@@ -856,19 +1017,19 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Поиск по № заявки, предприятию, телефону, email, детали..."
-                    className="w-full pl-9 pr-3 py-2 rounded-lg bg-[#ECEEF0] border border-[#D5D9DE] text-xs font-medium text-[#2B3340] focus:outline-none focus:border-[#E71B26]"
+                    className="w-full pl-9 pr-3 py-2 rounded-lg bg-[#ECEEF0] border border-[#D5D9DE] text-xs font-medium text-[#2B3340] focus:outline-none focus:border-[#E95A0C]"
                   />
                 </div>
 
                 <div className="flex items-center gap-1.5">
-                  <Filter className="w-3.5 h-3.5 text-[#E71B26]" />
+                  <Filter className="w-3.5 h-3.5 text-[#E95A0C]" />
                   <select
                     value={deptFilter}
                     onChange={(e) => setDeptFilter(e.target.value)}
                     className="bg-[#ECEEF0] border border-[#D5D9DE] rounded-lg px-3 py-2 text-xs font-bold text-[#2B3340]"
                   >
                     <option value="all">Все службы и отделы</option>
-                    <option value="marketing">Отдел маркетинга и сбыта</option>
+                    <option value="marketing">Отдел маркетинга и продаж</option>
                     <option value="ogk">ОГК (Конструкторы)</option>
                     <option value="ogt">ОГТ (Технологи)</option>
                     <option value="production">Производственные цеха ЧПУ</option>
@@ -892,7 +1053,7 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
 
               <button
                 onClick={() => setShowNewForm(!showNewForm)}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#E71B26] hover:bg-[#C9141E] text-white text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#E95A0C] hover:bg-[#CC4B06] text-white text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
               >
                 <Plus className="w-4 h-4" />
                 <span>Зарегистрировать телефонную заявку</span>
@@ -902,7 +1063,7 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
             {showNewForm && (
               <form
                 onSubmit={handleCreateManual}
-                className="bg-white p-5 rounded-xl border-2 border-[#E71B26] shadow-md space-y-4"
+                className="bg-white p-5 rounded-xl border-2 border-[#E95A0C] shadow-md space-y-4"
               >
                 <div className="flex items-center justify-between border-b border-[#ECEEF0] pb-3">
                   <div>
@@ -1055,7 +1216,7 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
                   />
                   <button
                     type="submit"
-                    className="px-5 py-2.5 rounded-lg bg-[#2B3340] hover:bg-[#E71B26] text-white text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
+                    className="px-5 py-2.5 rounded-lg bg-[#2B3340] hover:bg-[#E95A0C] text-white text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
                   >
                     Сохранить на сервере и в Supabase
                   </button>
@@ -1104,7 +1265,7 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
                       <button
                         type="button"
                         onClick={() => setProposalInquiry(inq)}
-                        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#2B3340] hover:bg-[#E71B26] text-white text-[11px] font-bold transition-colors cursor-pointer"
+                        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#2B3340] hover:bg-[#E95A0C] text-white text-[11px] font-bold transition-colors cursor-pointer"
                         title="Сформировать официальное Коммерческое предложение (КП) на бланке ОАО БЗАЛ"
                       >
                         <FileSpreadsheet className="w-3.5 h-3.5" />
@@ -1122,13 +1283,13 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
 
                       <div className="text-xs font-bold text-[#2B3340]">
                         Оценка:{' '}
-                        <span className="font-dela text-[#E71B26]">
+                        <span className="font-dela text-[#E95A0C]">
                           {Number(inq.estimated_amount_byn).toLocaleString('ru-RU')} BYN
                         </span>
                       </div>
                       <button
                         onClick={() => handleDeleteInquiry(inq.id)}
-                        className="p-1 text-[#647082] hover:text-[#E71B26] transition-colors cursor-pointer"
+                        className="p-1 text-[#647082] hover:text-[#E95A0C] transition-colors cursor-pointer"
                         title="Удалить запись"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -1139,7 +1300,7 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
                   <div className="p-4 grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
                     <div className="lg:col-span-4 space-y-2 border-b lg:border-b-0 lg:border-r border-[#ECEEF0] pb-3 lg:pb-0 lg:pr-4">
                       <div className="flex items-start gap-2">
-                        <Building2 className="w-4 h-4 text-[#E71B26] shrink-0 mt-0.5" />
+                        <Building2 className="w-4 h-4 text-[#E95A0C] shrink-0 mt-0.5" />
                         <div>
                           <div className="font-bold text-sm text-[#2B3340]">
                             {inq.company}
@@ -1152,10 +1313,10 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
 
                       <div className="pt-1 space-y-1.5 text-xs">
                         <div className="flex items-center gap-2">
-                          <Phone className="w-3.5 h-3.5 text-[#E71B26]" />
+                          <Phone className="w-3.5 h-3.5 text-[#E95A0C]" />
                           <a
                             href={`tel:${inq.phone}`}
-                            className="font-bold text-[#2B3340] hover:text-[#E71B26] underline"
+                            className="font-bold text-[#2B3340] hover:text-[#E95A0C] underline"
                           >
                             {inq.phone}
                           </a>
@@ -1165,14 +1326,14 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
                         </div>
 
                         <div className="flex items-center gap-2">
-                          <Mail className="w-3.5 h-3.5 text-[#E71B26]" />
+                          <Mail className="w-3.5 h-3.5 text-[#E95A0C]" />
                           <a
                             href={`mailto:${inq.email}?subject=${encodeURIComponent(
                               `Ответ ОАО БЗАЛ по заявке ${inq.inquiry_number} (${inq.service_type})`
                             )}&body=${encodeURIComponent(
-                              `Уважаемый(ая) ${inq.client_name}!\n\nОтдел маркетинга и сбыта ОАО БЗАЛ совместно с инженерными службами (ОГК / ОГТ) рассмотрел вашу заявку № ${inq.inquiry_number} (${inq.service_type}).\n\nС уважением,\nОтдел маркетинга и сбыта ОАО БЗАЛ\nТел.: +375 44 751 44 77, +375 (163) 67-20-48\nEmail: sales@bzal.by`
+                              `Уважаемый(ая) ${inq.client_name}!\n\nОтдел маркетинга и продаж ОАО БЗАЛ совместно с инженерными службами (ОГК / ОГТ) рассмотрел вашу заявку № ${inq.inquiry_number} (${inq.service_type}).\n\nС уважением,\nОтдел маркетинга и продаж ОАО БЗАЛ\nТел.: +375 44 751 44 77, +375 (163) 67-20-41\nEmail: sales@bzal.by`
                             )}`}
-                            className="font-bold text-[#E71B26] hover:underline break-all"
+                            className="font-bold text-[#E95A0C] hover:underline break-all"
                           >
                             {inq.email}
                           </a>
@@ -1235,7 +1396,7 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
                                     inq.company
                                   )
                                 }
-                                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#FDECEE] hover:bg-[#E71B26] text-[#2B3340] hover:text-white border border-[#E71B26]/30 text-[11px] font-bold transition-colors cursor-pointer"
+                                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#FFF2EB] hover:bg-[#E95A0C] text-[#2B3340] hover:text-white border border-[#E95A0C]/30 text-[11px] font-bold transition-colors cursor-pointer"
                                 title={`Скачать чертёж / карточку КД: ${file.name}`}
                               >
                                 <Download className="w-3.5 h-3.5 shrink-0" />
@@ -1389,7 +1550,7 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
                       Какие компетенции Технопарка БЗАЛ запрашивают чаще всего и их объём в BYN
                     </p>
                   </div>
-                  <Briefcase className="w-5 h-5 text-[#E71B26]" />
+                  <Briefcase className="w-5 h-5 text-[#E95A0C]" />
                 </div>
 
                 <div className="space-y-3.5">
@@ -1406,14 +1567,14 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
                           <span className="font-bold text-[#2B3340]">
                             {service}
                           </span>
-                          <span className="font-dela text-[#E71B26]">
+                          <span className="font-dela text-[#E95A0C]">
                             {info.count} заяв. •{' '}
                             {info.budget.toLocaleString('ru-RU')} BYN ({pct}%)
                           </span>
                         </div>
                         <div className="h-2.5 w-full bg-[#ECEEF0] rounded-full overflow-hidden">
                           <div
-                            className="h-full bg-[#E71B26] rounded-full"
+                            className="h-full bg-[#E95A0C] rounded-full"
                             style={{ width: `${Math.max(pct, 6)}%` }}
                           />
                         </div>
@@ -1433,7 +1594,7 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
                       Контроль прохождения заявок: Маркетинг → ОГК → ОГТ → Производство → ОТК
                     </p>
                   </div>
-                  <Users className="w-5 h-5 text-[#E71B26]" />
+                  <Users className="w-5 h-5 text-[#E95A0C]" />
                 </div>
 
                 <div className="space-y-3">
@@ -1466,7 +1627,7 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
                                 setDeptFilter(deptCode);
                                 setActiveTab('inquiries');
                               }}
-                              className="px-2.5 py-1 rounded bg-[#2B3340] hover:bg-[#E71B26] text-white text-[10px] font-bold uppercase transition-colors cursor-pointer"
+                              className="px-2.5 py-1 rounded bg-[#2B3340] hover:bg-[#E95A0C] text-white text-[10px] font-bold uppercase transition-colors cursor-pointer"
                             >
                               Открыть список
                             </button>
@@ -1494,7 +1655,7 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
                       className="flex items-center justify-between p-2.5 rounded-lg bg-[#ECEEF0] text-xs"
                     >
                       <span className="font-bold text-[#2B3340]">{mat}</span>
-                      <span className="px-2.5 py-0.5 rounded bg-white font-dela text-[#E71B26]">
+                      <span className="px-2.5 py-0.5 rounded bg-white font-dela text-[#E95A0C]">
                         {count} заяв.
                       </span>
                     </div>
@@ -1526,7 +1687,7 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
                       <div className="text-right">
                         <a
                           href={`mailto:${lead.email}`}
-                          className="font-bold text-[#E71B26] hover:underline block"
+                          className="font-bold text-[#E95A0C] hover:underline block"
                         >
                           {lead.email}
                         </a>
@@ -1550,7 +1711,7 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
             <div className="bg-white p-6 rounded-xl border border-[#D5D9DE] shadow-xs">
               <div className="flex flex-wrap items-center justify-between gap-4 pb-5 border-b border-[#ECEEF0]">
                 <div>
-                  <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded bg-[#FDECEE] text-[#E71B26] text-[10px] font-dela uppercase mb-1">
+                  <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded bg-[#FFF2EB] text-[#E95A0C] text-[10px] font-dela uppercase mb-1">
                     УПРАВЛЕНЧЕСКАЯ ОТЧЁТНОСТЬ ДИРЕКЦИИ
                   </div>
                   <h3 className="font-dela text-base sm:text-lg uppercase text-[#2B3340]">
@@ -1571,7 +1732,7 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
                   </button>
                   <button
                     onClick={handleExportCsv}
-                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#E71B26] hover:bg-[#C9141E] text-white text-xs font-bold uppercase cursor-pointer"
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#E95A0C] hover:bg-[#CC4B06] text-white text-xs font-bold uppercase cursor-pointer"
                   >
                     <Download className="w-4 h-4" />
                     <span>Скачать Excel (CSV)</span>
@@ -1616,11 +1777,11 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
                   </div>
                 </div>
 
-                <div className="p-4 rounded-xl bg-[#F8F9FA] border-l-4 border-[#E71B26]">
+                <div className="p-4 rounded-xl bg-[#F8F9FA] border-l-4 border-[#E95A0C]">
                   <div className="text-[11px] font-bold text-[#647082] uppercase">
                     Этап 4: КП и Контрактация
                   </div>
-                  <div className="font-dela text-2xl text-[#E71B26] mt-1">
+                  <div className="font-dela text-2xl text-[#E95A0C] mt-1">
                     {metrics.contractedBudgetByn.toLocaleString('ru-RU')} BYN
                   </div>
                   <div className="text-xs text-[#444E60] mt-1">
@@ -1660,7 +1821,7 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
                           <div className="font-bold text-[#2B3340]">
                             {inq.phone}
                           </div>
-                          <div className="text-[11px] text-[#E71B26]">
+                          <div className="text-[11px] text-[#E95A0C]">
                             {inq.email}
                           </div>
                         </td>
@@ -1703,7 +1864,7 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
           <div className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="bg-white p-5 rounded-xl border border-[#D5D9DE] shadow-xs">
-                <div className="text-[10px] font-dela uppercase text-[#E71B26] mb-1">
+                <div className="text-[10px] font-dela uppercase text-[#E95A0C] mb-1">
                   ТАБЛИЦА POSTGRESQL #1
                 </div>
                 <h4 className="font-dela text-sm text-[#2B3340] uppercase mb-2">
@@ -1721,7 +1882,7 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
               </div>
 
               <div className="bg-white p-5 rounded-xl border border-[#D5D9DE] shadow-xs">
-                <div className="text-[10px] font-dela uppercase text-[#E71B26] mb-1">
+                <div className="text-[10px] font-dela uppercase text-[#E95A0C] mb-1">
                   ФАЙЛОВОЕ ХРАНИЛИЩЕ ЧЕРТЕЖЕЙ
                 </div>
                 <h4 className="font-dela text-sm text-[#2B3340] uppercase mb-2">
@@ -1738,7 +1899,7 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
               </div>
 
               <div className="bg-white p-5 rounded-xl border border-[#D5D9DE] shadow-xs">
-                <div className="text-[10px] font-dela uppercase text-[#E71B26] mb-1">
+                <div className="text-[10px] font-dela uppercase text-[#E95A0C] mb-1">
                   ТАБЛИЦА POSTGRESQL #2
                 </div>
                 <h4 className="font-dela text-sm text-[#2B3340] uppercase mb-2">
@@ -1758,7 +1919,7 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
             <div className="bg-[#2B3340] text-white p-6 rounded-xl border border-[#1B222C] space-y-4">
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <div>
-                  <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded bg-[#E71B26] text-white text-[10px] font-dela uppercase mb-1">
+                  <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded bg-[#E95A0C] text-white text-[10px] font-dela uppercase mb-1">
                     ПОДКЛЮЧЕН СЕРВЕР SUPABASE: {SUPABASE_URL}
                   </div>
                   <h4 className="font-dela text-sm sm:text-base uppercase text-white">
@@ -1781,7 +1942,7 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
                       </>
                     ) : (
                       <>
-                        <Copy className="w-4 h-4 text-[#E71B26]" />
+                        <Copy className="w-4 h-4 text-[#E95A0C]" />
                         <span>1. Скопировать SQL-скрипт</span>
                       </>
                     )}
@@ -1790,7 +1951,7 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
                   <button
                     onClick={handleSyncToCloud}
                     disabled={isSyncing}
-                    className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-lg bg-[#E71B26] hover:bg-[#C9141E] text-white text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
+                    className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-lg bg-[#E95A0C] hover:bg-[#CC4B06] text-white text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
                   >
                     <RefreshCw
                       className={`w-4 h-4 ${isSyncing ? 'animate-spin' : ''}`}
@@ -1802,7 +1963,7 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
 
               {syncMessage && (
                 <div className="p-3 rounded-lg bg-white/10 border border-white/20 text-xs font-medium text-white flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-[#E71B26] shrink-0" />
+                  <CheckCircle2 className="w-4 h-4 text-[#E95A0C] shrink-0" />
                   <span>{syncMessage}</span>
                 </div>
               )}
@@ -1816,7 +1977,7 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
             <div className="bg-white p-6 rounded-xl border-2 border-[#2B3340] shadow-xs space-y-4">
               <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#ECEEF0] pb-4">
                 <div>
-                  <div className="text-[10px] font-dela uppercase text-[#E71B26] mb-1">
+                  <div className="text-[10px] font-dela uppercase text-[#E95A0C] mb-1">
                     МГНОВЕННЫЕ ОПОВЕЩЕНИЯ О НОВЫХ ЗАЯВКАХ
                   </div>
                   <h4 className="font-dela text-sm sm:text-base uppercase text-[#2B3340]">
@@ -1834,7 +1995,7 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
                     onChange={(e) =>
                       setTgConfig({ ...tgConfig, enabled: e.target.checked })
                     }
-                    className="w-4 h-4 accent-[#E71B26]"
+                    className="w-4 h-4 accent-[#E95A0C]"
                   />
                   <span>Включить авто-уведомления в Telegram</span>
                 </label>
@@ -1884,7 +2045,7 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
                   type="button"
                   onClick={handleTestTelegram}
                   disabled={isSendingTg}
-                  className="px-4 py-2.5 rounded-lg bg-[#E71B26] hover:bg-[#C9141E] text-white text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
+                  className="px-4 py-2.5 rounded-lg bg-[#E95A0C] hover:bg-[#CC4B06] text-white text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
                 >
                   {isSendingTg
                     ? 'Отправка...'
@@ -1909,7 +2070,7 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
           <div className="w-full max-w-4xl bg-white rounded-2xl border-2 border-[#2B3340] shadow-2xl overflow-hidden my-8">
             <div className="bg-[#2B3340] text-white px-6 py-4 flex flex-wrap items-center justify-between gap-3 print:hidden">
               <div>
-                <div className="text-[10px] font-dela uppercase text-[#E71B26]">
+                <div className="text-[10px] font-dela uppercase text-[#E95A0C]">
                   ГЕНЕРАТОР ОФИЦИАЛЬНОГО БЛАНКА КП (ЛИСТ А4)
                 </div>
                 <h3 className="font-dela text-base uppercase text-white">
@@ -1927,7 +2088,7 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
                     });
                     window.print();
                   }}
-                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#E71B26] hover:bg-[#C9141E] text-white text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#E95A0C] hover:bg-[#CC4B06] text-white text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
                 >
                   <Printer className="w-4 h-4" />
                   <span>Печать бланка КП / PDF (А4)</span>
@@ -1966,7 +2127,7 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
                   }
                   className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-white text-[#2B3340] hover:bg-[#ECEEF0] text-xs font-bold uppercase tracking-wider transition-colors"
                 >
-                  <Mail className="w-4 h-4 text-[#E71B26]" />
+                  <Mail className="w-4 h-4 text-[#E95A0C]" />
                   <span>Отправить КП на Email</span>
                 </a>
 
@@ -2021,17 +2182,19 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
             <div className="p-8 space-y-6 text-[#2B3340] text-xs">
               <div className="flex items-start justify-between border-b-2 border-[#2B3340] pb-4">
                 <div className="flex items-center gap-3">
-                  <img
-                    src="/images/bzal_mark_pristine_red.png"
-                    alt="БЗАЛ"
-                    className="w-12 h-12 object-contain"
-                  />
+                  <div className="w-[138px] h-[42px] overflow-hidden rounded-lg border border-[#D5D9DE] bg-white shrink-0 flex items-center justify-center">
+                    <img
+                      src="/assets/aistudio/_________________________2__________8849418c.png"
+                      alt="Технопарк БЗАЛ"
+                      className="w-full h-full object-cover object-center scale-[1.15]"
+                    />
+                  </div>
                   <div>
                     <div className="font-dela text-base uppercase text-[#2B3340]">
                       ОАО Барановичский завод автоматических линий
                     </div>
                     <div className="text-[11px] font-bold text-[#647082]">
-                      Холдинг «БЕЛАВТОМАЗ» • Республика Беларусь, 225410, г. Барановичи, ул. Королика, 8
+                      ГО «Белорусская железная дорога» • Республика Беларусь, 225410, г. Барановичи, ул. Королика, 8
                     </div>
                     <div className="text-[11px] text-[#647082]">
                       Тел.: +375 44 751 44 77, +375 (163) 67-20-48 • Email: sales@bzal.by
@@ -2130,7 +2293,7 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
                         Number(proposalInquiry.estimated_amount_byn) * 0.2
                       ).toLocaleString('ru-RU')}
                     </td>
-                    <td className="border border-[#D5D9DE] p-3 text-right font-dela text-[#E71B26]">
+                    <td className="border border-[#D5D9DE] p-3 text-right font-dela text-[#E95A0C]">
                       {(
                         Number(proposalInquiry.estimated_amount_byn) * 1.2
                       ).toLocaleString('ru-RU')}

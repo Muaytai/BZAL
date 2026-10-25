@@ -6,7 +6,7 @@ import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
 
-const PORT = 3000;
+const PORT = Number(process.env.PORT) || 3000;
 
 const SUPABASE_URL =
   process.env.SUPABASE_URL ||
@@ -59,12 +59,16 @@ function verifyAdminToken(token: string): { valid: boolean; email?: string } {
   try {
     const decoded = Buffer.from(token, 'base64url').toString('utf-8');
     const [email, sig] = decoded.split(':');
-    if (!email || !sig) return { valid: false };
+    if (!email || !sig || !ALLOWED_EMAILS.includes(email)) {
+      return { valid: false };
+    }
     const expected = crypto
       .createHmac('sha256', TOKEN_SECRET)
       .update(email)
       .digest('hex');
-    if (sig === expected && ALLOWED_EMAILS.includes(email)) {
+    const sigBuf = Buffer.from(sig, 'utf8');
+    const expBuf = Buffer.from(expected, 'utf8');
+    if (sigBuf.length === expBuf.length && crypto.timingSafeEqual(sigBuf, expBuf)) {
       return { valid: true, email };
     }
     return { valid: false };
@@ -73,9 +77,86 @@ function verifyAdminToken(token: string): { valid: boolean; email?: string } {
   }
 }
 
+function sanitizeStr(val: unknown, maxLen = 500): string {
+  return String(val ?? '')
+    .trim()
+    .slice(0, maxLen);
+}
+
+// Rate limiter for admin login (protects against brute-force attacks)
+const loginAttempts = new Map<string, { count: number; resetAt: number }>();
+function checkLoginRateLimit(ip: string): boolean {
+  const now = Date.now();
+  const entry = loginAttempts.get(ip);
+  if (!entry || now > entry.resetAt) {
+    loginAttempts.set(ip, { count: 1, resetAt: now + 15 * 60 * 1000 });
+    return true;
+  }
+  if (entry.count >= 12) {
+    return false;
+  }
+  entry.count += 1;
+  return true;
+}
+
 // Persistent server-side database file so data is shared across all browsers/devices on the server
 const DATA_DIR = path.join(import.meta.dirname, 'data');
 const DB_FILE = path.join(DATA_DIR, 'bzal_server_db.json');
+const AUTH_CONFIG_FILE = path.join(DATA_DIR, 'bzal_admin_auth.json');
+
+function hashAdminPassword(raw: string): string {
+  return crypto
+    .createHmac('sha256', 'bzal_admin_pwd_salt_2026')
+    .update(raw.trim())
+    .digest('hex');
+}
+
+function isValidAdminPassword(candidate: string): boolean {
+  const clean = candidate.trim();
+  if (!clean) return false;
+
+  // Check if specialist set a custom password via Admin UI
+  try {
+    if (fs.existsSync(AUTH_CONFIG_FILE)) {
+      const parsed = JSON.parse(fs.readFileSync(AUTH_CONFIG_FILE, 'utf-8'));
+      if (parsed && typeof parsed.passwordHash === 'string' && parsed.passwordHash.length === 64) {
+        const candidateHash = hashAdminPassword(clean);
+        const a = Buffer.from(candidateHash, 'utf8');
+        const b = Buffer.from(parsed.passwordHash, 'utf8');
+        if (a.length === b.length && crypto.timingSafeEqual(a, b)) {
+          return true;
+        }
+        // Also allow server-level env override if explicitly set
+        if (process.env.ADMIN_ACCESS_PIN && clean === process.env.ADMIN_ACCESS_PIN) {
+          return true;
+        }
+        return false;
+      }
+    }
+  } catch {
+    // Fallback to default passwords
+  }
+
+  return ADMIN_PASSWORDS.includes(clean);
+}
+
+function saveCustomAdminPassword(newPassword: string): void {
+  if (!fs.existsSync(DATA_DIR)) {
+    fs.mkdirSync(DATA_DIR, { recursive: true });
+  }
+  fs.writeFileSync(
+    AUTH_CONFIG_FILE,
+    JSON.stringify(
+      {
+        passwordHash: hashAdminPassword(newPassword),
+        updatedAt: new Date().toISOString(),
+      },
+      null,
+      2
+    ),
+    'utf-8'
+  );
+}
 
 export interface ServerRfqInquiry {
   id: string;
@@ -180,7 +261,7 @@ const INITIAL_INQUIRIES: ServerRfqInquiry[] = [
     service_type:
       'Изготовление детали: Станины, рамы и крупногабаритные корпусные узлы',
     has_drawings: 'Да, полный комплект КД (ЕСКД / 3D-модель)',
-    material: 'Чугун (СЧ20, СЧ25, ВЧ50) — литьё + мехобработка',
+    material: 'Чугун (СЧ20, СЧ25, ВЧ50) — мехобработка корпусных заготовок',
     quantity: 'Средняя серия (50 – 500 шт.)',
     drawing_files: [
       {
@@ -389,6 +470,24 @@ async function startServer() {
   const app = express();
   app.use(express.json({ limit: '10mb' }));
 
+  // Security headers middleware
+  app.use((_req: Request, res: Response, next: NextFunction) => {
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+    res.setHeader('X-XSS-Protection', '1; mode=block');
+    next();
+  });
+
+  function generateNextInquiryNumber(inquiries: ServerRfqInquiry[]): string {
+    const year = new Date().getFullYear();
+    const maxNum = inquiries.reduce((max, item) => {
+      const m = String(item.inquiry_number || '').match(/(\d+)$/);
+      const num = m ? parseInt(m[1], 10) : 0;
+      return num > max ? num : max;
+    }, 100);
+    return `БЗАЛ-${year}-${String(maxNum + 1).padStart(4, '0')}`;
+  }
+
   // Initialize storage bucket in background
   ensureSupabaseBucket();
 
@@ -398,36 +497,57 @@ async function startServer() {
 
   app.post('/api/public/inquiries', async (req: Request, res: Response) => {
     try {
+      const body = req.body || {};
+      const clientName = sanitizeStr(body.client_name, 160);
+      const phone = sanitizeStr(body.phone, 60);
+      const email = sanitizeStr(body.email, 160);
+
+      if (!clientName && !phone && !email) {
+        res.status(400).json({ error: 'Укажите контактные данные для связи' });
+        return;
+      }
+
       const db = readServerDb();
-      const year = new Date().getFullYear();
-      const nextNum = 101 + db.inquiries.length;
-      const inquiryNumber = `БЗАЛ-${year}-${String(nextNum).padStart(4, '0')}`;
+      const inquiryNumber = generateNextInquiryNumber(db.inquiries);
       const now = new Date().toISOString();
 
-      const body = req.body || {};
+      const safeFiles = Array.isArray(body.drawing_files)
+        ? body.drawing_files.slice(0, 10).map((f: Record<string, unknown>) => ({
+            name: sanitizeStr(f?.name, 200),
+            size: Math.max(0, Number(f?.size) || 0),
+            storage_path: f?.storage_path ? sanitizeStr(f.storage_path, 300) : undefined,
+            uploaded_at: sanitizeStr(f?.uploaded_at || now, 50),
+          }))
+        : [];
+
+      const allowedSources = ['calculator', 'modal', 'manual'] as const;
+      const source = allowedSources.includes(body.source) ? body.source : 'calculator';
+      const allowedPref = ['phone', 'email', 'both'] as const;
+      const preferredContact = allowedPref.includes(body.preferred_contact)
+        ? body.preferred_contact
+        : 'both';
+
       const newInquiry: ServerRfqInquiry = {
-        id: `inq-${Date.now()}`,
+        id: `inq-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
         inquiry_number: inquiryNumber,
-        source: body.source || 'calculator',
-        client_name: String(body.client_name || '').trim(),
-        company: String(body.company || '').trim(),
-        phone: String(body.phone || '').trim(),
-        email: String(body.email || '').trim(),
-        preferred_contact: body.preferred_contact || 'both',
-        service_type: String(body.service_type || ''),
-        has_drawings: String(body.has_drawings || ''),
-        material: String(body.material || ''),
-        quantity: String(body.quantity || ''),
-        drawing_files: Array.isArray(body.drawing_files)
-          ? body.drawing_files
-          : [],
-        comments: String(body.comments || '').trim(),
+        source,
+        client_name: clientName,
+        company: sanitizeStr(body.company, 200),
+        phone,
+        email,
+        preferred_contact: preferredContact,
+        service_type: sanitizeStr(body.service_type, 250),
+        has_drawings: sanitizeStr(body.has_drawings, 150),
+        material: sanitizeStr(body.material, 200),
+        quantity: sanitizeStr(body.quantity, 150),
+        drawing_files: safeFiles,
+        comments: sanitizeStr(body.comments, 2000),
         status: 'new_marketing',
         assigned_department: 'marketing',
         feedback_status: 'pending',
-        estimated_amount_byn: Number(body.estimated_amount_byn) || 35000,
+        estimated_amount_byn: Math.min(100_000_000, Math.max(0, Number(body.estimated_amount_byn) || 35000)),
         internal_notes:
-          'Заявка поступила с сайта в отдел маркетинга и сбыта (Пн–Пт 08:00–16:45). Ожидает первичной проверки и передачи в ОГК / ОГТ.',
+          'Заявка поступила с сайта в отдел маркетинга и продаж (Пн–Пт 08:00–16:30). Ожидает первичной проверки и передачи в ОГК / ОГТ.',
         created_at: now,
       };
 
@@ -455,13 +575,22 @@ async function startServer() {
 
   app.post('/api/public/passport-leads', async (req: Request, res: Response) => {
     try {
-      const db = readServerDb();
       const body = req.body || {};
+      const contactName = sanitizeStr(body.contact_name, 160);
+      const company = sanitizeStr(body.company, 200);
+      const email = sanitizeStr(body.email, 160);
+
+      if (!email || !email.includes('@')) {
+        res.status(400).json({ error: 'Укажите корректный корпоративный Email' });
+        return;
+      }
+
+      const db = readServerDb();
       const newLead: ServerPassportLead = {
-        id: `lead-${Date.now()}`,
-        contact_name: String(body.contact_name || '').trim(),
-        company: String(body.company || '').trim(),
-        email: String(body.email || '').trim(),
+        id: `lead-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+        contact_name: contactName,
+        company,
+        email,
         created_at: new Date().toISOString(),
       };
 
@@ -482,16 +611,17 @@ async function startServer() {
   });
 
   app.get('/api/public/inquiry-status', (req: Request, res: Response) => {
-    const rawNum = String(req.query.number || '').trim().toUpperCase();
-    if (!rawNum) {
-      res.status(400).json({ found: false, error: 'Укажите номер заявки' });
+    const rawNum = sanitizeStr(req.query.number, 40).toUpperCase();
+    // Require at least 4 characters (e.g., "0101" or "БЗАЛ-2026-0101") to prevent 1-char enumeration
+    if (!rawNum || rawNum.length < 4) {
+      res.status(400).json({ found: false, error: 'Укажите полный номер заявки (минимум 4 цифры, например 0101)' });
       return;
     }
 
     const db = readServerDb();
     const match = db.inquiries.find((i) => {
       const norm = i.inquiry_number.toUpperCase();
-      return norm === rawNum || norm.endsWith(rawNum);
+      return norm === rawNum || norm.endsWith(`-${rawNum}`) || (rawNum.length >= 4 && norm.endsWith(rawNum));
     });
 
     if (!match) {
@@ -519,23 +649,30 @@ async function startServer() {
   // =========================================================================
 
   app.post('/api/admin/login', (req: Request, res: Response) => {
+    const clientIp = String(req.headers['x-forwarded-for'] || req.socket.remoteAddress || 'unknown');
+    if (!checkLoginRateLimit(clientIp)) {
+      res.status(429).json({
+        error: 'Слишком много попыток входа. Повторите попытку через 15 минут.',
+      });
+      return;
+    }
+
     const { email, password } = req.body || {};
-    const normalizedEmail = String(email || '')
-      .trim()
-      .toLowerCase();
-    const cleanPass = String(password || '').trim();
+    const normalizedEmail = sanitizeStr(email, 160).toLowerCase();
+    const cleanPass = sanitizeStr(password, 100);
 
     if (
       ALLOWED_EMAILS.includes(normalizedEmail) &&
-      ADMIN_PASSWORDS.includes(cleanPass)
+      isValidAdminPassword(cleanPass)
     ) {
+      loginAttempts.delete(clientIp);
       const token = createAdminToken(normalizedEmail);
       res.json({
         success: true,
         token,
         user: {
           email: normalizedEmail,
-          role: 'Специалист отдела маркетинга и аналитики ОАО «БЗАЛ»',
+          role: 'Специалист отдела маркетинга и продаж ОАО БЗАЛ',
         },
       });
       return;
@@ -543,9 +680,41 @@ async function startServer() {
 
     res.status(401).json({
       error:
-        'Неверный Email специалиста или код доступа. Доступ разрешён только уполномоченным сотрудникам ОАО «БЗАЛ».',
+        'Неверный Email специалиста или код доступа. Доступ разрешён только уполномоченным сотрудникам ОАО БЗАЛ.',
     });
   });
+
+  app.post(
+    '/api/admin/change-password',
+    requireSpecialistAuth,
+    (req: Request, res: Response) => {
+      const { currentPassword, newPassword } = req.body || {};
+      const cleanCurrent = sanitizeStr(currentPassword, 100);
+      const cleanNew = sanitizeStr(newPassword, 100);
+
+      if (!isValidAdminPassword(cleanCurrent)) {
+        res.status(400).json({
+          success: false,
+          error: 'Текущий пароль введён неверно.',
+        });
+        return;
+      }
+
+      if (cleanNew.length < 4) {
+        res.status(400).json({
+          success: false,
+          error: 'Новый пароль должен содержать минимум 4 символа.',
+        });
+        return;
+      }
+
+      saveCustomAdminPassword(cleanNew);
+      res.json({
+        success: true,
+        message: 'Пароль доступа в админ-панель успешно изменён и сохранён на сервере.',
+      });
+    }
+  );
 
   app.get(
     '/api/admin/data',
@@ -603,33 +772,31 @@ async function startServer() {
     requireSpecialistAuth,
     async (req: Request, res: Response) => {
       const db = readServerDb();
-      const year = new Date().getFullYear();
-      const nextNum = 101 + db.inquiries.length;
-      const inquiryNumber = `БЗАЛ-${year}-${String(nextNum).padStart(4, '0')}`;
+      const inquiryNumber = generateNextInquiryNumber(db.inquiries);
       const now = new Date().toISOString();
       const body = req.body || {};
 
       const newInquiry: ServerRfqInquiry = {
-        id: `inq-${Date.now()}`,
+        id: `inq-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
         inquiry_number: inquiryNumber,
         source: 'manual',
-        client_name: String(body.client_name || '').trim(),
-        company: String(body.company || '').trim(),
-        phone: String(body.phone || '').trim(),
-        email: String(body.email || '').trim(),
+        client_name: sanitizeStr(body.client_name, 160),
+        company: sanitizeStr(body.company, 200),
+        phone: sanitizeStr(body.phone, 60),
+        email: sanitizeStr(body.email, 160),
         preferred_contact: body.preferred_contact || 'phone',
-        service_type: String(body.service_type || ''),
-        has_drawings: String(body.has_drawings || ''),
-        material: String(body.material || ''),
-        quantity: String(body.quantity || ''),
+        service_type: sanitizeStr(body.service_type, 250),
+        has_drawings: sanitizeStr(body.has_drawings, 150),
+        material: sanitizeStr(body.material, 200),
+        quantity: sanitizeStr(body.quantity, 150),
         drawing_files: [],
-        comments: String(body.comments || '').trim(),
+        comments: sanitizeStr(body.comments, 2000),
         status: 'new_marketing',
         assigned_department: 'marketing',
         feedback_status: 'pending',
-        estimated_amount_byn: Number(body.estimated_amount_byn) || 35000,
+        estimated_amount_byn: Math.min(100_000_000, Math.max(0, Number(body.estimated_amount_byn) || 35000)),
         internal_notes:
-          'Зарегистрировано специалистом отдела маркетинга при телефонном обращении.',
+          'Зарегистрировано специалистом отдела маркетинга и продаж при телефонном обращении.',
         created_at: now,
       };
 
@@ -651,13 +818,32 @@ async function startServer() {
     requireSpecialistAuth,
     async (req: Request, res: Response) => {
       const { id } = req.params;
-      const updates = req.body || {};
+      const raw = req.body || {};
       const db = readServerDb();
+
+      // Strict allowlist to prevent mass assignment of id / inquiry_number / created_at
+      const safeUpdates: Partial<ServerRfqInquiry> = {};
+      if (typeof raw.status === 'string') safeUpdates.status = raw.status as ServerRfqInquiry['status'];
+      if (typeof raw.assigned_department === 'string') {
+        safeUpdates.assigned_department = raw.assigned_department as ServerRfqInquiry['assigned_department'];
+      }
+      if (typeof raw.feedback_status === 'string') {
+        safeUpdates.feedback_status = raw.feedback_status as ServerRfqInquiry['feedback_status'];
+      }
+      if (raw.estimated_amount_byn !== undefined) {
+        safeUpdates.estimated_amount_byn = Math.min(
+          100_000_000,
+          Math.max(0, Number(raw.estimated_amount_byn) || 0)
+        );
+      }
+      if (typeof raw.internal_notes === 'string') {
+        safeUpdates.internal_notes = sanitizeStr(raw.internal_notes, 3000);
+      }
 
       let updatedItem: ServerRfqInquiry | null = null;
       db.inquiries = db.inquiries.map((item) => {
         if (item.id === id) {
-          const nextItem: ServerRfqInquiry = { ...item, ...updates };
+          const nextItem: ServerRfqInquiry = { ...item, ...safeUpdates };
           updatedItem = nextItem;
           return nextItem;
         }
@@ -669,7 +855,7 @@ async function startServer() {
       try {
         await supabaseAdmin
           .from('rfq_inquiries')
-          .update(updates)
+          .update(safeUpdates)
           .eq('id', id);
       } catch {
         // ignore
@@ -848,10 +1034,28 @@ async function startServer() {
           return;
         }
 
+        const allowedMimes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+        const cleanMime = String(contentType || 'image/jpeg').toLowerCase();
+        if (!allowedMimes.includes(cleanMime)) {
+          res.status(400).json({ error: 'Разрешены только изображения JPG, PNG, WEBP или GIF' });
+          return;
+        }
+
+        const extMatch = String(fileName).toLowerCase().match(/\.(jpg|jpeg|png|webp|gif)$/);
+        const ext = extMatch ? extMatch[0] : '.jpg';
+        const baseName = path
+          .basename(String(fileName), path.extname(String(fileName)))
+          .replace(/[^a-zA-Z0-9_-]/g, '_')
+          .slice(0, 60);
+
+        const buffer = Buffer.from(String(base64Data), 'base64');
+        if (buffer.length > 6 * 1024 * 1024) {
+          res.status(400).json({ error: 'Размер изображения превышает 6 МБ' });
+          return;
+        }
+
         await ensureSupabaseBucket();
-        const safeName = String(fileName).replace(/[^a-zA-Z0-9._-]/g, '_');
-        const stampedName = `${Date.now()}_${safeName}`;
-        const buffer = Buffer.from(base64Data, 'base64');
+        const stampedName = `${Date.now()}_${baseName || 'img'}${ext}`;
 
         // 1. Save to local public/images/uploads so it works locally as well
         const uploadsDir = path.join(
@@ -870,7 +1074,7 @@ async function startServer() {
         const { error } = await supabaseAdmin.storage
           .from('bzal-drawings')
           .upload(storagePath, buffer, {
-            contentType: contentType || 'image/jpeg',
+            contentType: cleanMime,
             upsert: true,
           });
 
@@ -894,6 +1098,30 @@ async function startServer() {
   );
 
   // =========================================================================
+  // 2C. HEALTHCHECK ENDPOINT (For Docker, Nginx, and VPS Deployment)
+  // =========================================================================
+  app.get('/api/health', (_req: Request, res: Response) => {
+    res.json({
+      status: 'ok',
+      service: 'technopark-bzal-portal',
+      env: process.env.NODE_ENV || 'development',
+      timestamp: new Date().toISOString(),
+    });
+  });
+
+  // Always serve dynamically uploaded CMS images from public/images/uploads
+  const runtimeUploadsDir = path.join(
+    import.meta.dirname,
+    'public',
+    'images',
+    'uploads'
+  );
+  if (!fs.existsSync(runtimeUploadsDir)) {
+    fs.mkdirSync(runtimeUploadsDir, { recursive: true });
+  }
+  app.use('/images/uploads', express.static(runtimeUploadsDir));
+
+  // =========================================================================
   // 3. VITE MIDDLEWARE (DEV) OR STATIC ASSETS (PROD)
   // =========================================================================
   if (process.env.NODE_ENV !== 'production') {
@@ -904,7 +1132,7 @@ async function startServer() {
     app.use(vite.middlewares);
   } else {
     const distPath = path.join(import.meta.dirname, 'dist');
-    app.use(express.static(distPath));
+    app.use(express.static(distPath, { maxAge: '7d', index: false }));
     app.get('*', (_req, res) => {
       res.sendFile(path.join(distPath, 'index.html'));
     });

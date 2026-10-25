@@ -184,7 +184,12 @@ export default function App() {
       />
 
       {/* 2. Main Full-Screen Active Page View */}
-      <main data-cms-rev={cmsRevision} className="flex-1 flex flex-col justify-between pt-24 sm:pt-28 lg:pt-28 min-h-[calc(100vh-110px)]">
+      <main
+        data-cms-rev={cmsRevision}
+        className={`flex-1 flex flex-col justify-between min-h-[calc(100vh-110px)] ${
+          isA11yOpen ? 'pt-32 sm:pt-40 lg:pt-40' : 'pt-[88px] sm:pt-28 lg:pt-28'
+        }`}
+      >
         <div className="flex-1">
           {/* PAGE 01: HOME (HERO) */}
           {activePage === 'home' && (
@@ -242,7 +247,7 @@ export default function App() {
                       onClick={() => setServicesSubTab('competencies')}
                       className={`px-3.5 py-2 rounded-lg text-xs font-extrabold uppercase transition-all cursor-pointer ${
                         servicesSubTab === 'competencies'
-                          ? 'bg-[#E71B26] text-white shadow-xs'
+                          ? 'bg-[#E95A0C] text-white shadow-xs'
                           : 'text-[#2B3340] hover:bg-white'
                       }`}
                     >
@@ -257,7 +262,7 @@ export default function App() {
                       onClick={() => setServicesSubTab('comparison')}
                       className={`px-3.5 py-2 rounded-lg text-xs font-extrabold uppercase transition-all cursor-pointer ${
                         servicesSubTab === 'comparison'
-                          ? 'bg-[#E71B26] text-white shadow-xs'
+                          ? 'bg-[#E95A0C] text-white shadow-xs'
                           : 'text-[#2B3340] hover:bg-white'
                       }`}
                     >
@@ -277,7 +282,10 @@ export default function App() {
                   onSelectService={handleGoToCalculator}
                 />
               ) : (
-                <Comparison currentLang={currentLang} />
+                <Comparison
+                  currentLang={currentLang}
+                  onSelectService={handleGoToCalculator}
+                />
               )}
             </div>
           )}
@@ -300,7 +308,7 @@ export default function App() {
                       onClick={() => setEquipmentSubTab('machines')}
                       className={`px-3.5 py-2 rounded-lg text-xs font-extrabold uppercase transition-all cursor-pointer ${
                         equipmentSubTab === 'machines'
-                          ? 'bg-[#E71B26] text-white shadow-xs'
+                          ? 'bg-[#E95A0C] text-white shadow-xs'
                           : 'text-[#2B3340] hover:bg-white'
                       }`}
                     >
@@ -315,7 +323,7 @@ export default function App() {
                       onClick={() => setEquipmentSubTab('quality')}
                       className={`px-3.5 py-2 rounded-lg text-xs font-extrabold uppercase transition-all cursor-pointer ${
                         equipmentSubTab === 'quality'
-                          ? 'bg-[#E71B26] text-white shadow-xs'
+                          ? 'bg-[#E95A0C] text-white shadow-xs'
                           : 'text-[#2B3340] hover:bg-white'
                       }`}
                     >
@@ -370,7 +378,7 @@ export default function App() {
                       onClick={() => setEaeuSubTab('logistics')}
                       className={`px-3.5 py-2 rounded-lg text-xs font-extrabold uppercase transition-all cursor-pointer ${
                         eaeuSubTab === 'logistics'
-                          ? 'bg-[#E71B26] text-white shadow-xs'
+                          ? 'bg-[#E95A0C] text-white shadow-xs'
                           : 'text-[#2B3340] hover:bg-white'
                       }`}
                     >
@@ -385,7 +393,7 @@ export default function App() {
                       onClick={() => setEaeuSubTab('pipeline')}
                       className={`px-3.5 py-2 rounded-lg text-xs font-extrabold uppercase transition-all cursor-pointer ${
                         eaeuSubTab === 'pipeline'
-                          ? 'bg-[#E71B26] text-white shadow-xs'
+                          ? 'bg-[#E95A0C] text-white shadow-xs'
                           : 'text-[#2B3340] hover:bg-white'
                       }`}
                     >
@@ -438,7 +446,7 @@ export default function App() {
                       onClick={() => setContactsSubTab('contacts')}
                       className={`px-3.5 py-2 rounded-lg text-xs font-extrabold uppercase transition-all cursor-pointer ${
                         contactsSubTab === 'contacts'
-                          ? 'bg-[#E71B26] text-white shadow-xs'
+                          ? 'bg-[#E95A0C] text-white shadow-xs'
                           : 'text-[#2B3340] hover:bg-white'
                       }`}
                     >
@@ -453,7 +461,7 @@ export default function App() {
                       onClick={() => setContactsSubTab('about')}
                       className={`px-3.5 py-2 rounded-lg text-xs font-extrabold uppercase transition-all cursor-pointer ${
                         contactsSubTab === 'about'
-                          ? 'bg-[#E71B26] text-white shadow-xs'
+                          ? 'bg-[#E95A0C] text-white shadow-xs'
                           : 'text-[#2B3340] hover:bg-white'
                       }`}
                     >
@@ -468,7 +476,7 @@ export default function App() {
                       onClick={() => setContactsSubTab('gov')}
                       className={`px-3.5 py-2 rounded-lg text-xs font-extrabold uppercase transition-all cursor-pointer ${
                         contactsSubTab === 'gov'
-                          ? 'bg-[#E71B26] text-white shadow-xs'
+                          ? 'bg-[#E95A0C] text-white shadow-xs'
                           : 'text-[#2B3340] hover:bg-white'
                       }`}
                     >
@@ -501,68 +509,70 @@ export default function App() {
           )}
         </div>
 
-        {/* Bottom Page Flipper Bar (Localized RU / EN / ZH) */}
-        <div className="bg-white border-t border-b border-[#D5D9DE] py-4">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <button
-              type="button"
-              disabled={!prevPageMeta}
-              onClick={() => prevPageMeta && handleSelectPage(prevPageMeta.id)}
-              className={`w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-xs font-extrabold uppercase tracking-wider border transition-all ${
-                prevPageMeta
-                  ? 'bg-[#F8F9FA] hover:bg-[#2B3340] text-[#2B3340] hover:text-white border-[#D5D9DE] cursor-pointer'
-                  : 'bg-[#F8F9FA] text-[#BAC5CF] border-[#ECEEF0] cursor-not-allowed'
-              }`}
-            >
-              <ArrowLeft className="w-4 h-4 shrink-0" />
-              <span>
-                {prevPageMeta
-                  ? currentLang === 'ru'
-                    ? `Назад: ${prevPageMeta.num}. ${getPageTitle(prevPageMeta)}`
-                    : currentLang === 'en'
-                      ? `Previous: ${prevPageMeta.num}. ${getPageTitle(prevPageMeta)}`
-                      : `上一页：${prevPageMeta.num}. ${getPageTitle(prevPageMeta)}`
-                  : currentLang === 'ru'
-                    ? 'Вы на первой странице'
-                    : currentLang === 'en'
-                      ? 'First Page'
-                      : '当前为第一页'}
-              </span>
-            </button>
-
-            <div className="text-xs font-bold text-[#647082] text-center">
+        {/* Bottom Page Flipper Bar (Localized RU / EN / ZH & Compact on Mobile) */}
+        <div className="bg-white border-t border-b border-[#D5D9DE] py-3 sm:py-4">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-2.5 sm:gap-4">
+            <div className="text-xs font-bold text-[#647082] text-center sm:order-2">
               {currentLang === 'ru' ? 'Страница' : currentLang === 'en' ? 'Page' : '第'}{' '}
               <span className="text-[#2B3340] font-extrabold">{currentPageMeta.num}</span>{' '}
               {currentLang === 'ru' ? 'из' : currentLang === 'en' ? 'of' : '/'}{' '}
               <span className="text-[#2B3340] font-extrabold">08</span> ·{' '}
-              <span className="text-[#E71B26] font-extrabold">{getPageTitle(currentPageMeta)}</span>
+              <span className="text-[#E95A0C] font-extrabold">{getPageTitle(currentPageMeta)}</span>
             </div>
 
-            <button
-              type="button"
-              disabled={!nextPageMeta}
-              onClick={() => nextPageMeta && handleSelectPage(nextPageMeta.id)}
-              className={`w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-xs font-extrabold uppercase tracking-wider transition-all ${
-                nextPageMeta
-                  ? 'bg-[#E71B26] hover:bg-[#C9141E] text-white shadow-sm cursor-pointer'
-                  : 'bg-[#ECEEF0] text-[#95A1AE] cursor-not-allowed'
-              }`}
-            >
-              <span>
-                {nextPageMeta
-                  ? currentLang === 'ru'
-                    ? `Следующая страница: ${nextPageMeta.num}. ${getPageTitle(nextPageMeta)}`
-                    : currentLang === 'en'
-                      ? `Next Page: ${nextPageMeta.num}. ${getPageTitle(nextPageMeta)}`
-                      : `下一页：${nextPageMeta.num}. ${getPageTitle(nextPageMeta)}`
-                  : currentLang === 'ru'
-                    ? 'Вы на последней странице'
-                    : currentLang === 'en'
-                      ? 'Last Page'
-                      : '当前为最后一页'}
-              </span>
-              <ArrowRight className="w-4 h-4 shrink-0" />
-            </button>
+            <div className="grid grid-cols-2 sm:contents gap-2 w-full">
+              <button
+                type="button"
+                disabled={!prevPageMeta}
+                onClick={() => prevPageMeta && handleSelectPage(prevPageMeta.id)}
+                className={`sm:order-1 inline-flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2.5 sm:py-3 rounded-xl text-[11px] sm:text-xs font-extrabold uppercase tracking-wider border transition-all ${
+                  prevPageMeta
+                    ? 'bg-[#F8F9FA] hover:bg-[#2B3340] text-[#2B3340] hover:text-white border-[#D5D9DE] cursor-pointer'
+                    : 'bg-[#F8F9FA] text-[#BAC5CF] border-[#ECEEF0] cursor-not-allowed'
+                }`}
+              >
+                <ArrowLeft className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+                <span className="truncate">
+                  {prevPageMeta
+                    ? currentLang === 'ru'
+                      ? `${prevPageMeta.num}. ${getPageTitle(prevPageMeta)}`
+                      : currentLang === 'en'
+                        ? `${prevPageMeta.num}. ${getPageTitle(prevPageMeta)}`
+                        : `${prevPageMeta.num}. ${getPageTitle(prevPageMeta)}`
+                    : currentLang === 'ru'
+                      ? 'Начало'
+                      : currentLang === 'en'
+                        ? 'Start'
+                        : '首页'}
+                </span>
+              </button>
+
+              <button
+                type="button"
+                disabled={!nextPageMeta}
+                onClick={() => nextPageMeta && handleSelectPage(nextPageMeta.id)}
+                className={`sm:order-3 inline-flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-6 py-2.5 sm:py-3 rounded-xl text-[11px] sm:text-xs font-extrabold uppercase tracking-wider transition-all ${
+                  nextPageMeta
+                    ? 'bg-[#E95A0C] hover:bg-[#CC4B06] text-white shadow-sm cursor-pointer'
+                    : 'bg-[#ECEEF0] text-[#95A1AE] cursor-not-allowed'
+                }`}
+              >
+                <span className="truncate">
+                  {nextPageMeta
+                    ? currentLang === 'ru'
+                      ? `${nextPageMeta.num}. ${getPageTitle(nextPageMeta)}`
+                      : currentLang === 'en'
+                        ? `${nextPageMeta.num}. ${getPageTitle(nextPageMeta)}`
+                        : `${nextPageMeta.num}. ${getPageTitle(nextPageMeta)}`
+                    : currentLang === 'ru'
+                      ? 'Конец'
+                      : currentLang === 'en'
+                        ? 'End'
+                        : '末页'}
+                </span>
+                <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+              </button>
+            </div>
           </div>
         </div>
       </main>

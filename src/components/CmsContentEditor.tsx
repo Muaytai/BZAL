@@ -441,7 +441,7 @@ export const CmsContentEditor: React.FC<CmsContentEditorProps> = ({
       {/* Top Action & Language Control Bar */}
       <div className="rounded-2xl bg-white border-2 border-[#2B3340] p-4 sm:p-5 shadow-md flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-[#E71B26]/10 text-[#E71B26] text-[11px] font-extrabold uppercase tracking-wider mb-1">
+          <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-[#E95A0C]/10 text-[#E95A0C] text-[11px] font-extrabold uppercase tracking-wider mb-1">
             <Sparkles className="w-3.5 h-3.5" />
             <span>CMS • ВИЗУАЛЬНЫЙ РЕДАКТОР КОНТЕНТА И ФОТОГРАФИЙ САЙТА</span>
           </div>
@@ -479,7 +479,7 @@ export const CmsContentEditor: React.FC<CmsContentEditorProps> = ({
               onClick={onPreviewSite}
               className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-[#ECEEF0] hover:bg-[#D5D9DE] text-[#2B3340] text-xs font-extrabold uppercase transition-all cursor-pointer"
             >
-              <Eye className="w-4 h-4 text-[#E71B26]" />
+              <Eye className="w-4 h-4 text-[#E95A0C]" />
               <span>Посмотреть на сайте</span>
             </button>
           )}
@@ -488,7 +488,7 @@ export const CmsContentEditor: React.FC<CmsContentEditorProps> = ({
             type="button"
             onClick={handleSaveAll}
             disabled={isSaving || isUploading}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#E71B26] hover:bg-[#C9141E] text-white text-xs font-extrabold uppercase tracking-wider shadow-md transition-all cursor-pointer disabled:opacity-60"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#E95A0C] hover:bg-[#CC4B06] text-white text-xs font-extrabold uppercase tracking-wider shadow-md transition-all cursor-pointer disabled:opacity-60"
           >
             <Save className="w-4 h-4" />
             <span>
@@ -510,7 +510,7 @@ export const CmsContentEditor: React.FC<CmsContentEditorProps> = ({
           }`}
         >
           <div className="flex items-center gap-2.5">
-            <CheckCircle2 className="w-5 h-5 shrink-0 text-[#E71B26]" />
+            <CheckCircle2 className="w-5 h-5 shrink-0 text-[#E95A0C]" />
             <span>{statusBanner.text}</span>
           </div>
           <button
@@ -570,7 +570,7 @@ export const CmsContentEditor: React.FC<CmsContentEditorProps> = ({
                     : 'bg-[#ECEEF0] text-[#444E60] hover:text-[#2B3340]'
                 }`}
               >
-                <Icon className="w-3.5 h-3.5 text-[#E71B26]" />
+                <Icon className="w-3.5 h-3.5 text-[#E95A0C]" />
                 <span>{sec.label}</span>
               </button>
             );
@@ -582,7 +582,7 @@ export const CmsContentEditor: React.FC<CmsContentEditorProps> = ({
             type="checkbox"
             checked={syncPhotosAllLangs}
             onChange={(e) => setSyncPhotosAllLangs(e.target.checked)}
-            className="accent-[#E71B26] w-4 h-4"
+            className="accent-[#E95A0C] w-4 h-4"
           />
           <span>Синхронизировать новые фото для RU / EN / ZH</span>
         </label>
@@ -607,7 +607,7 @@ export const CmsContentEditor: React.FC<CmsContentEditorProps> = ({
               <button
                 type="button"
                 onClick={handleAddPartItem}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#E71B26] hover:bg-[#C9141E] text-white text-xs font-extrabold uppercase cursor-pointer shadow-xs"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#E95A0C] hover:bg-[#CC4B06] text-white text-xs font-extrabold uppercase cursor-pointer shadow-xs"
               >
                 <Plus className="w-4 h-4" />
                 <span>Добавить новую деталь</span>
@@ -715,7 +715,7 @@ export const CmsContentEditor: React.FC<CmsContentEditorProps> = ({
 
                   <div className="sm:col-span-7 p-4 flex flex-col justify-between text-white">
                     <div>
-                      <div className="text-[11px] font-extrabold uppercase text-[#E71B26] mb-1">
+                      <div className="text-[11px] font-extrabold uppercase text-[#E95A0C] mb-1">
                         Фотография изделия
                       </div>
                       <p className="text-xs text-white/80 leading-snug mb-3">
@@ -733,7 +733,7 @@ export const CmsContentEditor: React.FC<CmsContentEditorProps> = ({
                     </div>
 
                     <div className="flex flex-wrap items-center gap-2">
-                      <label className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#E71B26] hover:bg-[#C9141E] text-white text-[11px] font-extrabold uppercase cursor-pointer">
+                      <label className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#E95A0C] hover:bg-[#CC4B06] text-white text-[11px] font-extrabold uppercase cursor-pointer">
                         <Upload className="w-3.5 h-3.5" />
                         <span>Загрузить фото</span>
                         <input
@@ -894,7 +894,7 @@ export const CmsContentEditor: React.FC<CmsContentEditorProps> = ({
                         onChange={(e) =>
                           updatePartItem(part.id, { tolerance: e.target.value })
                         }
-                        className="w-full px-2.5 py-1.5 rounded-lg border border-[#D5D9DE] text-xs font-semibold text-[#E71B26]"
+                        className="w-full px-2.5 py-1.5 rounded-lg border border-[#D5D9DE] text-xs font-semibold text-[#E95A0C]"
                       />
                     </div>
 
@@ -965,7 +965,7 @@ export const CmsContentEditor: React.FC<CmsContentEditorProps> = ({
               <button
                 type="button"
                 onClick={handleAddEquipmentItem}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#E71B26] hover:bg-[#C9141E] text-white text-xs font-extrabold uppercase cursor-pointer shadow-xs"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#E95A0C] hover:bg-[#CC4B06] text-white text-xs font-extrabold uppercase cursor-pointer shadow-xs"
               >
                 <Plus className="w-4 h-4" />
                 <span>Добавить станок</span>
@@ -1046,7 +1046,7 @@ export const CmsContentEditor: React.FC<CmsContentEditorProps> = ({
 
                   <div className="sm:col-span-7 p-4 flex flex-col justify-between text-white">
                     <div>
-                      <div className="text-[11px] font-extrabold uppercase text-[#E71B26] mb-1">
+                      <div className="text-[11px] font-extrabold uppercase text-[#E95A0C] mb-1">
                         Фотография станка
                       </div>
                       <input
@@ -1060,7 +1060,7 @@ export const CmsContentEditor: React.FC<CmsContentEditorProps> = ({
                     </div>
 
                     <div className="flex flex-wrap items-center gap-2">
-                      <label className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#E71B26] hover:bg-[#C9141E] text-white text-[11px] font-extrabold uppercase cursor-pointer">
+                      <label className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#E95A0C] hover:bg-[#CC4B06] text-white text-[11px] font-extrabold uppercase cursor-pointer">
                         <Upload className="w-3.5 h-3.5" />
                         <span>Загрузить фото</span>
                         <input
@@ -1173,7 +1173,7 @@ export const CmsContentEditor: React.FC<CmsContentEditorProps> = ({
                             precision: e.target.value,
                           })
                         }
-                        className="w-full px-2.5 py-1.5 rounded-lg border border-[#D5D9DE] text-xs font-bold text-[#E71B26]"
+                        className="w-full px-2.5 py-1.5 rounded-lg border border-[#D5D9DE] text-xs font-bold text-[#E95A0C]"
                       />
                     </div>
 
@@ -1264,7 +1264,7 @@ export const CmsContentEditor: React.FC<CmsContentEditorProps> = ({
                   onChange={(e) =>
                     updateHeroField('titleHighlight', e.target.value)
                   }
-                  className="w-full px-3 py-2 rounded-lg border border-[#D5D9DE] text-xs font-extrabold text-[#E71B26]"
+                  className="w-full px-3 py-2 rounded-lg border border-[#D5D9DE] text-xs font-extrabold text-[#E95A0C]"
                 />
               </div>
 
@@ -1359,7 +1359,7 @@ export const CmsContentEditor: React.FC<CmsContentEditorProps> = ({
                         };
                         updateHeroField('stats', nextStats);
                       }}
-                      className="w-full px-2.5 py-1 rounded bg-white border border-[#D5D9DE] text-xs font-black text-[#E71B26]"
+                      className="w-full px-2.5 py-1 rounded bg-white border border-[#D5D9DE] text-xs font-black text-[#E95A0C]"
                       placeholder="Цифра (напр. 30 000+ м²)"
                     />
                     <input
@@ -1395,7 +1395,7 @@ export const CmsContentEditor: React.FC<CmsContentEditorProps> = ({
                 className="w-full h-full object-cover"
               />
               <div className="absolute bottom-2 left-2 right-2 bg-[#1B222C]/85 backdrop-blur-xs p-2.5 rounded text-white text-xs">
-                <div className="text-[10px] font-extrabold text-[#E71B26] uppercase">
+                <div className="text-[10px] font-extrabold text-[#E95A0C] uppercase">
                   {langData.hero.billboardEyebrow}
                 </div>
                 <div className="font-bold truncate">
@@ -1417,7 +1417,7 @@ export const CmsContentEditor: React.FC<CmsContentEditorProps> = ({
             </div>
 
             <div className="flex flex-wrap items-center gap-2">
-              <label className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#E71B26] hover:bg-[#C9141E] text-white text-xs font-extrabold uppercase cursor-pointer">
+              <label className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#E95A0C] hover:bg-[#CC4B06] text-white text-xs font-extrabold uppercase cursor-pointer">
                 <Upload className="w-4 h-4" />
                 <span>Загрузить новое фото с ПК</span>
                 <input
@@ -1448,7 +1448,7 @@ export const CmsContentEditor: React.FC<CmsContentEditorProps> = ({
                 }
                 className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#ECEEF0] hover:bg-[#D5D9DE] text-[#2B3340] text-xs font-extrabold uppercase cursor-pointer"
               >
-                <ImageIcon className="w-4 h-4 text-[#E71B26]" />
+                <ImageIcon className="w-4 h-4 text-[#E95A0C]" />
                 <span>Выбрать из галереи</span>
               </button>
             </div>
@@ -1533,7 +1533,7 @@ export const CmsContentEditor: React.FC<CmsContentEditorProps> = ({
                 type="text"
                 value={langData.brand.subname}
                 onChange={(e) => updateBrandField('subname', e.target.value)}
-                className="w-full px-3 py-2 rounded-lg border border-[#D5D9DE] text-xs font-bold text-[#E71B26]"
+                className="w-full px-3 py-2 rounded-lg border border-[#D5D9DE] text-xs font-bold text-[#E95A0C]"
               />
             </div>
 
@@ -1601,7 +1601,7 @@ export const CmsContentEditor: React.FC<CmsContentEditorProps> = ({
                 type="text"
                 value={langData.brand.email}
                 onChange={(e) => updateBrandField('email', e.target.value)}
-                className="w-full px-3 py-2 rounded-lg border border-[#D5D9DE] text-xs font-black text-[#E71B26]"
+                className="w-full px-3 py-2 rounded-lg border border-[#D5D9DE] text-xs font-black text-[#E95A0C]"
               />
             </div>
 
@@ -1726,7 +1726,7 @@ export const CmsContentEditor: React.FC<CmsContentEditorProps> = ({
                     ];
                     updateAboutField('projects', nextProjects);
                   }}
-                  className="inline-flex items-center gap-1 px-3 py-1 rounded bg-[#E71B26] text-white text-[11px] font-extrabold uppercase cursor-pointer"
+                  className="inline-flex items-center gap-1 px-3 py-1 rounded bg-[#E95A0C] text-white text-[11px] font-extrabold uppercase cursor-pointer"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   <span>Добавить проект</span>
@@ -1747,7 +1747,7 @@ export const CmsContentEditor: React.FC<CmsContentEditorProps> = ({
                         next[pIdx] = { ...next[pIdx], code: e.target.value };
                         updateAboutField('projects', next);
                       }}
-                      className="sm:col-span-3 px-2.5 py-1.5 rounded bg-white border border-[#D5D9DE] text-xs font-black text-[#E71B26]"
+                      className="sm:col-span-3 px-2.5 py-1.5 rounded bg-white border border-[#D5D9DE] text-xs font-black text-[#E95A0C]"
                       placeholder="Индекс (ЛБ0755)"
                     />
                     <input
@@ -1831,7 +1831,7 @@ export const CmsContentEditor: React.FC<CmsContentEditorProps> = ({
             </div>
 
             <div className="flex flex-wrap items-center gap-2">
-              <label className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#E71B26] hover:bg-[#C9141E] text-white text-xs font-extrabold uppercase cursor-pointer">
+              <label className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#E95A0C] hover:bg-[#CC4B06] text-white text-xs font-extrabold uppercase cursor-pointer">
                 <Upload className="w-4 h-4" />
                 <span>Загрузить своё фото</span>
                 <input
@@ -1863,7 +1863,7 @@ export const CmsContentEditor: React.FC<CmsContentEditorProps> = ({
                 }
                 className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#ECEEF0] hover:bg-[#D5D9DE] text-[#2B3340] text-xs font-extrabold uppercase cursor-pointer"
               >
-                <ImageIcon className="w-4 h-4 text-[#E71B26]" />
+                <ImageIcon className="w-4 h-4 text-[#E95A0C]" />
                 <span>Выбрать из галереи</span>
               </button>
             </div>
@@ -1905,7 +1905,7 @@ export const CmsContentEditor: React.FC<CmsContentEditorProps> = ({
                 onClick={handleExportJson}
                 className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-[#2B3340] hover:bg-[#1B222C] text-white text-xs font-extrabold uppercase cursor-pointer"
               >
-                <Download className="w-3.5 h-3.5 text-[#E71B26]" />
+                <Download className="w-3.5 h-3.5 text-[#E95A0C]" />
                 <span>Экспорт JSON</span>
               </button>
 
@@ -1914,7 +1914,7 @@ export const CmsContentEditor: React.FC<CmsContentEditorProps> = ({
                 onClick={() => fileImportRef.current?.click()}
                 className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-[#ECEEF0] hover:bg-[#D5D9DE] text-[#2B3340] text-xs font-extrabold uppercase cursor-pointer"
               >
-                <FileUp className="w-3.5 h-3.5 text-[#E71B26]" />
+                <FileUp className="w-3.5 h-3.5 text-[#E95A0C]" />
                 <span>Импорт JSON</span>
               </button>
               <input
@@ -1948,7 +1948,7 @@ export const CmsContentEditor: React.FC<CmsContentEditorProps> = ({
                 </p>
               </div>
 
-              <label className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#E71B26] hover:bg-[#C9141E] text-white text-xs font-extrabold uppercase cursor-pointer shadow-sm">
+              <label className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#E95A0C] hover:bg-[#CC4B06] text-white text-xs font-extrabold uppercase cursor-pointer shadow-sm">
                 <Upload className="w-4 h-4" />
                 <span>Загрузить фото в медиатеку</span>
                 <input
@@ -2025,7 +2025,7 @@ export const CmsContentEditor: React.FC<CmsContentEditorProps> = ({
           <div className="bg-white rounded-2xl border-2 border-[#2B3340] max-w-4xl w-full max-h-[88vh] flex flex-col overflow-hidden shadow-2xl">
             <div className="p-4 sm:p-5 bg-[#2B3340] text-white flex items-center justify-between">
               <div>
-                <div className="text-[10px] font-extrabold uppercase text-[#E71B26]">
+                <div className="text-[10px] font-extrabold uppercase text-[#E95A0C]">
                   ВЫБОР ИЗОБРАЖЕНИЯ ИЗ МЕДИАБИБЛИОТЕКИ ОАО БЗАЛ
                 </div>
                 <h4 className="text-sm sm:text-base font-black font-dela uppercase">
@@ -2054,7 +2054,7 @@ export const CmsContentEditor: React.FC<CmsContentEditorProps> = ({
                     }}
                     className={`text-left rounded-xl overflow-hidden border-2 transition-all cursor-pointer flex flex-col ${
                       isSelected
-                        ? 'border-[#E71B26] ring-2 ring-[#E71B26]/30'
+                        ? 'border-[#E95A0C] ring-2 ring-[#E95A0C]/30'
                         : 'border-[#D5D9DE] hover:border-[#2B3340]'
                     }`}
                   >
@@ -2072,7 +2072,7 @@ export const CmsContentEditor: React.FC<CmsContentEditorProps> = ({
                       <div className="text-xs font-extrabold text-[#2B3340] truncate">
                         {img.name}
                       </div>
-                      <div className="text-[10px] text-[#E71B26] font-bold uppercase mt-1">
+                      <div className="text-[10px] text-[#E95A0C] font-bold uppercase mt-1">
                         {isSelected ? '✓ Выбрано сейчас' : 'Нажмите, чтобы выбрать →'}
                       </div>
                     </div>

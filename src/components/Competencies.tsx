@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Check, ArrowRight, Cog, Layers, Hammer, Boxes, Building, ShieldCheck, ArrowUpRight } from 'lucide-react';
 import { Language } from '../types';
 import { content, competencyTabs } from '../data/content';
+import { BrandLogo } from './BrandLogo';
 
 interface CompetenciesProps {
   currentLang: Language;
@@ -39,8 +40,8 @@ export const Competencies: React.FC<CompetenciesProps> = ({ currentLang, onSelec
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-6 sm:mb-8">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-white rounded-md border border-[#D5D9DE] text-[#E71B26] text-xs font-dela uppercase tracking-wider mb-3">
-              <span className="w-2 h-2 rounded-full bg-[#E71B26]" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-white rounded-md border border-[#D5D9DE] text-[#E95A0C] text-xs font-dela uppercase tracking-wider mb-3">
+              <span className="w-2 h-2 rounded-full bg-[#E95A0C]" />
               <span>{t.services.eyebrow}</span>
             </div>
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#2B3340] tracking-tight font-dela uppercase">
@@ -62,7 +63,7 @@ export const Competencies: React.FC<CompetenciesProps> = ({ currentLang, onSelec
                 onClick={() => setActiveTabId(tab.id)}
                 className={`flex items-center gap-2.5 px-4 py-3 rounded-lg text-xs sm:text-sm font-bold uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap shadow-xs ${
                   isActive
-                    ? 'bg-[#E71B26] text-white shadow-md'
+                    ? 'bg-[#E95A0C] text-white shadow-md'
                     : 'bg-white text-[#2B3340] hover:bg-[#ECEEF0] border border-[#D5D9DE]'
                 }`}
               >
@@ -87,7 +88,7 @@ export const Competencies: React.FC<CompetenciesProps> = ({ currentLang, onSelec
                 
                 {/* Badge & Title */}
                 <div className="flex items-center gap-3 mb-3">
-                  <span className="px-2.5 py-1 rounded bg-[#ECEEF0] text-[#E71B26] text-xs font-dela uppercase tracking-wider border border-[#D5D9DE]">
+                  <span className="px-2.5 py-1 rounded bg-[#ECEEF0] text-[#E95A0C] text-xs font-dela uppercase tracking-wider border border-[#D5D9DE]">
                     {activeTab.badge}
                   </span>
                   <span className="text-xs font-bold text-[#647082] uppercase">
@@ -114,7 +115,7 @@ export const Competencies: React.FC<CompetenciesProps> = ({ currentLang, onSelec
                         key={idx}
                         className="p-3 rounded-lg bg-[#ECEEF0] border border-[#D5D9DE] flex items-start gap-2.5 text-xs text-[#2B3340] font-medium leading-relaxed"
                       >
-                        <Check className="w-4 h-4 text-[#E71B26] shrink-0 mt-0.5 stroke-[2.5]" />
+                        <Check className="w-4 h-4 text-[#E95A0C] shrink-0 mt-0.5 stroke-[2.5]" />
                         <span>{feature}</span>
                       </div>
                     ))}
@@ -139,13 +140,13 @@ export const Competencies: React.FC<CompetenciesProps> = ({ currentLang, onSelec
 
                 {/* Bottom Quote & Action Button */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 border-t border-[#E2E5E8]">
-                  <div className="text-xs italic text-[#444E60] font-medium border-l-2 border-[#E71B26] pl-3">
+                  <div className="text-xs italic text-[#444E60] font-medium border-l-2 border-[#E95A0C] pl-3">
                     {activeTab.accentQuote}
                   </div>
 
                   <button
                     onClick={() => onSelectService(activeTab.title)}
-                    className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-[#E71B26] hover:bg-[#C9141E] text-white font-bold text-xs uppercase tracking-wider shadow-sm hover:shadow-md transition-all cursor-pointer whitespace-nowrap"
+                    className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-[#E95A0C] hover:bg-[#CC4B06] text-white font-bold text-xs uppercase tracking-wider shadow-sm hover:shadow-md transition-all cursor-pointer whitespace-nowrap"
                   >
                     <span>{t.services.auditCta}</span>
                     <ArrowUpRight className="w-4 h-4" />
@@ -166,10 +167,12 @@ export const Competencies: React.FC<CompetenciesProps> = ({ currentLang, onSelec
                     <div className="absolute inset-0 bg-gradient-to-t from-[#2B3340]/80 via-transparent to-transparent" />
                     
                     <div className="absolute bottom-3 left-4 right-4 text-white">
-                      <span className="text-[10px] font-dela uppercase tracking-wider bg-[#E71B26] px-2 py-0.5 rounded">
-                        {t.brand.name} {t.brand.subname}
-                      </span>
-                      <p className="text-xs font-bold text-white mt-1">
+                      <div className="inline-flex items-center bg-white/95 px-2 py-0.5 rounded-md shadow-xs mb-1">
+                        <div className="w-[112px] h-[32px] overflow-hidden flex items-center justify-center">
+                          <BrandLogo currentLang={currentLang} />
+                        </div>
+                      </div>
+                      <p className="text-xs font-bold text-white">
                         {t.brand.slogan}
                       </p>
                     </div>
@@ -179,7 +182,7 @@ export const Competencies: React.FC<CompetenciesProps> = ({ currentLang, onSelec
                 {/* Direct Guarantee Banner */}
                 <div className="p-4 rounded-xl bg-[#2B3340] text-white flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <ShieldCheck className="w-6 h-6 text-[#E71B26] shrink-0" />
+                    <ShieldCheck className="w-6 h-6 text-[#E95A0C] shrink-0" />
                     <div>
                       <div className="text-xs font-bold uppercase tracking-wide">
                         {t.services.guaranteeTitle}
@@ -189,7 +192,7 @@ export const Competencies: React.FC<CompetenciesProps> = ({ currentLang, onSelec
                       </div>
                     </div>
                   </div>
-                  <span className="font-dela text-sm text-[#E71B26]">{t.services.otcBadge}</span>
+                  <span className="font-dela text-sm text-[#E95A0C]">{t.services.otcBadge}</span>
                 </div>
 
               </div>

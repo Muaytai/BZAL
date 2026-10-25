@@ -48,8 +48,8 @@ export const Facilities: React.FC<FacilitiesProps> = ({
         {/* Header with Switcher */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6 sm:mb-8">
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#ECEEF0] rounded-md border border-[#D5D9DE] text-[#E71B26] text-xs font-dela uppercase tracking-wider mb-2.5">
-              <span className="w-2 h-2 rounded-full bg-[#E71B26]" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#ECEEF0] rounded-md border border-[#D5D9DE] text-[#E95A0C] text-xs font-dela uppercase tracking-wider mb-2.5">
+              <span className="w-2 h-2 rounded-full bg-[#E95A0C]" />
               <span>{t.equipment.eyebrow}</span>
             </div>
             <h2 className="text-xl sm:text-3xl lg:text-4xl font-black text-[#2B3340] tracking-tight font-dela uppercase">
@@ -113,7 +113,7 @@ export const Facilities: React.FC<FacilitiesProps> = ({
             {filteredList.map((item) => (
               <div
                 key={item.id}
-                className="rounded-2xl bg-white border border-[#D5D9DE] overflow-hidden shadow-md hover:border-[#E71B26] transition-all flex flex-col group"
+                className="rounded-2xl bg-white border border-[#D5D9DE] overflow-hidden shadow-md hover:border-[#E95A0C] transition-all flex flex-col group"
               >
                 <div className="aspect-[16/9] relative overflow-hidden bg-[#2B3340]">
                   <img
@@ -129,7 +129,7 @@ export const Facilities: React.FC<FacilitiesProps> = ({
                   </div>
 
                   {/* Precision Red Badge */}
-                  <div className="absolute top-4 right-4 bg-[#E71B26] text-white text-xs font-dela px-3 py-1 rounded shadow-md">
+                  <div className="absolute top-4 right-4 bg-[#E95A0C] text-white text-xs font-dela px-3 py-1 rounded shadow-md">
                     {item.precision}
                   </div>
 
@@ -149,7 +149,7 @@ export const Facilities: React.FC<FacilitiesProps> = ({
 
                 <div className="p-6 flex-1 flex flex-col justify-between bg-white">
                   <div>
-                    <h3 className="text-base sm:text-lg font-black text-[#2B3340] mb-2 font-dela uppercase group-hover:text-[#E71B26] transition-colors">
+                    <h3 className="text-base sm:text-lg font-black text-[#2B3340] mb-2 font-dela uppercase group-hover:text-[#E95A0C] transition-colors">
                       {item.name}
                     </h3>
                     <p className="text-xs sm:text-sm text-[#444E60] leading-relaxed mb-5 font-medium">
@@ -190,7 +190,7 @@ export const Facilities: React.FC<FacilitiesProps> = ({
                     <th className="py-3.5 px-4">{specs.colTable}</th>
                     <th className="py-3.5 px-4">{specs.colSpindle}</th>
                     <th className="py-3.5 px-4">{specs.colWeight}</th>
-                    <th className="py-3.5 px-4 text-[#E71B26]">{specs.colAccuracy}</th>
+                    <th className="py-3.5 px-4 text-[#E95A0C]">{specs.colAccuracy}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#ECEEF0]">
@@ -217,7 +217,7 @@ export const Facilities: React.FC<FacilitiesProps> = ({
                       <td className="py-3 px-4 font-bold text-[#2B3340] whitespace-nowrap">
                         {row.maxWeight}
                       </td>
-                      <td className="py-3 px-4 font-dela font-bold text-[#E71B26] whitespace-nowrap">
+                      <td className="py-3 px-4 font-dela font-bold text-[#E95A0C] whitespace-nowrap">
                         {row.accuracy}
                       </td>
                     </tr>
@@ -232,7 +232,7 @@ export const Facilities: React.FC<FacilitiesProps> = ({
         <div className="p-6 sm:p-8 rounded-2xl bg-[#2B3340] text-white shadow-xl relative overflow-hidden">
           <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
             <div className="max-w-2xl">
-              <span className="text-[11px] font-dela uppercase tracking-wider text-[#E71B26]">
+              <span className="text-[11px] font-dela uppercase tracking-wider text-[#E95A0C]">
                 {t.equipment.bannerEyebrow}
               </span>
               <h3 className="text-lg sm:text-xl font-black text-white font-dela uppercase mt-1">
@@ -249,18 +249,19 @@ export const Facilities: React.FC<FacilitiesProps> = ({
                   onClick={onOpenPassportModal}
                   className="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-lg bg-white/10 hover:bg-white/20 text-white font-bold text-xs uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap"
                 >
-                  <Download className="w-4 h-4 text-[#E71B26]" />
+                  <Download className="w-4 h-4 text-[#E95A0C]" />
                   <span>{specs.title.length > 25 ? (currentLang === 'ru' ? 'Скачать паспорта' : currentLang === 'en' ? 'Download Dossier' : '下载参数手册') : specs.title}</span>
                 </button>
               )}
 
-              <a
-                href="#calculator"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg bg-[#E71B26] hover:bg-[#C9141E] text-white font-bold text-xs uppercase tracking-wider shadow-sm hover:shadow-md transition-all cursor-pointer whitespace-nowrap self-start lg:self-center"
+              <button
+                type="button"
+                onClick={() => onSelectService?.(t.equipment.bannerTitle)}
+                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg bg-[#E95A0C] hover:bg-[#CC4B06] text-white font-bold text-xs uppercase tracking-wider shadow-sm hover:shadow-md transition-all cursor-pointer whitespace-nowrap self-start lg:self-center"
               >
                 <span>{t.equipment.bannerCta}</span>
                 <ArrowUpRight className="w-4 h-4" />
-              </a>
+              </button>
             </div>
           </div>
 

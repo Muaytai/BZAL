@@ -1,9 +1,9 @@
 @import "tailwindcss";
 
 @theme {
-  --color-bzal-red: #E71B26;
-  --color-bzal-red-hover: #C9141E;
-  --color-bzal-red-light: #FDECEE;
+  --color-bzal-red: #E95A0C;
+  --color-bzal-red-hover: #CC4B06;
+  --color-bzal-red-light: #FFF2EB;
   --color-bzal-graphite: #2B3340;
   --color-bzal-graphite-dark: #1B222C;
   --color-bzal-graphite-light: #444E60;
@@ -29,29 +29,38 @@ body {
 
 .font-dela {
   font-family: 'Dela Gothic One', cursive, sans-serif;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
+  word-spacing: 0.22em;
 }
 
 .font-montserrat {
   font-family: 'Montserrat', sans-serif;
 }
 
-/* Authentic Brandbook Chevron Diagonal Stripes Ribbon (Pages 28, 29, 30, 40) */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Official Technopark BZAL Geometric Orange Accent Ribbons (matching #E95A0C logo) */
 .bzal-ribbon-red-white {
-  background: repeating-linear-gradient(
-    -45deg,
-    #E71B26,
-    #E71B26 14px,
-    #FFFFFF 14px,
-    #FFFFFF 22px
+  background: linear-gradient(
+    90deg,
+    #E95A0C 0%,
+    #FF7426 45%,
+    #E95A0C 75%,
+    #2B3340 100%
   );
 }
 
 .bzal-ribbon-red-dark {
   background: repeating-linear-gradient(
     -45deg,
-    #E71B26,
-    #E71B26 14px,
+    #E95A0C,
+    #E95A0C 14px,
     #2B3340 14px,
     #2B3340 22px
   );
@@ -60,8 +69,8 @@ body {
 .bzal-ribbon-red-light {
   background: repeating-linear-gradient(
     -45deg,
-    #E71B26,
-    #E71B26 14px,
+    #E95A0C,
+    #E95A0C 14px,
     #ECEEF0 14px,
     #ECEEF0 22px
   );

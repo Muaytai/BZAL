@@ -3,6 +3,7 @@ import { Phone, Mail, MapPin, Clock, Globe, ArrowUpRight, Download, Send, Buildi
 import { Language } from '../types';
 import { content } from '../data/content';
 import { GovLinksBanner } from './GovComplianceSection';
+import { BrandLogo } from './BrandLogo';
 
 interface ContactSectionProps {
   currentLang: Language;
@@ -23,8 +24,8 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
         
         {/* Header */}
         <div className="max-w-3xl mb-6 sm:mb-8">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#ECEEF0] rounded-md border border-[#D5D9DE] text-[#E71B26] text-xs font-dela uppercase tracking-wider mb-3">
-            <span className="w-2 h-2 rounded-full bg-[#E71B26]" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#ECEEF0] rounded-md border border-[#D5D9DE] text-[#E95A0C] text-xs font-dela uppercase tracking-wider mb-3">
+            <span className="w-2 h-2 rounded-full bg-[#E95A0C]" />
             <span>{t.contacts.eyebrow}</span>
           </div>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#2B3340] tracking-tight font-dela uppercase">
@@ -48,16 +49,17 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                   <h3 className="text-lg sm:text-xl font-black text-[#2B3340] mb-1 font-dela uppercase">
                     {t.brand.fullName}
                   </h3>
-                  <div className="text-xs text-[#E71B26] font-dela tracking-wider uppercase">
-                    {t.contacts.cardDepartment} • УНП 200166530
+                  <div className="text-xs text-[#E95A0C] font-dela tracking-wider uppercase">
+                    {t.contacts.cardDepartment} •{' '}
+                    {currentLang === 'ru'
+                      ? 'УНП 200166530'
+                      : currentLang === 'en'
+                        ? 'Tax ID (UNP) 200166530'
+                        : '税号 UNP 200166530'}
                   </div>
                 </div>
-                <div className="w-12 h-12 rounded-xl bg-white border border-[#D5D9DE] p-1.5 shrink-0 hidden sm:block">
-                  <img
-                    src="/images/bzal_mark_pristine_red.png"
-                    alt="БЗАЛ"
-                    className="w-full h-full object-contain"
-                  />
+                <div className="w-[152px] h-[46px] rounded-xl bg-white border border-[#D5D9DE] overflow-hidden shrink-0 hidden sm:flex items-center justify-center shadow-2xs p-1">
+                  <BrandLogo currentLang={currentLang} />
                 </div>
               </div>
 
@@ -66,12 +68,12 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                 {/* Direct Line */}
                 <div className="space-y-1">
                   <div className="text-[11px] font-bold text-[#647082] uppercase tracking-wider flex items-center gap-1.5">
-                    <Phone className="w-3.5 h-3.5 text-[#E71B26]" />
+                    <Phone className="w-3.5 h-3.5 text-[#E95A0C]" />
                     <span>{t.contacts.phoneEngineerLabel}</span>
                   </div>
                   <a
                     href={`tel:${t.brand.phoneRaw}`}
-                    className="text-base sm:text-lg font-black text-[#2B3340] hover:text-[#E71B26] transition-colors block"
+                    className="text-base sm:text-lg font-black text-[#2B3340] hover:text-[#E95A0C] transition-colors block"
                   >
                     {t.brand.phone}
                   </a>
@@ -92,12 +94,12 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                 {/* Email Contacts */}
                 <div className="space-y-1">
                   <div className="text-[11px] font-bold text-[#647082] uppercase tracking-wider flex items-center gap-1.5">
-                    <Mail className="w-3.5 h-3.5 text-[#E71B26]" />
+                    <Mail className="w-3.5 h-3.5 text-[#E95A0C]" />
                     <span>{t.contacts.emailLabel}</span>
                   </div>
                   <a
                     href={`mailto:${t.brand.email}`}
-                    className="text-base sm:text-lg font-black text-[#E71B26] hover:underline transition-colors block"
+                    className="text-base sm:text-lg font-black text-[#E95A0C] hover:underline transition-colors block"
                   >
                     {t.brand.email}
                   </a>
@@ -109,7 +111,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                 {/* Physical Plant Address */}
                 <div className="space-y-1">
                   <div className="text-[11px] font-bold text-[#647082] uppercase tracking-wider flex items-center gap-1.5">
-                    <MapPin className="w-3.5 h-3.5 text-[#E71B26]" />
+                    <MapPin className="w-3.5 h-3.5 text-[#E95A0C]" />
                     <span>{t.contacts.addressLabel}</span>
                   </div>
                   <div className="text-xs sm:text-sm font-bold text-[#2B3340]">
@@ -120,7 +122,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                 {/* Working Hours */}
                 <div className="space-y-1">
                   <div className="text-[11px] font-bold text-[#647082] uppercase tracking-wider flex items-center gap-1.5">
-                    <Clock className="w-3.5 h-3.5 text-[#E71B26]" />
+                    <Clock className="w-3.5 h-3.5 text-[#E95A0C]" />
                     <span>{t.contacts.hoursLabel}</span>
                   </div>
                   <div className="text-xs sm:text-sm font-bold text-[#2B3340]">
@@ -137,7 +139,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
               <div className="mt-8 pt-6 border-t border-[#E2E5E8] flex flex-wrap items-center gap-3">
                 <button
                   onClick={onOpenRfq}
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-[#E71B26] hover:bg-[#C9141E] text-white font-bold text-xs uppercase tracking-wider shadow-sm transition-all cursor-pointer"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#E95A0C] hover:bg-[#CC4B06] text-white font-bold text-xs uppercase tracking-wider shadow-sm transition-all cursor-pointer"
                 >
                   <Send className="w-4 h-4" />
                   <span>{t.contacts.sendDrawingBtn}</span>
@@ -147,17 +149,23 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                   href="https://обращения.бел"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-[#2B3340] hover:bg-[#1B222C] text-white font-bold text-xs uppercase tracking-wider underline decoration-white/60 underline-offset-3 transition-all"
+                  className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-[#2B3340] hover:bg-[#1B222C] text-white font-bold text-xs uppercase tracking-wider underline decoration-white/60 underline-offset-3 transition-all"
                 >
-                  <span>Электронные обращения (обращения.бел)</span>
-                  <ExternalLink className="w-4 h-4 text-[#E71B26]" />
+                  <span>
+                    {currentLang === 'ru'
+                      ? 'Электронные обращения (обращения.бел)'
+                      : currentLang === 'en'
+                        ? 'Electronic Appeals (обращения.бел)'
+                        : '国家电子申诉系统 (обращения.бел)'}
+                  </span>
+                  <ExternalLink className="w-4 h-4 text-[#E95A0C]" />
                 </a>
 
                 <a
                   href="http://www.bzal.by"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-[#ECEEF0] hover:bg-[#D5D9DE] text-[#2B3340] font-bold text-xs uppercase tracking-wider underline transition-all"
+                  className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-[#ECEEF0] hover:bg-[#D5D9DE] text-[#2B3340] font-bold text-xs uppercase tracking-wider underline transition-all"
                 >
                   <Globe className="w-4 h-4" />
                   <span>{t.contacts.mainPortalBtn}</span>
@@ -168,7 +176,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
             {/* Logistics & Accessibility Card */}
             <div className="rounded-xl bg-[#ECEEF0] border border-[#D5D9DE] p-5">
               <div className="flex items-center gap-2 text-xs font-dela text-[#2B3340] uppercase mb-2">
-                <Truck className="w-4 h-4 text-[#E71B26]" />
+                <Truck className="w-4 h-4 text-[#E95A0C]" />
                 <span>{t.contacts.logisticsTitle}</span>
               </div>
               <p className="text-xs text-[#444E60] leading-relaxed font-medium">
@@ -181,11 +189,11 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
           {/* Right Column: Interactive Yandex Map & Visual Brand Card */}
           <div className="lg:col-span-5 flex flex-col gap-4">
             
-            {/* Interactive Yandex Map Card */}
+            {/* Interactive Yandex Map Card — strictly Baranovichi, Korolika St., 8 (53.160550, 26.020241) */}
             <div className="rounded-2xl overflow-hidden border border-[#D5D9DE] bg-white shadow-lg">
               <div className="px-4 py-3 bg-[#2B3340] text-white flex items-center justify-between gap-2">
                 <div className="flex items-center gap-2 min-w-0">
-                  <MapPin className="w-4 h-4 text-[#E71B26] shrink-0" />
+                  <MapPin className="w-4 h-4 text-[#E95A0C] shrink-0" />
                   <div className="truncate">
                     <span className="text-[11px] font-dela uppercase tracking-wider block text-white truncate">
                       {currentLang === 'en'
@@ -204,10 +212,10 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                   </div>
                 </div>
                 <a
-                  href="https://yandex.by/maps/?ll=26.042200%2C53.125700&z=16&pt=26.042200,53.125700,pm2rdm"
+                  href="https://yandex.by/maps/?ll=26.020241%2C53.160550&z=16&pt=26.020241,53.160550,pm2orgm"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded bg-[#E71B26] hover:bg-[#C9141E] text-white text-[10px] font-bold uppercase tracking-wider shrink-0 transition-colors"
+                  className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-[#E95A0C] hover:bg-[#CC4B06] text-white text-[10px] font-bold uppercase tracking-wider shrink-0 transition-colors"
                 >
                   <span>
                     {currentLang === 'en'
@@ -222,7 +230,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
 
               <div className="relative w-full h-[270px] sm:h-[300px] bg-[#ECEEF0]">
                 <iframe
-                  src="https://yandex.ru/map-widget/v1/?ll=26.042200%2C53.125700&z=16&pt=26.042200,53.125700,pm2rdm"
+                  src="https://yandex.ru/map-widget/v1/?ll=26.020241%2C53.160550&z=16&pt=26.020241,53.160550,pm2orgm"
                   width="100%"
                   height="100%"
                   frameBorder="0"
@@ -238,13 +246,13 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
               <div className="px-4 py-3 bg-white flex flex-wrap items-center justify-between gap-2 text-xs">
                 <div className="font-semibold text-[#444E60]">
                   <span>{t.contacts.coordinatesLabel} </span>
-                  <span className="font-bold text-[#2B3340]">53.1257° N, 26.0422° E</span>
+                  <span className="font-bold text-[#2B3340]">53.16055° N, 26.02024° E</span>
                 </div>
                 <a
-                  href="https://yandex.by/maps/?rtext=~53.125700,26.042200&rtt=auto"
+                  href="https://yandex.by/maps/?rtext=~53.160550,26.020241&rtt=auto"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-[11px] font-bold text-[#E71B26] hover:underline inline-flex items-center gap-1"
+                  className="text-[11px] font-bold text-[#E95A0C] hover:underline inline-flex items-center gap-1"
                 >
                   <span>
                     {currentLang === 'en'
@@ -268,7 +276,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#2B3340]/95 via-[#2B3340]/40 to-transparent" />
                 <div className="absolute bottom-3 left-4 right-4 text-white">
-                  <span className="text-[9px] font-dela uppercase tracking-wider text-[#E71B26] bg-[#2B3340] px-2 py-0.5 rounded">
+                  <span className="text-[9px] font-dela uppercase tracking-wider text-[#E95A0C] bg-[#2B3340] px-2 py-0.5 rounded">
                     {t.contacts.photoTag}
                   </span>
                   <div className="text-sm font-bold text-white mt-0.5">

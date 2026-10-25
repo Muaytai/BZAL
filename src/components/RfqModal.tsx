@@ -143,8 +143,14 @@ export const RfqModal: React.FC<RfqModalProps> = ({
                 <CheckCircle2 className="w-8 h-8" />
               </div>
               {createdNumber && (
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-[#FDECEE] border border-[#E71B26]/30 text-[#E71B26] font-dela text-[11px] uppercase mb-2">
-                  <span>Заявка зарегистрирована в БД № {createdNumber}</span>
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-[#FFF2EB] border border-[#E95A0C]/30 text-[#E95A0C] font-dela text-[11px] uppercase mb-2">
+                  <span>
+                    {currentLang === 'ru'
+                      ? `Заявка зарегистрирована в БД № ${createdNumber}`
+                      : currentLang === 'en'
+                        ? `Registered Inquiry # ${createdNumber}`
+                        : `已登记询价编号 # ${createdNumber}`}
+                  </span>
                 </div>
               )}
               <h3 className="text-xl font-black text-[#2B3340] font-dela uppercase mb-2">
@@ -156,7 +162,7 @@ export const RfqModal: React.FC<RfqModalProps> = ({
               <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-2.5">
                 <a
                   href={`mailto:sales@bzal.by?subject=${mailtoSubject}&body=${mailtoBody}`}
-                  className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-[#E71B26] hover:bg-[#C9141E] text-white text-xs font-bold uppercase tracking-wider transition-colors"
+                  className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-[#E95A0C] hover:bg-[#CC4B06] text-white text-xs font-bold uppercase tracking-wider transition-colors"
                 >
                   <Mail className="w-4 h-4" />
                   <span>
@@ -179,7 +185,7 @@ export const RfqModal: React.FC<RfqModalProps> = ({
             <div>
               {/* Modal Header */}
               <div className="mb-5 pr-8">
-                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-[#FDECEE] text-[#E71B26] text-[10px] font-dela uppercase tracking-wider mb-2">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-[#FFF2EB] text-[#E95A0C] text-[10px] font-dela uppercase tracking-wider mb-2">
                   <span>{t.modal.badge}</span>
                 </div>
                 <h3 className="text-lg sm:text-xl font-black text-[#2B3340] font-dela uppercase leading-tight">
@@ -199,7 +205,7 @@ export const RfqModal: React.FC<RfqModalProps> = ({
                   <select
                     value={service}
                     onChange={(e) => setService(e.target.value)}
-                    className="w-full bg-[#ECEEF0] border border-[#D5D9DE] rounded-lg px-3.5 py-2.5 text-xs text-[#2B3340] font-semibold focus:outline-none focus:border-[#E71B26]"
+                    className="w-full bg-[#ECEEF0] border border-[#D5D9DE] rounded-lg px-3.5 py-2.5 text-xs text-[#2B3340] font-semibold focus:outline-none focus:border-[#E95A0C]"
                   >
                     {serviceOptionsList.map((opt, i) => (
                       <option key={i} value={opt}>
@@ -220,7 +226,7 @@ export const RfqModal: React.FC<RfqModalProps> = ({
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       placeholder={t.modal.namePlaceholder}
-                      className="w-full bg-[#ECEEF0] border border-[#D5D9DE] rounded-lg px-3.5 py-2.5 text-xs text-[#2B3340] placeholder-slate-400 focus:outline-none focus:border-[#E71B26]"
+                      className="w-full bg-[#ECEEF0] border border-[#D5D9DE] rounded-lg px-3.5 py-2.5 text-xs text-[#2B3340] placeholder-slate-400 focus:outline-none focus:border-[#E95A0C]"
                     />
                   </div>
                   <div>
@@ -233,7 +239,7 @@ export const RfqModal: React.FC<RfqModalProps> = ({
                       value={company}
                       onChange={(e) => setCompany(e.target.value)}
                       placeholder={t.modal.companyPlaceholder}
-                      className="w-full bg-[#ECEEF0] border border-[#D5D9DE] rounded-lg px-3.5 py-2.5 text-xs text-[#2B3340] placeholder-slate-400 focus:outline-none focus:border-[#E71B26]"
+                      className="w-full bg-[#ECEEF0] border border-[#D5D9DE] rounded-lg px-3.5 py-2.5 text-xs text-[#2B3340] placeholder-slate-400 focus:outline-none focus:border-[#E95A0C]"
                     />
                   </div>
                 </div>
@@ -249,7 +255,7 @@ export const RfqModal: React.FC<RfqModalProps> = ({
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
                       placeholder={t.modal.phonePlaceholder}
-                      className="w-full bg-[#ECEEF0] border border-[#D5D9DE] rounded-lg px-3.5 py-2.5 text-xs text-[#2B3340] placeholder-slate-400 focus:outline-none focus:border-[#E71B26]"
+                      className="w-full bg-[#ECEEF0] border border-[#D5D9DE] rounded-lg px-3.5 py-2.5 text-xs text-[#2B3340] placeholder-slate-400 focus:outline-none focus:border-[#E95A0C]"
                     />
                   </div>
                   <div>
@@ -262,7 +268,7 @@ export const RfqModal: React.FC<RfqModalProps> = ({
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder={t.modal.emailPlaceholder}
-                      className="w-full bg-[#ECEEF0] border border-[#D5D9DE] rounded-lg px-3.5 py-2.5 text-xs text-[#2B3340] placeholder-slate-400 focus:outline-none focus:border-[#E71B26]"
+                      className="w-full bg-[#ECEEF0] border border-[#D5D9DE] rounded-lg px-3.5 py-2.5 text-xs text-[#2B3340] placeholder-slate-400 focus:outline-none focus:border-[#E95A0C]"
                     />
                   </div>
                 </div>
@@ -280,7 +286,7 @@ export const RfqModal: React.FC<RfqModalProps> = ({
                         onClick={() => setPreferredContact(opt.id)}
                         className={`py-2 px-2 rounded-lg border text-[11px] font-bold transition-colors cursor-pointer text-center ${
                           preferredContact === opt.id
-                            ? 'bg-[#FDECEE] border-[#E71B26] text-[#E71B26]'
+                            ? 'bg-[#FFF2EB] border-[#E95A0C] text-[#E95A0C]'
                             : 'bg-[#ECEEF0] border-[#D5D9DE] text-[#444E60] hover:text-[#2B3340]'
                         }`}
                       >
@@ -299,7 +305,7 @@ export const RfqModal: React.FC<RfqModalProps> = ({
                     value={comment}
                     onChange={(e) => setComment(e.target.value)}
                     placeholder={t.modal.commentPlaceholder}
-                    className="w-full bg-[#ECEEF0] border border-[#D5D9DE] rounded-lg px-3.5 py-2 text-xs text-[#2B3340] placeholder-slate-400 focus:outline-none focus:border-[#E71B26]"
+                    className="w-full bg-[#ECEEF0] border border-[#D5D9DE] rounded-lg px-3.5 py-2 text-xs text-[#2B3340] placeholder-slate-400 focus:outline-none focus:border-[#E95A0C]"
                   />
                 </div>
 
@@ -308,7 +314,7 @@ export const RfqModal: React.FC<RfqModalProps> = ({
                   <label className="block text-[11px] font-bold text-[#444E60] uppercase tracking-wider mb-1">
                     {t.modal.attachLabel}
                   </label>
-                  <div className="border border-dashed border-[#D5D9DE] hover:border-[#E71B26] rounded-lg p-3 text-center bg-[#ECEEF0] transition-colors">
+                  <div className="border border-dashed border-[#D5D9DE] hover:border-[#E95A0C] rounded-lg p-3 text-center bg-[#ECEEF0] transition-colors">
                     <input
                       type="file"
                       id="modal-file-upload"
@@ -317,19 +323,19 @@ export const RfqModal: React.FC<RfqModalProps> = ({
                       className="hidden"
                     />
                     <label htmlFor="modal-file-upload" className="cursor-pointer flex items-center justify-center gap-2 text-xs text-[#2B3340] font-semibold">
-                      <Upload className="w-4 h-4 text-[#E71B26]" />
+                      <Upload className="w-4 h-4 text-[#E95A0C]" />
                       <span>{files.length > 0 ? `${t.modal.filesCountLabel} ${files.length}` : t.modal.chooseFileLabel}</span>
                     </label>
                     {files.length > 0 && (
                       <div className="mt-2 flex flex-wrap gap-1.5 justify-center">
                         {files.map((fileName, idx) => (
                           <span key={idx} className="inline-flex items-center gap-1 px-2 py-0.5 bg-white border border-[#D5D9DE] rounded text-[10px] font-bold text-[#2B3340]">
-                            <FileCheck className="w-3 h-3 text-[#E71B26]" />
+                            <FileCheck className="w-3 h-3 text-[#E95A0C]" />
                             <span>{fileName}</span>
                             <button
                               type="button"
                               onClick={() => handleRemoveFile(idx)}
-                              className="text-[#647082] hover:text-[#E71B26] cursor-pointer"
+                              className="text-[#647082] hover:text-[#E95A0C] cursor-pointer"
                             >
                               <X className="w-3 h-3" />
                             </button>
@@ -346,7 +352,7 @@ export const RfqModal: React.FC<RfqModalProps> = ({
                     type="checkbox"
                     required
                     defaultChecked
-                    className="mt-0.5 accent-[#E71B26] shrink-0"
+                    className="mt-0.5 accent-[#E95A0C] shrink-0"
                   />
                   <span>
                     {currentLang === 'ru' ? (
@@ -355,7 +361,7 @@ export const RfqModal: React.FC<RfqModalProps> = ({
                         <button
                           type="button"
                           onClick={onOpenPrivacyPolicy}
-                          className="text-[#E71B26] font-bold underline cursor-pointer"
+                          className="text-[#E95A0C] font-bold underline cursor-pointer"
                         >
                           Законом РБ № 99-З «О защите персональных данных»
                         </button>
@@ -366,7 +372,7 @@ export const RfqModal: React.FC<RfqModalProps> = ({
                         <button
                           type="button"
                           onClick={onOpenPrivacyPolicy}
-                          className="text-[#E71B26] font-bold underline cursor-pointer"
+                          className="text-[#E95A0C] font-bold underline cursor-pointer"
                         >
                           Law of Belarus No. 99-Z
                         </button>
@@ -382,14 +388,14 @@ export const RfqModal: React.FC<RfqModalProps> = ({
                 {/* Submit button */}
                 <button
                   type="submit"
-                  className="w-full inline-flex items-center justify-center gap-2 py-3.5 rounded-lg bg-[#E71B26] hover:bg-[#C9141E] text-white font-extrabold text-xs uppercase tracking-wider shadow-sm transition-all cursor-pointer mt-2"
+                  className="w-full inline-flex items-center justify-center gap-2 py-3.5 rounded-lg bg-[#E95A0C] hover:bg-[#CC4B06] text-white font-extrabold text-xs uppercase tracking-wider shadow-sm transition-all cursor-pointer mt-2"
                 >
                   <Send className="w-4 h-4" />
                   <span>{t.modal.submitBtn}</span>
                 </button>
 
                 <div className="flex items-center justify-center gap-2 text-[10px] text-[#647082] pt-1">
-                  <Clock className="w-3.5 h-3.5 text-[#E71B26] shrink-0" />
+                  <Clock className="w-3.5 h-3.5 text-[#E95A0C] shrink-0" />
                   <span>{t.modal.note}</span>
                 </div>
               </form>

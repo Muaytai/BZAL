@@ -257,7 +257,7 @@ export const EngineeringToolsSection: React.FC<EngineeringToolsSectionProps> = (
         {/* Section Header */}
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 mb-6">
           <div>
-            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#E71B26] mb-2">
+            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#E95A0C] mb-2">
               <span>
                 {currentLang === 'ru'
                   ? 'ИНЖЕНЕРНЫЕ СЕРВИСЫ ОАО БЗАЛ'
@@ -284,7 +284,7 @@ export const EngineeringToolsSection: React.FC<EngineeringToolsSectionProps> = (
               onClick={() => setActiveTool('metal')}
               className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-extrabold uppercase tracking-wider transition-all cursor-pointer ${
                 activeTool === 'metal'
-                  ? 'bg-[#E71B26] text-white shadow-sm'
+                  ? 'bg-[#E95A0C] text-white shadow-sm'
                   : 'text-[#2B3340] hover:bg-white/70'
               }`}
             >
@@ -308,7 +308,7 @@ export const EngineeringToolsSection: React.FC<EngineeringToolsSectionProps> = (
               }}
               className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-extrabold uppercase tracking-wider transition-all cursor-pointer ${
                 activeTool === 'status'
-                  ? 'bg-[#E71B26] text-white shadow-sm'
+                  ? 'bg-[#E95A0C] text-white shadow-sm'
                   : 'text-[#2B3340] hover:bg-white/70'
               }`}
             >
@@ -396,7 +396,7 @@ export const EngineeringToolsSection: React.FC<EngineeringToolsSectionProps> = (
                       </div>
                       <div
                         className={`text-[11px] mt-0.5 font-mono ${
-                          shape === item.id ? 'text-[#E71B26]' : 'text-[#647082]'
+                          shape === item.id ? 'text-[#E95A0C]' : 'text-[#647082]'
                         }`}
                       >
                         {item.sub}
@@ -418,7 +418,7 @@ export const EngineeringToolsSection: React.FC<EngineeringToolsSectionProps> = (
                 <select
                   value={alloyId}
                   onChange={(e) => setAlloyId(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl bg-white border border-[#D5D9DE] text-xs font-bold text-[#2B3340] focus:outline-none focus:border-[#E71B26]"
+                  className="w-full px-4 py-3 rounded-xl bg-white border border-[#D5D9DE] text-xs font-bold text-[#2B3340] focus:outline-none focus:border-[#E95A0C]"
                 >
                   {ALLOY_OPTIONS.map((a) => (
                     <option key={a.id} value={a.id}>
@@ -627,7 +627,7 @@ export const EngineeringToolsSection: React.FC<EngineeringToolsSectionProps> = (
                         : 'GOST 毛坯重量核算'}
                   </div>
                 </div>
-                <Calculator className="w-7 h-7 text-[#E71B26] shrink-0" />
+                <Calculator className="w-7 h-7 text-[#E95A0C] shrink-0" />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
@@ -653,7 +653,7 @@ export const EngineeringToolsSection: React.FC<EngineeringToolsSectionProps> = (
                         ? `Gross (+${allowancePct}% stock)`
                         : `含加工余量 (+${allowancePct}%)`}
                   </div>
-                  <div className="font-dela text-xl text-[#E71B26] mt-1">
+                  <div className="font-dela text-xl text-[#E95A0C] mt-1">
                     {metalCalc.grossWeightKg.toFixed(2)}{' '}
                     {currentLang === 'ru' ? 'кг' : 'kg'}
                   </div>
@@ -692,7 +692,7 @@ export const EngineeringToolsSection: React.FC<EngineeringToolsSectionProps> = (
               <button
                 type="button"
                 onClick={handleSendMetalSpecToRfq}
-                className="w-full py-3.5 px-4 rounded-xl bg-[#E71B26] hover:bg-[#C9141E] text-white font-extrabold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md"
+                className="w-full py-3.5 px-4 rounded-xl bg-[#E95A0C] hover:bg-[#CC4B06] text-white font-extrabold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md"
               >
                 <span>
                   {currentLang === 'ru'
@@ -744,7 +744,7 @@ export const EngineeringToolsSection: React.FC<EngineeringToolsSectionProps> = (
                       key={sample}
                       type="button"
                       onClick={() => handleStatusSearch(undefined, sample)}
-                      className="px-2.5 py-1 rounded bg-white border border-[#D5D9DE] hover:border-[#E71B26] text-[#2B3340] font-bold transition-colors cursor-pointer"
+                      className="px-2.5 py-1 rounded bg-white border border-[#D5D9DE] hover:border-[#E95A0C] text-[#2B3340] font-bold transition-colors cursor-pointer"
                     >
                       {sample}
                     </button>
@@ -762,12 +762,12 @@ export const EngineeringToolsSection: React.FC<EngineeringToolsSectionProps> = (
                 value={queryNumber}
                 onChange={(e) => setQueryNumber(e.target.value)}
                 placeholder="БЗАЛ-2026-0101"
-                className="flex-1 px-4 py-3.5 rounded-xl bg-white border border-[#D5D9DE] text-sm font-extrabold text-[#2B3340] uppercase focus:outline-none focus:border-[#E71B26]"
+                className="flex-1 px-4 py-3.5 rounded-xl bg-white border border-[#D5D9DE] text-sm font-extrabold text-[#2B3340] uppercase focus:outline-none focus:border-[#E95A0C]"
               />
               <button
                 type="submit"
                 disabled={isSearching}
-                className="px-6 py-3.5 rounded-xl bg-[#E71B26] hover:bg-[#C9141E] text-white font-extrabold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer"
+                className="px-6 py-3.5 rounded-xl bg-[#E95A0C] hover:bg-[#CC4B06] text-white font-extrabold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer"
               >
                 <Search className="w-4 h-4" />
                 <span>
@@ -788,7 +788,7 @@ export const EngineeringToolsSection: React.FC<EngineeringToolsSectionProps> = (
 
             {searchAttempted && !statusResult && !isSearching && (
               <div className="p-5 rounded-xl bg-white border border-[#D5D9DE] text-xs text-[#2B3340] space-y-2">
-                <div className="font-extrabold text-sm text-[#E71B26]">
+                <div className="font-extrabold text-sm text-[#E95A0C]">
                   {currentLang === 'ru'
                     ? `Заявка с номером ${queryNumber} не найдена в оперативном реестре`
                     : currentLang === 'en'
@@ -797,7 +797,7 @@ export const EngineeringToolsSection: React.FC<EngineeringToolsSectionProps> = (
                 </div>
                 <p className="text-[#647082]">
                   {currentLang === 'ru'
-                    ? 'Проверьте правильность написания номера (формат БЗАЛ-2026-XXXX) или свяжитесь с отделом маркетинга и сбыта ОАО БЗАЛ: +375 44 751 44 77, +375 (163) 67-20-41, sales@bzal.by (Пн–Пт: 08:00 – 16:30).'
+                    ? 'Проверьте правильность написания номера (формат БЗАЛ-2026-XXXX) или свяжитесь с отделом маркетинга и продаж ОАО БЗАЛ: +375 44 751 44 77, +375 (163) 67-20-41, sales@bzal.by (Пн–Пт: 08:00 – 16:30).'
                     : currentLang === 'en'
                       ? 'Please verify the inquiry number format (БЗАЛ-2026-XXXX) or contact the Marketing & Sales Department of JSC BZAL: +375 44 751 44 77, +375 (163) 67-20-41, sales@bzal.by (Mon–Fri: 08:00 – 16:30).'
                       : '请核对编号格式（БЗАЛ-2026-XXXX）或联系BZAL市场销售部：+375 44 751 44 77，sales@bzal.by（周一至周五 08:00–16:30）。'}
@@ -848,7 +848,7 @@ export const EngineeringToolsSection: React.FC<EngineeringToolsSectionProps> = (
                       : currentLang === 'en'
                         ? 'Division:'
                         : '当前部门：'}{' '}
-                    <span className="text-[#E71B26]">
+                    <span className="text-[#E95A0C]">
                       {statusResult.assigned_department.toUpperCase()}
                     </span>
                   </div>
@@ -939,7 +939,7 @@ export const EngineeringToolsSection: React.FC<EngineeringToolsSectionProps> = (
                           {isCompleted ? (
                             <CheckCircle2
                               className={`w-4 h-4 shrink-0 ${
-                                isCurrent ? 'text-[#E71B26]' : 'text-emerald-600'
+                                isCurrent ? 'text-[#E95A0C]' : 'text-emerald-600'
                               }`}
                             />
                           ) : (
@@ -961,7 +961,7 @@ export const EngineeringToolsSection: React.FC<EngineeringToolsSectionProps> = (
                 {/* Detailed Department & Feedback Status */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
                   <div className="p-4 rounded-xl bg-[#F8F9FA] border border-[#D5D9DE] flex items-start gap-3">
-                    <Building2 className="w-5 h-5 text-[#E71B26] shrink-0 mt-0.5" />
+                    <Building2 className="w-5 h-5 text-[#E95A0C] shrink-0 mt-0.5" />
                     <div className="text-xs">
                       <div className="font-bold text-[#647082] uppercase">
                         {currentLang === 'ru'

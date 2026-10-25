@@ -12,12 +12,12 @@ export const QualityMetrology: React.FC<QualityMetrologyProps> = ({ currentLang,
   const t = extraContent[currentLang]?.qualityMetrology || extraContent.ru.qualityMetrology;
 
   const deviceIcons = [
-    <Cpu className="w-5 h-5 text-[#E71B26]" key="cmm" />,
-    <Microscope className="w-5 h-5 text-[#E71B26]" key="spectro" />,
-    <Activity className="w-5 h-5 text-[#E71B26]" key="ut" />,
-    <Gauge className="w-5 h-5 text-[#E71B26]" key="hard" />,
-    <Scale className="w-5 h-5 text-[#E71B26]" key="prof" />,
-    <Award className="w-5 h-5 text-[#E71B26]" key="bal" />
+    <Cpu className="w-5 h-5 text-[#E95A0C]" key="cmm" />,
+    <Microscope className="w-5 h-5 text-[#E95A0C]" key="spectro" />,
+    <Activity className="w-5 h-5 text-[#E95A0C]" key="ut" />,
+    <Gauge className="w-5 h-5 text-[#E95A0C]" key="hard" />,
+    <Scale className="w-5 h-5 text-[#E95A0C]" key="prof" />,
+    <Award className="w-5 h-5 text-[#E95A0C]" key="bal" />
   ];
 
   return (
@@ -26,8 +26,8 @@ export const QualityMetrology: React.FC<QualityMetrologyProps> = ({ currentLang,
 
         {/* Section Header */}
         <div className="max-w-3xl mb-6 sm:mb-8">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#ECEEF0] rounded-md border border-[#D5D9DE] text-[#E71B26] text-xs font-dela uppercase tracking-wider mb-3">
-            <ShieldCheck className="w-4 h-4 text-[#E71B26]" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#ECEEF0] rounded-md border border-[#D5D9DE] text-[#E95A0C] text-xs font-dela uppercase tracking-wider mb-3">
+            <ShieldCheck className="w-4 h-4 text-[#E95A0C]" />
             <span>{t.eyebrow}</span>
           </div>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#2B3340] tracking-tight font-dela uppercase">
@@ -43,7 +43,7 @@ export const QualityMetrology: React.FC<QualityMetrologyProps> = ({ currentLang,
           <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             
             <div className="lg:col-span-8">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-[#E71B26] text-white text-[11px] font-dela uppercase tracking-wider mb-3">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-[#E95A0C] text-white text-[11px] font-dela uppercase tracking-wider mb-3">
                 <Award className="w-3.5 h-3.5" />
                 <span>{t.certBadge}</span>
               </div>
@@ -56,11 +56,13 @@ export const QualityMetrology: React.FC<QualityMetrologyProps> = ({ currentLang,
 
               {/* Official Stamp Box */}
               <div className="mt-5 p-3.5 rounded-lg bg-white/10 backdrop-blur-md border border-white/20 inline-flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full border-2 border-[#E71B26] flex items-center justify-center shrink-0 bg-[#E71B26]/20">
-                  <span className="font-dela text-[10px] text-white">ОТК</span>
+                <div className="w-10 h-10 rounded-full border-2 border-[#E95A0C] flex items-center justify-center shrink-0 bg-[#E95A0C]/20">
+                  <span className="font-dela text-[10px] text-white">
+                    {currentLang === 'ru' ? 'ОТК' : currentLang === 'en' ? 'QC' : '质检'}
+                  </span>
                 </div>
                 <div>
-                  <div className="text-[11px] font-dela uppercase text-[#E71B26] tracking-wider">
+                  <div className="text-[11px] font-dela uppercase text-[#E95A0C] tracking-wider">
                     {t.stampLabel}
                   </div>
                   <div className="text-xs text-[#BAC5CF] font-medium">
@@ -73,20 +75,20 @@ export const QualityMetrology: React.FC<QualityMetrologyProps> = ({ currentLang,
             {/* Right: Key Deliverable Document Badges */}
             <div className="lg:col-span-4 bg-white/5 backdrop-blur-md rounded-xl p-5 border border-white/10">
               <h4 className="text-xs font-dela text-white uppercase tracking-wider mb-3 flex items-center gap-2">
-                <FileText className="w-4 h-4 text-[#E71B26]" />
+                <FileText className="w-4 h-4 text-[#E95A0C]" />
                 <span>{t.docsTitle}</span>
               </h4>
               <ul className="space-y-2 text-[11px] sm:text-xs text-[#BAC5CF] mb-4">
                 {t.docsList.map((doc, dIdx) => (
                   <li key={dIdx} className="flex items-start gap-2">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-[#E71B26] shrink-0 mt-0.5" />
+                    <CheckCircle2 className="w-3.5 h-3.5 text-[#E95A0C] shrink-0 mt-0.5" />
                     <span>{doc}</span>
                   </li>
                 ))}
               </ul>
               <button
                 onClick={onOpenRfq}
-                className="w-full py-2.5 px-4 rounded-lg bg-[#E71B26] hover:bg-[#C9141E] text-white font-bold text-xs uppercase tracking-wider transition-colors cursor-pointer"
+                className="w-full py-2.5 px-4 rounded-lg bg-[#E95A0C] hover:bg-[#CC4B06] text-white font-bold text-xs uppercase tracking-wider transition-colors cursor-pointer"
               >
                 {currentLang === 'ru'
                   ? 'Запросить образцы паспортов и сертификатов'
@@ -105,7 +107,7 @@ export const QualityMetrology: React.FC<QualityMetrologyProps> = ({ currentLang,
         {/* Metrology Laboratory Equipment Grid */}
         <div>
           <div className="flex items-center gap-3 mb-8">
-            <div className="h-5 w-1 bg-[#E71B26] rounded-full" />
+            <div className="h-5 w-1 bg-[#E95A0C] rounded-full" />
             <h3 className="text-base sm:text-xl font-bold font-dela text-[#2B3340] uppercase">
               {t.labTitle}
             </h3>
@@ -115,19 +117,19 @@ export const QualityMetrology: React.FC<QualityMetrologyProps> = ({ currentLang,
             {t.devices.map((dev, idx) => (
               <div
                 key={dev.id}
-                className="bg-[#ECEEF0] rounded-xl p-6 border border-[#D5D9DE] hover:border-[#E71B26] hover:bg-white hover:shadow-lg transition-all flex flex-col justify-between group"
+                className="bg-[#ECEEF0] rounded-xl p-6 border border-[#D5D9DE] hover:border-[#E95A0C] hover:bg-white hover:shadow-lg transition-all flex flex-col justify-between group"
               >
                 <div>
                   <div className="flex items-start justify-between gap-3 mb-3">
-                    <div className="p-2.5 rounded-lg bg-white border border-[#D5D9DE] group-hover:border-[#E71B26] transition-colors">
+                    <div className="p-2.5 rounded-lg bg-white border border-[#D5D9DE] group-hover:border-[#E95A0C] transition-colors">
                       {deviceIcons[idx % deviceIcons.length]}
                     </div>
-                    <span className="px-2.5 py-1 rounded bg-[#E71B26] text-white text-[11px] font-dela tracking-wider">
+                    <span className="px-2.5 py-1 rounded bg-[#E95A0C] text-white text-[11px] font-dela tracking-wider">
                       {dev.precision}
                     </span>
                   </div>
 
-                  <h4 className="font-dela text-sm sm:text-base font-bold text-[#2B3340] group-hover:text-[#E71B26] transition-colors mb-1.5">
+                  <h4 className="font-dela text-sm sm:text-base font-bold text-[#2B3340] group-hover:text-[#E95A0C] transition-colors mb-1.5">
                     {dev.title}
                   </h4>
 
@@ -142,11 +144,23 @@ export const QualityMetrology: React.FC<QualityMetrologyProps> = ({ currentLang,
 
                 <div className="pt-3 border-t border-[#D5D9DE] text-[11px] space-y-1">
                   <div className="text-[#2B3340] font-semibold">
-                    <span className="text-[#647082]">Параметры: </span>
+                    <span className="text-[#647082]">
+                      {currentLang === 'ru'
+                        ? 'Параметры: '
+                        : currentLang === 'en'
+                          ? 'Scope: '
+                          : '检测范围：'}
+                    </span>
                     {dev.scope}
                   </div>
                   <div className="text-[#647082]">
-                    <span>Стандарты: </span>
+                    <span>
+                      {currentLang === 'ru'
+                        ? 'Стандарты: '
+                        : currentLang === 'en'
+                          ? 'Standards: '
+                          : '执行标准：'}
+                    </span>
                     <span className="font-bold text-[#2B3340]">{dev.standard}</span>
                   </div>
                 </div>

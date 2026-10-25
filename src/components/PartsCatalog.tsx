@@ -32,8 +32,8 @@ export const PartsCatalog: React.FC<PartsCatalogProps> = ({
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-white rounded-md border border-[#D5D9DE] text-[#E71B26] text-xs font-dela uppercase tracking-wider mb-2 shadow-xs">
-              <span className="w-2 h-2 rounded-full bg-[#E71B26]" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-white rounded-md border border-[#D5D9DE] text-[#E95A0C] text-xs font-dela uppercase tracking-wider mb-2 shadow-xs">
+              <span className="w-2 h-2 rounded-full bg-[#E95A0C]" />
               <span>{t.eyebrow}</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-black text-[#2B3340] tracking-tight font-dela uppercase">
@@ -49,7 +49,7 @@ export const PartsCatalog: React.FC<PartsCatalogProps> = ({
             onClick={onOpenPassportModal}
             className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-white hover:bg-[#2B3340] hover:text-white border border-[#D5D9DE] text-[#2B3340] font-bold text-xs uppercase tracking-wider transition-all shadow-sm hover:shadow-md cursor-pointer shrink-0 self-start md:self-end"
           >
-            <Download className="w-4 h-4 text-[#E71B26]" />
+            <Download className="w-4 h-4 text-[#E95A0C]" />
             <span>{t.btnDownloadCatalog}</span>
           </button>
         </div>
@@ -75,7 +75,7 @@ export const PartsCatalog: React.FC<PartsCatalogProps> = ({
                 onClick={() => setActiveCategory(cat.id)}
                 className={`px-3.5 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all whitespace-nowrap cursor-pointer ${
                   activeCategory === cat.id
-                    ? 'bg-[#E71B26] text-white shadow-sm'
+                    ? 'bg-[#E95A0C] text-white shadow-sm'
                     : 'bg-white text-[#647082] hover:text-[#2B3340] border border-[#D5D9DE]'
                 }`}
               >
@@ -98,7 +98,7 @@ export const PartsCatalog: React.FC<PartsCatalogProps> = ({
           {filteredParts.map((part) => (
             <div
               key={part.id}
-              className={`bg-white rounded-xl border border-[#D5D9DE] overflow-hidden shadow-sm hover:shadow-xl hover:border-[#E71B26] transition-all flex group ${
+              className={`bg-white rounded-xl border border-[#D5D9DE] overflow-hidden shadow-sm hover:shadow-xl hover:border-[#E95A0C] transition-all flex group ${
                 isTwoColumnWide ? 'flex-col sm:flex-row' : 'flex-col'
               }`}
             >
@@ -123,8 +123,12 @@ export const PartsCatalog: React.FC<PartsCatalogProps> = ({
                 </div>
 
                 {/* Tolerance Floating Tag */}
-                <div className="absolute top-3 right-3 bg-[#E71B26] text-white px-2 py-0.5 rounded text-[10px] font-dela tracking-wider shadow-xs">
-                  {part.tolerance.includes('IT') ? part.tolerance.split(',')[0] : '±0,005 мм'}
+                <div className="absolute top-3 right-3 bg-[#E95A0C] text-white px-2 py-0.5 rounded text-[10px] font-dela tracking-wider shadow-xs">
+                  {part.tolerance.includes('IT')
+                    ? part.tolerance.split(',')[0]
+                    : currentLang === 'ru'
+                      ? '±0,005 мм'
+                      : '±0.005 mm'}
                 </div>
 
                 {/* Batch label on bottom image */}
@@ -139,7 +143,7 @@ export const PartsCatalog: React.FC<PartsCatalogProps> = ({
               {/* Card Body */}
               <div className="p-5 flex-1 flex flex-col justify-between">
                 <div>
-                  <h3 className="font-dela text-sm sm:text-base font-bold text-[#2B3340] group-hover:text-[#E71B26] transition-colors leading-snug mb-3">
+                  <h3 className="font-dela text-sm sm:text-base font-bold text-[#2B3340] group-hover:text-[#E95A0C] transition-colors leading-snug mb-3">
                     {part.title}
                   </h3>
 
@@ -162,7 +166,7 @@ export const PartsCatalog: React.FC<PartsCatalogProps> = ({
 
                     <div className="flex items-start justify-between gap-2">
                       <span className="text-[#647082] font-semibold">{t.specLabels.roughness}</span>
-                      <span className="text-[#E71B26] font-bold text-right">{part.roughness}</span>
+                      <span className="text-[#E95A0C] font-bold text-right">{part.roughness}</span>
                     </div>
 
                     <div className="flex items-start justify-between gap-2">
@@ -192,10 +196,10 @@ export const PartsCatalog: React.FC<PartsCatalogProps> = ({
                 {/* Action Button */}
                 <button
                   onClick={() => onRequestQuoteForPart(`${part.title} (${part.material})`)}
-                  className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-[#ECEEF0] hover:bg-[#E71B26] text-[#2B3340] hover:text-white font-bold text-xs uppercase tracking-wider transition-all cursor-pointer group/btn"
+                  className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-[#ECEEF0] hover:bg-[#E95A0C] text-[#2B3340] hover:text-white font-bold text-xs uppercase tracking-wider transition-all cursor-pointer group/btn"
                 >
                   <span>{t.btnRequestQuote}</span>
-                  <ArrowUpRight className="w-3.5 h-3.5 text-[#E71B26] group-hover/btn:text-white transition-colors" />
+                  <ArrowUpRight className="w-3.5 h-3.5 text-[#E95A0C] group-hover/btn:text-white transition-colors" />
                 </button>
               </div>
             </div>
@@ -205,7 +209,7 @@ export const PartsCatalog: React.FC<PartsCatalogProps> = ({
         {/* Bottom Banner with Catalog Assurance */}
         <div className="mt-8 p-4 sm:p-5 rounded-xl bg-white border border-[#D5D9DE] shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3 text-xs sm:text-sm text-[#444E60] font-medium">
-            <CheckCircle2 className="w-5 h-5 text-[#E71B26] shrink-0" />
+            <CheckCircle2 className="w-5 h-5 text-[#E95A0C] shrink-0" />
             <span>{t.catalogDownloadNote}</span>
           </div>
 
@@ -213,7 +217,7 @@ export const PartsCatalog: React.FC<PartsCatalogProps> = ({
             onClick={onOpenPassportModal}
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#2B3340] hover:bg-[#1B222C] text-white font-bold text-xs uppercase tracking-wider transition-all shadow-sm cursor-pointer whitespace-nowrap"
           >
-            <Download className="w-4 h-4 text-[#E71B26]" />
+            <Download className="w-4 h-4 text-[#E95A0C]" />
             <span>{t.btnDownloadCatalog}</span>
           </button>
         </div>

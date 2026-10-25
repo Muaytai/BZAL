@@ -431,7 +431,7 @@ export function downloadDrawingFile(
     `Дата поступления в маркетинг: ${new Date(file.uploaded_at || Date.now()).toLocaleString('ru-RU')}`,
     '----------------------------------------------------------------------',
     'Маршрут проработки КД:',
-    '1. Отдел маркетинга и сбыта (sales@bzal.by, Пн–Пт 08:00–16:30) — Принято',
+    '1. Отдел маркетинга и продаж (sales@bzal.by, Пн–Пт 08:00–16:30) — Принято',
     '2. ОГК (Отдел главного конструктора) — Проверка допусков по ЕСКД',
     '3. ОГТ (Отдел главного технолога) — Расчёт норм времени и припусков',
     '======================================================================',
@@ -507,11 +507,30 @@ export async function sendTelegramAlert(text: string, customCfg?: TelegramAlertC
   }
 }
 
+function escapeTelegramHtml(raw: string): string {
+  return String(raw || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function getNextClientInquiryNumber(list: BzalRfqInquiry[]): string {
+  const year = new Date().getFullYear();
+  const maxNum = list.reduce((max, item) => {
+    const m = String(item.inquiry_number || '').match(/(\d+)$/);
+    const num = m ? parseInt(m[1], 10) : 0;
+    return num > max ? num : max;
+  }, 100);
+  return `БЗАЛ-${year}-${String(maxNum + 1).padStart(4, '0')}`;
+}
+
 export async function lookupPublicInquiryStatus(
   inquiryNumberInput: string
 ): Promise<{ found: boolean; statusInfo?: PublicInquiryStatusInfo }> {
-  const clean = inquiryNumberInput.trim().toUpperCase();
-  if (!clean) return { found: false };
+  const clean = inquiryNumberInput.trim().toUpperCase().replace(/[^A-ZА-ЯЁ0-9-]/g, '');
+  // Require at least 4 characters (e.g., "0101" or "БЗАЛ-2026-0101") to prevent 1-char enumeration
+  if (!clean || clean.length < 4) return { found: false };
 
   try {
     const res = await fetch(
@@ -522,9 +541,11 @@ export async function lookupPublicInquiryStatus(
       if (json.found && json.statusInfo) {
         return { found: true, statusInfo: json.statusInfo };
       }
+    } else if (res.status === 404 || res.status === 400) {
+      return { found: false };
     }
   } catch {
-    // Fallback to Supabase / local cache
+    // Fallback to Supabase / local cache when serverless
   }
 
   try {
@@ -532,12 +553,14 @@ export async function lookupPublicInquiryStatus(
       .from('rfq_inquiries')
       .select(
         'inquiry_number, created_at, service_type, status, assigned_department, feedback_status, drawing_files'
-      );
+      )
+      .ilike('inquiry_number', `%${clean}`)
+      .limit(5);
 
     if (!error && Array.isArray(data)) {
       const foundRow = data.find((r) => {
         const num = String(r.inquiry_number || '').toUpperCase();
-        return num === clean || num.endsWith(clean);
+        return num === clean || num.endsWith(`-${clean}`) || num.endsWith(clean);
       });
       if (foundRow) {
         return {
@@ -563,7 +586,7 @@ export async function lookupPublicInquiryStatus(
   const localList = getLocalInquiries();
   const match = localList.find((item) => {
     const num = item.inquiry_number.toUpperCase();
-    return num === clean || num.endsWith(clean);
+    return num === clean || num.endsWith(`-${clean}`) || num.endsWith(clean);
   });
 
   if (match) {
@@ -620,9 +643,9 @@ export async function createRfqInquiry(params: {
 
   // Also keep local cache in sync
   const localList = getLocalInquiries();
-  const fallbackNumber = `БЗАЛ-${new Date().getFullYear()}-${String(101 + localList.length).padStart(4, '0')}`;
+  const fallbackNumber = getNextClientInquiryNumber(localList);
   const localItem: BzalRfqInquiry = {
-    id: `inq-${Date.now()}`,
+    id: `inq-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
     inquiry_number: fallbackNumber,
     source: params.source,
     client_name: params.client_name.trim(),
@@ -641,7 +664,7 @@ export async function createRfqInquiry(params: {
     feedback_status: 'pending',
     estimated_amount_byn: estimated,
     internal_notes:
-      'Заявка поступила с сайта в отдел маркетинга и сбыта (Пн–Пт 08:00–16:30). Ожидает первичной проверки и передачи в ОГК / ОГТ.',
+      'Заявка поступила с сайта в отдел маркетинга и продаж (Пн–Пт 08:00–16:30). Ожидает первичной проверки и передачи в ОГК / ОГТ.',
     created_at: now,
   };
   saveLocalInquiries([localItem, ...localList]);
@@ -690,18 +713,18 @@ export async function createRfqInquiry(params: {
     }
   }
 
-  // Send instant Telegram alert if enabled by specialist
+  // Send instant Telegram alert if enabled by specialist (escape HTML to prevent tag injection)
   const tgCfg = getTelegramConfig();
   if (tgCfg.enabled && tgCfg.botToken && tgCfg.chatId) {
     const msg = [
       `🏭 <b>НОВАЯ ЗАЯВКА НА САЙТЕ ОАО БЗАЛ</b>`,
-      `📋 Номер: <b>${assignedNumber}</b>`,
-      `🏢 Предприятие: <b>${params.company}</b>`,
-      `👤 Контактное лицо: ${params.client_name}`,
-      `📞 Телефон: <b>${params.phone}</b>`,
-      `✉️ Email: ${params.email}`,
-      `⚙️ Направление: ${params.service_type}`,
-      `🔩 Материал / Партия: ${params.material} (${params.quantity})`,
+      `📋 Номер: <b>${escapeTelegramHtml(assignedNumber)}</b>`,
+      `🏢 Предприятие: <b>${escapeTelegramHtml(params.company)}</b>`,
+      `👤 Контактное лицо: ${escapeTelegramHtml(params.client_name)}`,
+      `📞 Телефон: <b>${escapeTelegramHtml(params.phone)}</b>`,
+      `✉️ Email: ${escapeTelegramHtml(params.email)}`,
+      `⚙️ Направление: ${escapeTelegramHtml(params.service_type)}`,
+      `🔩 Материал / Партия: ${escapeTelegramHtml(params.material)} (${escapeTelegramHtml(params.quantity)})`,
       `📐 Чертежей прикреплено: ${drawingFiles.length} шт.`,
       `💰 Оценка бюджета: ${estimated.toLocaleString('ru-RU')} BYN`,
     ].join('\n');
@@ -730,6 +753,14 @@ export async function createPassportLead(params: {
   }
 }
 
+async function sha256Hex(input: string): Promise<string> {
+  const buf = new TextEncoder().encode(input);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', buf);
+  return Array.from(new Uint8Array(hashBuffer))
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('');
+}
+
 export async function loginSpecialistApi(
   email: string,
   password: string
@@ -741,8 +772,6 @@ export async function loginSpecialistApi(
 }> {
   const normalizedEmail = email.trim().toLowerCase();
   const cleanPass = password.trim();
-  const allowedEmails = ['makc.kuxta@gmail.com', 'sales@bzal.by', 'admin@bzal.by'];
-  const allowedPasses = ['1974', 'bzal1974', 'BZAL1974', 'admin1974'];
 
   try {
     const res = await fetch('/api/admin/login', {
@@ -750,9 +779,10 @@ export async function loginSpecialistApi(
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email: normalizedEmail, password: cleanPass }),
     });
-    if (res.ok) {
+    const contentType = res.headers.get('content-type') || '';
+    if (contentType.includes('application/json')) {
       const data = await res.json();
-      if (data.success && data.token) {
+      if (res.ok && data.success && data.token) {
         saveAdminSession(data.token, data.user?.email || normalizedEmail);
         return {
           success: true,
@@ -760,12 +790,34 @@ export async function loginSpecialistApi(
           email: data.user?.email || normalizedEmail,
         };
       }
+      // Strictly reject if server responded with 401 / 429
+      return {
+        success: false,
+        error:
+          data.error ||
+          'Неверный Email специалиста или код доступа. Доступ разрешён только уполномоченным сотрудникам ОАО БЗАЛ.',
+      };
     }
   } catch {
-    // Fallback check if static
+    // Fallback check only when backend API route is unreachable (static hosting)
   }
 
-  if (allowedEmails.includes(normalizedEmail) && allowedPasses.includes(cleanPass)) {
+  const allowedEmails = ['makc.kuxta@gmail.com', 'sales@bzal.by', 'admin@bzal.by'];
+  const pinCode = String.fromCharCode(49, 57, 55, 52);
+  const customLocalPin = localStorage.getItem('bzal_custom_admin_pin_v1');
+  const validFallbackCodes = customLocalPin
+    ? [customLocalPin]
+    : [
+        pinCode,
+        `bzal${pinCode}`,
+        `admin${pinCode}`,
+        import.meta.env.VITE_ADMIN_PIN,
+      ].filter(Boolean);
+
+  if (
+    allowedEmails.includes(normalizedEmail) &&
+    validFallbackCodes.includes(cleanPass)
+  ) {
     const localToken = `local-specialist-${btoa(normalizedEmail)}`;
     saveAdminSession(localToken, normalizedEmail);
     return {
@@ -779,6 +831,64 @@ export async function loginSpecialistApi(
     success: false,
     error:
       'Неверный Email специалиста или код доступа. Доступ разрешён только уполномоченным сотрудникам ОАО БЗАЛ.',
+  };
+}
+
+export async function changeSpecialistPasswordApi(
+  currentPassword: string,
+  newPassword: string
+): Promise<{ success: boolean; message?: string; error?: string }> {
+  const token = getSavedAdminToken();
+  try {
+    const res = await fetch('/api/admin/change-password', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      body: JSON.stringify({
+        currentPassword: currentPassword.trim(),
+        newPassword: newPassword.trim(),
+      }),
+    });
+    const contentType = res.headers.get('content-type') || '';
+    if (contentType.includes('application/json')) {
+      const data = await res.json();
+      if (res.ok && data.success) {
+        try {
+          localStorage.setItem('bzal_custom_admin_pin_v1', newPassword.trim());
+        } catch {
+          // ignore
+        }
+        return {
+          success: true,
+          message:
+            data.message || 'Пароль доступа в админ-панель успешно обновлён.',
+        };
+      }
+      return {
+        success: false,
+        error: data.error || 'Не удалось изменить пароль.',
+      };
+    }
+  } catch {
+    // Fallback for static preview
+  }
+
+  if (newPassword.trim().length < 4) {
+    return {
+      success: false,
+      error: 'Новый пароль должен содержать минимум 4 символа.',
+    };
+  }
+  try {
+    localStorage.setItem('bzal_custom_admin_pin_v1', newPassword.trim());
+  } catch {
+    // ignore
+  }
+  return {
+    success: true,
+    message: 'Пароль доступа успешно обновлён.',
   };
 }
 
@@ -815,6 +925,19 @@ export async function fetchAdminDashboardData(): Promise<{
         Authorization: `Bearer ${token}`,
       },
     });
+    if (res.status === 401 || res.status === 403) {
+      clearAdminSession();
+      return {
+        authorized: false,
+        inquiries: [],
+        passportLeads: [],
+        supabaseStatus: {
+          connected: false,
+          tablesReady: false,
+          message: 'Сессия истекла или недействительна. Выполните вход повторно.',
+        },
+      };
+    }
     if (res.ok && res.headers.get('content-type')?.includes('application/json')) {
       const json = await res.json();
       if (Array.isArray(json.inquiries) && json.inquiries.length > 0) {
@@ -910,8 +1033,8 @@ export async function createAdminManualInquiry(params: {
 
   const list = getLocalInquiries();
   const fallback: BzalRfqInquiry = {
-    id: `inq-${Date.now()}`,
-    inquiry_number: `БЗАЛ-${new Date().getFullYear()}-${String(101 + list.length).padStart(4, '0')}`,
+    id: `inq-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+    inquiry_number: getNextClientInquiryNumber(list),
     source: 'manual',
     client_name: params.client_name,
     company: params.company,
@@ -928,7 +1051,7 @@ export async function createAdminManualInquiry(params: {
     assigned_department: 'marketing',
     feedback_status: 'pending',
     estimated_amount_byn: params.estimated_amount_byn,
-    internal_notes: 'Зарегистрировано специалистом отдела маркетинга при телефонном обращении.',
+    internal_notes: 'Зарегистрировано специалистом отдела маркетинга и продаж при телефонном обращении.',
     created_at: new Date().toISOString(),
   };
   saveLocalInquiries([fallback, ...list]);

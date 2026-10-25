@@ -114,12 +114,12 @@ export const AccessibilityToolbar: React.FC<AccessibilityToolbarProps> = ({
           ? 'Панель настроек версии для слабовидящих (СТБ 2105)'
           : 'Accessibility settings panel'
       }
-      className="fixed top-0 left-0 right-0 z-[70] bg-[#1B222C] text-white border-b-2 border-[#E71B26] shadow-2xl px-4 py-3 animate-in slide-in-from-top duration-200"
+      className="fixed top-[92px] sm:top-[104px] left-0 right-0 z-[45] bg-[#1B222C] text-white border-b-2 border-[#E95A0C] shadow-2xl px-4 py-2.5 animate-in slide-in-from-top duration-200"
     >
       <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4 text-xs">
         {/* Title */}
         <div className="flex items-center gap-2 font-extrabold uppercase tracking-wider text-white">
-          <Eye className="w-4 h-4 text-[#E71B26] shrink-0" />
+          <Eye className="w-4 h-4 text-[#E95A0C] shrink-0" />
           <span>
             {currentLang === 'ru'
               ? 'Версия для слабовидящих (СТБ 2105)'
@@ -150,7 +150,7 @@ export const AccessibilityToolbar: React.FC<AccessibilityToolbarProps> = ({
                 onClick={() => update({ fontSize: f.id })}
                 className={`px-2.5 py-1 rounded font-extrabold cursor-pointer transition-colors ${
                   settings.fontSize === f.id
-                    ? 'bg-[#E71B26] text-white'
+                    ? 'bg-[#E95A0C] text-white'
                     : 'bg-[#2B3340] text-[#BAC5CF] hover:text-white'
                 }`}
               >
@@ -191,7 +191,7 @@ export const AccessibilityToolbar: React.FC<AccessibilityToolbarProps> = ({
                 onClick={() => update({ theme: tItem.id })}
                 className={`px-2.5 py-1 rounded font-extrabold cursor-pointer transition-colors ${
                   settings.theme === tItem.id
-                    ? 'bg-[#E71B26] text-white'
+                    ? 'bg-[#E95A0C] text-white'
                     : 'bg-[#2B3340] text-[#BAC5CF] hover:text-white'
                 }`}
               >
@@ -228,7 +228,7 @@ export const AccessibilityToolbar: React.FC<AccessibilityToolbarProps> = ({
                 onClick={() => update({ images: img.id })}
                 className={`px-2 py-1 rounded font-extrabold cursor-pointer transition-colors ${
                   settings.images === img.id
-                    ? 'bg-[#E71B26] text-white'
+                    ? 'bg-[#E95A0C] text-white'
                     : 'bg-[#2B3340] text-[#BAC5CF] hover:text-white'
                 }`}
               >
@@ -265,7 +265,7 @@ export const AccessibilityToolbar: React.FC<AccessibilityToolbarProps> = ({
             onClick={resetAll}
             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#2B3340] hover:bg-[#444E60] text-white font-bold cursor-pointer"
           >
-            <RotateCcw className="w-3.5 h-3.5 text-[#E71B26]" />
+            <RotateCcw className="w-3.5 h-3.5 text-[#E95A0C]" />
             <span>
               {currentLang === 'ru'
                 ? 'Обычная версия сайта'
@@ -277,7 +277,7 @@ export const AccessibilityToolbar: React.FC<AccessibilityToolbarProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 rounded-lg bg-[#2B3340] hover:bg-[#E71B26] text-white cursor-pointer"
+            className="p-1.5 rounded-lg bg-[#2B3340] hover:bg-[#E95A0C] text-white cursor-pointer"
             title={currentLang === 'ru' ? 'Скрыть панель' : 'Close panel'}
           >
             <X className="w-4 h-4" />

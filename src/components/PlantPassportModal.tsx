@@ -45,7 +45,7 @@ export const PlantPassportModal: React.FC<PlantPassportModalProps> = ({
 ТЕХНОЛОГИЧЕСКИЙ ПАСПОРТ ТЕХНОПАРКА ОАО БЗАЛ
 Барановичский завод автоматических линий (Основан 14.03.1974)
 Адрес: Республика Беларусь, 225410, г. Барановичи, ул. Королика, 8
-Тел. сбыта: +375 44 751 44 77, +375 (163) 67-20-48
+Отдел маркетинга и продаж: +375 44 751 44 77, +375 (163) 67-20-41
 Email: sales@bzal.by | Сайт: www.bzal.by
 Сертификация: СТБ ISO 9001-2015 | Аккредитованная лаборатория ОТК
 ========================================================================
@@ -101,7 +101,7 @@ Email: sales@bzal.by | Сайт: www.bzal.by
         <div className="bg-[#2B3340] text-white p-5 sm:p-6 relative">
           <div className="flex items-start justify-between gap-4">
             <div>
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-[#E71B26] text-white text-[10px] font-dela uppercase tracking-wider mb-2">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-[#E95A0C] text-white text-[10px] font-dela uppercase tracking-wider mb-2">
                 <FileText className="w-3.5 h-3.5" />
                 <span>ОФИЦИАЛЬНЫЙ ДОКУМЕНТ ОАО БЗАЛ</span>
               </div>
@@ -133,7 +133,7 @@ Email: sales@bzal.by | Сайт: www.bzal.by
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
             {t.stats.map((st, idx) => (
               <div key={idx} className="p-2.5 rounded-lg bg-[#ECEEF0] border border-[#D5D9DE] text-center">
-                <div className="font-dela text-sm sm:text-base text-[#E71B26] leading-none mb-1">
+                <div className="font-dela text-sm sm:text-base text-[#E95A0C] leading-none mb-1">
                   {st.value}
                 </div>
                 <div className="text-[10px] font-bold text-[#647082] leading-tight">
@@ -146,7 +146,7 @@ Email: sales@bzal.by | Сайт: www.bzal.by
           {/* Preview Snapshot Box */}
           <div className="p-4 rounded-xl bg-[#F8F9FA] border border-[#E2E5E8] mb-6 flex items-center gap-4">
             <div className="w-16 h-20 bg-white border-2 border-[#D5D9DE] rounded-md shadow-xs p-1.5 flex flex-col justify-between shrink-0">
-              <div className="h-1.5 w-8 bg-[#E71B26] rounded-xs" />
+              <div className="h-1.5 w-8 bg-[#E95A0C] rounded-xs" />
               <div className="space-y-1">
                 <div className="h-1 w-full bg-[#D5D9DE] rounded-xs" />
                 <div className="h-1 w-10 bg-[#D5D9DE] rounded-xs" />
@@ -180,7 +180,7 @@ Email: sales@bzal.by | Сайт: www.bzal.by
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   placeholder={t.namePlaceholder}
-                  className="w-full px-3.5 py-2.5 rounded-lg border border-[#D5D9DE] bg-[#F8F9FA] text-xs font-medium focus:bg-white focus:outline-none focus:border-[#E71B26]"
+                  className="w-full px-3.5 py-2.5 rounded-lg border border-[#D5D9DE] bg-[#F8F9FA] text-xs font-medium focus:bg-white focus:outline-none focus:border-[#E95A0C]"
                 />
               </div>
 
@@ -195,7 +195,7 @@ Email: sales@bzal.by | Сайт: www.bzal.by
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     placeholder={t.emailPlaceholder}
-                    className="w-full px-3.5 py-2.5 rounded-lg border border-[#D5D9DE] bg-[#F8F9FA] text-xs font-medium focus:bg-white focus:outline-none focus:border-[#E71B26]"
+                    className="w-full px-3.5 py-2.5 rounded-lg border border-[#D5D9DE] bg-[#F8F9FA] text-xs font-medium focus:bg-white focus:outline-none focus:border-[#E95A0C]"
                   />
                 </div>
 
@@ -209,7 +209,7 @@ Email: sales@bzal.by | Сайт: www.bzal.by
                     value={formData.company}
                     onChange={(e) => setFormData({ ...formData, company: e.target.value })}
                     placeholder={t.companyPlaceholder}
-                    className="w-full px-3.5 py-2.5 rounded-lg border border-[#D5D9DE] bg-[#F8F9FA] text-xs font-medium focus:bg-white focus:outline-none focus:border-[#E71B26]"
+                    className="w-full px-3.5 py-2.5 rounded-lg border border-[#D5D9DE] bg-[#F8F9FA] text-xs font-medium focus:bg-white focus:outline-none focus:border-[#E95A0C]"
                   />
                 </div>
               </div>
@@ -217,7 +217,7 @@ Email: sales@bzal.by | Сайт: www.bzal.by
               <div className="pt-2">
                 <button
                   type="submit"
-                  className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg bg-[#E71B26] hover:bg-[#C9141E] text-white font-extrabold text-xs uppercase tracking-wider shadow-md hover:shadow-lg transition-all cursor-pointer"
+                  className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg bg-[#E95A0C] hover:bg-[#CC4B06] text-white font-extrabold text-xs uppercase tracking-wider shadow-md hover:shadow-lg transition-all cursor-pointer"
                 >
                   <Download className="w-4 h-4" />
                   <span>{t.btnDownload}</span>
@@ -244,7 +244,7 @@ Email: sales@bzal.by | Сайт: www.bzal.by
               <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
                 <button
                   onClick={handleDownloadDirectly}
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-[#E71B26] hover:bg-[#C9141E] text-white font-bold text-xs uppercase tracking-wider shadow-md transition-all cursor-pointer"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-[#E95A0C] hover:bg-[#CC4B06] text-white font-bold text-xs uppercase tracking-wider shadow-md transition-all cursor-pointer"
                 >
                   <Download className="w-4 h-4" />
                   <span>{t.btnDirectDownload}</span>

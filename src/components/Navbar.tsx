@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Phone, Mail, Globe, Menu, X, ArrowUpRight, Clock, MapPin, Lock, Scale, Search, Eye, ExternalLink } from 'lucide-react';
 import { Language } from '../types';
 import { content } from '../data/content';
+import { BrandLogo } from './BrandLogo';
 
 export type SitePageId =
   | 'home'
@@ -22,6 +23,9 @@ export interface SitePageMeta {
   shortRu: string;
   shortEn: string;
   shortZh: string;
+  mobileRu: string;
+  mobileEn: string;
+  mobileZh: string;
 }
 
 export const SITE_PAGES: SitePageMeta[] = [
@@ -34,6 +38,9 @@ export const SITE_PAGES: SitePageMeta[] = [
     shortRu: 'Главная',
     shortEn: 'Home',
     shortZh: '首页',
+    mobileRu: 'Главная',
+    mobileEn: 'Home',
+    mobileZh: '首页',
   },
   {
     id: 'tools',
@@ -44,6 +51,9 @@ export const SITE_PAGES: SitePageMeta[] = [
     shortRu: 'Калькулятор ГОСТ / Статус',
     shortEn: 'GOST Calc & Status',
     shortZh: '计算与状态',
+    mobileRu: 'ГОСТ и Статус',
+    mobileEn: 'Calc & Status',
+    mobileZh: '计算与状态',
   },
   {
     id: 'parts',
@@ -54,6 +64,9 @@ export const SITE_PAGES: SitePageMeta[] = [
     shortRu: 'Каталог деталей',
     shortEn: 'Parts',
     shortZh: '零件图录',
+    mobileRu: 'Детали',
+    mobileEn: 'Parts',
+    mobileZh: '零件',
   },
   {
     id: 'services',
@@ -64,6 +77,9 @@ export const SITE_PAGES: SitePageMeta[] = [
     shortRu: 'Компетенции',
     shortEn: 'Competencies',
     shortZh: '专业能力',
+    mobileRu: 'Компетенции',
+    mobileEn: 'Services',
+    mobileZh: '能力',
   },
   {
     id: 'equipment',
@@ -74,6 +90,9 @@ export const SITE_PAGES: SitePageMeta[] = [
     shortRu: 'Станки и ОТК',
     shortEn: 'Machinery & QC',
     shortZh: '机床与质检',
+    mobileRu: 'Станки ЧПУ',
+    mobileEn: 'Machines',
+    mobileZh: '机床',
   },
   {
     id: 'eaeu',
@@ -84,6 +103,9 @@ export const SITE_PAGES: SitePageMeta[] = [
     shortRu: 'РФ и ЕАЭС',
     shortEn: 'EAEU Logistics',
     shortZh: '欧亚物流',
+    mobileRu: 'РФ и ЕАЭС',
+    mobileEn: 'EAEU',
+    mobileZh: '物流',
   },
   {
     id: 'calculator',
@@ -94,6 +116,9 @@ export const SITE_PAGES: SitePageMeta[] = [
     shortRu: 'Расчёт по ТЗ',
     shortEn: 'RFQ Form',
     shortZh: '在线询价',
+    mobileRu: 'Расчёт ТЗ',
+    mobileEn: 'RFQ Form',
+    mobileZh: '询价',
   },
   {
     id: 'contacts',
@@ -104,6 +129,9 @@ export const SITE_PAGES: SitePageMeta[] = [
     shortRu: 'О заводе / Контакты',
     shortEn: 'Contacts',
     shortZh: '联系我们',
+    mobileRu: 'Контакты',
+    mobileEn: 'Contacts',
+    mobileZh: '联系',
   },
 ];
 
@@ -145,6 +173,9 @@ export const Navbar: React.FC<NavbarProps> = ({
   const getPageLabel = (p: SitePageMeta) =>
     currentLang === 'ru' ? p.shortRu : currentLang === 'en' ? p.shortEn : p.shortZh;
 
+  const getMobilePageLabel = (p: SitePageMeta) =>
+    currentLang === 'ru' ? p.mobileRu : currentLang === 'en' ? p.mobileEn : p.mobileZh;
+
   const specialistLabel =
     currentLang === 'ru'
       ? 'Кабинет специалиста'
@@ -165,14 +196,14 @@ export const Navbar: React.FC<NavbarProps> = ({
       <div className="bg-[#2B3340] text-white text-xs border-b border-[#1B222C] hidden md:block">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-1.5 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-center">
           <span className="inline-flex items-center gap-1.5 font-medium text-[#BAC5CF]">
-            <MapPin className="w-3.5 h-3.5 text-[#E71B26] shrink-0" />
+            <MapPin className="w-3.5 h-3.5 text-[#E95A0C] shrink-0" />
             <span>{t.brand.address}</span>
           </span>
 
           <span className="text-white/20 hidden lg:inline">|</span>
 
           <span className="inline-flex items-center gap-1.5 font-bold text-white">
-            <Clock className="w-3.5 h-3.5 text-[#E71B26] shrink-0" />
+            <Clock className="w-3.5 h-3.5 text-[#E95A0C] shrink-0" />
             <span>{t.brand.workingHours}</span>
           </span>
 
@@ -180,9 +211,9 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           <a
             href="tel:+375447514477"
-            className="inline-flex items-center gap-1.5 text-white font-bold hover:text-[#E71B26] transition-colors"
+            className="inline-flex items-center gap-1.5 text-white font-bold hover:text-[#E95A0C] transition-colors"
           >
-            <Phone className="w-3.5 h-3.5 text-[#E71B26] shrink-0" />
+            <Phone className="w-3.5 h-3.5 text-[#E95A0C] shrink-0" />
             <span>+375 44 751 44 77</span>
           </a>
 
@@ -193,11 +224,23 @@ export const Navbar: React.FC<NavbarProps> = ({
             href="https://обращения.бел"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 text-white font-extrabold underline decoration-[#E71B26] underline-offset-3 hover:text-[#E71B26] transition-colors"
-            title="Государственная единая система учета и обработки обращений граждан и юридических лиц"
+            className="inline-flex items-center gap-1 text-white font-extrabold underline decoration-[#E95A0C] underline-offset-3 hover:text-[#E95A0C] transition-colors"
+            title={
+              currentLang === 'ru'
+                ? 'Государственная единая система учета и обработки обращений граждан и юридических лиц'
+                : currentLang === 'en'
+                  ? 'Unified State Electronic Appeals System of Belarus (обращения.бел)'
+                  : '白俄罗斯国家统一电子申诉系统 (обращения.бел)'
+            }
           >
-            <span>обращения.бел</span>
-            <ExternalLink className="w-3 h-3 text-[#E71B26]" />
+            <span>
+              {currentLang === 'ru'
+                ? 'обращения.бел'
+                : currentLang === 'en'
+                  ? 'Appeals (обращения.бел)'
+                  : '电子申诉 (обращения.бел)'}
+            </span>
+            <ExternalLink className="w-3 h-3 text-[#E95A0C]" />
           </a>
 
           {onOpenGovSection && (
@@ -218,21 +261,21 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           <span className="text-white/20">|</span>
 
-          {/* Visually Impaired Mode Toggle (СТБ 2105) */}
+          {/* Visually Impaired Mode Toggle (СТБ 2105) - Large & High Contrast */}
           {onToggleA11y && (
             <button
               type="button"
               onClick={onToggleA11y}
-              className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-[#1B222C] hover:bg-[#E71B26] text-white border border-white/15 font-bold text-[11px] transition-colors cursor-pointer"
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-[#FFCC00] hover:bg-white text-[#1B222C] border-2 border-white font-black text-xs sm:text-[13px] uppercase tracking-wide shadow-md hover:scale-[1.02] transition-all cursor-pointer shrink-0"
               title="Версия сайта для слабовидящих (СТБ 2105)"
             >
-              <Eye className="w-3.5 h-3.5 text-[#E71B26]" />
+              <Eye className="w-4 h-4 sm:w-5 sm:h-5 text-[#E95A0C] stroke-[2.5] shrink-0" />
               <span>
                 {currentLang === 'ru'
-                  ? 'Слабовидящим'
+                  ? 'Версия для слабовидящих'
                   : currentLang === 'en'
-                    ? 'Accessibility'
-                    : '无障碍'}
+                    ? 'Visually Impaired'
+                    : '无障碍模式'}
               </span>
             </button>
           )}
@@ -247,7 +290,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 onClick={() => onLanguageChange(lang)}
                 className={`px-1.5 py-0.5 rounded uppercase transition-all cursor-pointer ${
                   currentLang === lang
-                    ? 'bg-[#E71B26] text-white'
+                    ? 'bg-[#E95A0C] text-white'
                     : 'text-[#BAC5CF] hover:text-white'
                 }`}
               >
@@ -265,7 +308,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 className="inline-flex items-center gap-1 text-[#8E9BAE] hover:text-white transition-colors cursor-pointer"
                 title={specialistLabel}
               >
-                <Lock className="w-3 h-3 text-[#E71B26]" />
+                <Lock className="w-3 h-3 text-[#E95A0C]" />
                 <span>{specialistLabel}</span>
               </button>
             </>
@@ -282,34 +325,16 @@ export const Navbar: React.FC<NavbarProps> = ({
         }`}
       >
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between lg:justify-center gap-2 xl:gap-4">
-            {/* Brand Logo & Name strictly per Brandbook */}
+          <div className="flex items-center justify-between lg:justify-center gap-2 xl:gap-3">
+            {/* Official Horizontal Brand Logo (dynamically localized for RU / EN / ZH) */}
             <button
               type="button"
               onClick={() => onSelectPage('home')}
-              className="flex items-center gap-2 group focus:outline-none text-left cursor-pointer shrink-0"
+              className="flex items-center group focus:outline-none text-left cursor-pointer shrink-0"
               aria-label="Технопарк ОАО БЗАЛ"
             >
-              <div className="relative w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center bg-white border border-[#E2E5E8] rounded-lg p-1 shadow-xs group-hover:border-[#E71B26] transition-all shrink-0">
-                <img
-                  src="/images/bzal_mark_pristine_red.png"
-                  alt="БЗАЛ"
-                  className="w-full h-full object-contain"
-                />
-              </div>
-
-              <div className="flex flex-col">
-                <div className="flex items-center gap-1 sm:gap-1.5">
-                  <span className="font-dela tracking-wider text-[#2B3340] text-xs sm:text-sm xl:text-base leading-none group-hover:text-[#E71B26] transition-colors">
-                    {t.brand.name}
-                  </span>
-                  <span className="bg-[#E71B26] text-white font-dela text-[8px] sm:text-[9px] px-1 sm:px-1.5 py-0.5 rounded tracking-wider uppercase whitespace-nowrap">
-                    {t.brand.subname}
-                  </span>
-                </div>
-                <span className="text-[9px] tracking-wide font-semibold text-[#647082] uppercase mt-0.5 hidden 2xl:inline">
-                  {t.brand.fullName}
-                </span>
+              <div className="relative w-[142px] h-[44px] sm:w-[174px] sm:h-[52px] xl:w-[190px] xl:h-[56px] flex items-center justify-center bg-white border border-[#E2E5E8] rounded-xl overflow-hidden shadow-xs group-hover:border-[#E95A0C] transition-all shrink-0 p-1">
+                <BrandLogo currentLang={currentLang} />
               </div>
             </button>
 
@@ -324,8 +349,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                     onClick={() => onSelectPage(page.id)}
                     className={`px-2 xl:px-2.5 py-1.5 rounded-lg text-[11px] xl:text-xs font-extrabold transition-all cursor-pointer whitespace-nowrap ${
                       isActive
-                        ? 'bg-[#E71B26] text-white shadow-xs'
-                        : 'text-[#2B3340] hover:bg-white hover:text-[#E71B26]'
+                        ? 'bg-[#E95A0C] text-white shadow-xs'
+                        : 'text-[#2B3340] hover:bg-white hover:text-[#E95A0C]'
                     }`}
                   >
                     {getPageLabel(page)}
@@ -336,6 +361,21 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             {/* Right Action Area */}
             <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+              {/* Prominent Visually Impaired Button on Mobile/Tablet where top bar is hidden */}
+              {onToggleA11y && (
+                <button
+                  type="button"
+                  onClick={onToggleA11y}
+                  className="inline-flex md:hidden items-center gap-1 px-2.5 py-1.5 rounded-lg bg-[#FFCC00] text-[#1B222C] border-2 border-[#2B3340] font-black text-[11px] shadow-xs cursor-pointer"
+                  title="Версия для слабовидящих (СТБ 2105)"
+                >
+                  <Eye className="w-4 h-4 text-[#E95A0C] stroke-[2.5] shrink-0" />
+                  <span className="hidden xs:inline">
+                    {currentLang === 'ru' ? 'Слабовидящим' : 'A11Y'}
+                  </span>
+                </button>
+              )}
+
               {/* Language Switcher (shown on mobile where top utility bar is hidden) */}
               <div className="flex md:hidden items-center bg-[#ECEEF0] rounded-lg p-0.5 border border-[#D5D9DE] text-[10px] font-bold text-[#2B3340]">
                 {(['ru', 'en', 'zh'] as Language[]).map((lang) => (
@@ -354,11 +394,21 @@ export const Navbar: React.FC<NavbarProps> = ({
                 ))}
               </div>
 
+              {/* Quick Call Button on Mobile */}
+              <a
+                href="tel:+375447514477"
+                className="inline-flex sm:hidden items-center justify-center p-1.5 rounded-lg bg-[#E95A0C] text-white shadow-xs"
+                aria-label="Call Marketing & Sales"
+                title="+375 44 751 44 77"
+              >
+                <Phone className="w-4 h-4" />
+              </a>
+
               {/* Primary Red CTA Button */}
               <button
                 type="button"
                 onClick={onOpenRfq}
-                className="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-[#E71B26] hover:bg-[#C9141E] text-white font-bold text-xs uppercase tracking-wider shadow-sm hover:shadow-md transition-all cursor-pointer whitespace-nowrap"
+                className="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-[#E95A0C] hover:bg-[#CC4B06] text-white font-bold text-xs uppercase tracking-wider shadow-sm hover:shadow-md transition-all cursor-pointer whitespace-nowrap"
               >
                 <span>{t.brand.btnRfq}</span>
                 <ArrowUpRight className="w-3.5 h-3.5" />
@@ -368,7 +418,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               <button
                 type="button"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="lg:hidden p-1.5 sm:p-2 rounded-lg bg-[#ECEEF0] border border-[#D5D9DE] text-[#2B3340] hover:text-[#E71B26] focus:outline-none cursor-pointer"
+                className="lg:hidden p-1.5 sm:p-2 rounded-lg bg-[#ECEEF0] border border-[#D5D9DE] text-[#2B3340] hover:text-[#E95A0C] focus:outline-none cursor-pointer"
                 aria-label="Menu"
               >
                 {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -376,8 +426,8 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
           </div>
 
-          {/* Mobile & Tablet Horizontal Quick-Scroll Page Strip (always visible on mobile <1024px) */}
-          <div className="lg:hidden flex items-center gap-1.5 overflow-x-auto pt-2 pb-0.5 no-scrollbar">
+          {/* Mobile & Tablet Horizontal Quick-Scroll Page Strip (scrollbar hidden via .no-scrollbar, concise labels) */}
+          <div className="lg:hidden flex items-center gap-1 overflow-x-auto pt-1.5 pb-0.5 no-scrollbar -mx-1 px-1">
             {SITE_PAGES.map((page) => {
               const isActive = activePage === page.id;
               return (
@@ -387,11 +437,11 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onClick={() => onSelectPage(page.id)}
                   className={`px-2.5 py-1 rounded-md text-[11px] font-extrabold whitespace-nowrap transition-all cursor-pointer shrink-0 ${
                     isActive
-                      ? 'bg-[#E71B26] text-white shadow-2xs'
+                      ? 'bg-[#E95A0C] text-white shadow-2xs'
                       : 'bg-[#F3F5F7] text-[#2B3340] border border-[#D5D9DE]'
                   }`}
                 >
-                  {page.num}. {getPageLabel(page)}
+                  {getMobilePageLabel(page)}
                 </button>
               );
             })}
@@ -421,7 +471,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   }}
                   className={`flex items-center justify-between px-3.5 py-2.5 rounded-lg text-xs font-extrabold text-left transition-colors cursor-pointer ${
                     isActive
-                      ? 'bg-[#E71B26] text-white'
+                      ? 'bg-[#E95A0C] text-white'
                       : 'bg-[#F8F9FA] text-[#2B3340] hover:bg-[#ECEEF0]'
                   }`}
                 >
@@ -436,7 +486,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           <div className="pt-3 mt-3 border-t border-[#ECEEF0] flex flex-col gap-2">
             <div className="flex items-center gap-2 px-2 py-1 text-xs font-bold text-[#2B3340]">
-              <Clock className="w-3.5 h-3.5 text-[#E71B26]" />
+              <Clock className="w-3.5 h-3.5 text-[#E95A0C]" />
               <span>{t.brand.workingHours}</span>
             </div>
             <div className="flex flex-wrap items-center gap-4 px-2">
@@ -444,14 +494,14 @@ export const Navbar: React.FC<NavbarProps> = ({
                 href="tel:+375447514477"
                 className="flex items-center gap-1.5 text-xs font-extrabold text-[#2B3340]"
               >
-                <Phone className="w-3.5 h-3.5 text-[#E71B26]" />
+                <Phone className="w-3.5 h-3.5 text-[#E95A0C]" />
                 <span>+375 44 751 44 77</span>
               </a>
               <a
                 href="mailto:sales@bzal.by"
-                className="flex items-center gap-1.5 text-xs font-extrabold text-[#E71B26]"
+                className="flex items-center gap-1.5 text-xs font-extrabold text-[#E95A0C]"
               >
-                <Mail className="w-3.5 h-3.5 text-[#E71B26]" />
+                <Mail className="w-3.5 h-3.5 text-[#E95A0C]" />
                 <span>sales@bzal.by</span>
               </a>
             </div>
@@ -461,7 +511,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 setMobileMenuOpen(false);
                 onOpenRfq();
               }}
-              className="w-full flex items-center justify-center gap-2 py-3 mt-1 rounded-lg bg-[#E71B26] text-white font-bold text-xs uppercase tracking-wider cursor-pointer"
+              className="w-full flex items-center justify-center gap-2 py-3 mt-1 rounded-lg bg-[#E95A0C] text-white font-bold text-xs uppercase tracking-wider cursor-pointer"
             >
               <span>{t.brand.btnRfq}</span>
               <ArrowUpRight className="w-4 h-4" />
@@ -473,9 +523,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                   setMobileMenuOpen(false);
                   onToggleA11y();
                 }}
-                className="w-full flex items-center justify-center gap-1.5 py-2.5 rounded-lg bg-[#2B3340] text-white font-bold text-xs cursor-pointer"
+                className="w-full flex items-center justify-center gap-2 py-3 rounded-lg bg-[#FFCC00] text-[#1B222C] border-2 border-[#2B3340] font-black text-xs uppercase tracking-wide shadow-sm cursor-pointer"
               >
-                <Eye className="w-4 h-4 text-[#E71B26]" />
+                <Eye className="w-4 h-4 text-[#E95A0C] stroke-[2.5]" />
                 <span>
                   {currentLang === 'ru'
                     ? 'Версия для слабовидящих (СТБ 2105)'
@@ -489,9 +539,15 @@ export const Navbar: React.FC<NavbarProps> = ({
               href="https://обращения.бел"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full flex items-center justify-center gap-1.5 py-2 rounded-lg bg-[#FDECEE] border border-[#E71B26]/30 text-[#E71B26] font-extrabold text-xs underline"
+              className="w-full flex items-center justify-center gap-1.5 py-2 rounded-lg bg-[#FFF2EB] border border-[#E95A0C]/30 text-[#E95A0C] font-extrabold text-xs underline"
             >
-              <span>Электронные обращения (обращения.бел)</span>
+              <span>
+                {currentLang === 'ru'
+                  ? 'Электронные обращения (обращения.бел)'
+                  : currentLang === 'en'
+                    ? 'Electronic Appeals (обращения.бел)'
+                    : '国家电子申诉系统 (обращения.бел)'}
+              </span>
               <ExternalLink className="w-3.5 h-3.5" />
             </a>
             {onOpenAdmin && (
@@ -503,7 +559,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 }}
                 className="w-full flex items-center justify-center gap-1.5 py-2 rounded-lg bg-[#ECEEF0] text-[#2B3340] font-bold text-xs cursor-pointer"
               >
-                <Lock className="w-3.5 h-3.5 text-[#E71B26]" />
+                <Lock className="w-3.5 h-3.5 text-[#E95A0C]" />
                 <span>{specialistLabel}</span>
               </button>
             )}

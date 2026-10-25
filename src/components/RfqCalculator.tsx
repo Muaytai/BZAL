@@ -153,8 +153,8 @@ export const RfqCalculator: React.FC<RfqCalculatorProps> = ({
         
         {/* Header */}
         <div className="max-w-3xl mb-6 sm:mb-8">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-white rounded-md border border-[#D5D9DE] text-[#E71B26] text-xs font-dela uppercase tracking-wider mb-3">
-            <span className="w-2 h-2 rounded-full bg-[#E71B26]" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 bg-white rounded-md border border-[#D5D9DE] text-[#E95A0C] text-xs font-dela uppercase tracking-wider mb-3">
+            <span className="w-2 h-2 rounded-full bg-[#E95A0C]" />
             <span>{t.calculator.eyebrow}</span>
           </div>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#2B3340] tracking-tight font-dela uppercase">
@@ -177,8 +177,14 @@ export const RfqCalculator: React.FC<RfqCalculatorProps> = ({
                   <CheckCircle2 className="w-10 h-10" />
                 </div>
                 {createdNumber && (
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-[#FDECEE] border border-[#E71B26]/30 text-[#E71B26] font-dela text-xs uppercase mb-3">
-                    <span>Зарегистрирована в БД № {createdNumber}</span>
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-[#FFF2EB] border border-[#E95A0C]/30 text-[#E95A0C] font-dela text-xs uppercase mb-3">
+                    <span>
+                      {currentLang === 'ru'
+                        ? `Зарегистрирована в БД № ${createdNumber}`
+                        : currentLang === 'en'
+                          ? `Registered Inquiry # ${createdNumber}`
+                          : `已登记询价编号 # ${createdNumber}`}
+                    </span>
                   </div>
                 )}
                 <h3 className="text-xl sm:text-2xl font-black text-[#2B3340] font-dela uppercase mb-2">
@@ -203,7 +209,7 @@ export const RfqCalculator: React.FC<RfqCalculatorProps> = ({
                 <div className="flex flex-wrap items-center justify-center gap-3">
                   <a
                     href={`mailto:sales@bzal.by?subject=${mailtoSubject}&body=${mailtoBody}`}
-                    className="inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-[#E71B26] hover:bg-[#C9141E] text-white text-xs font-bold uppercase tracking-wider transition-colors"
+                    className="inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-[#E95A0C] hover:bg-[#CC4B06] text-white text-xs font-bold uppercase tracking-wider transition-colors"
                   >
                     <Mail className="w-4 h-4" />
                     <span>
@@ -237,7 +243,7 @@ export const RfqCalculator: React.FC<RfqCalculatorProps> = ({
                     <select
                       value={formData.serviceType}
                       onChange={(e) => setFormData({ ...formData, serviceType: e.target.value })}
-                      className="w-full bg-[#ECEEF0] border border-[#D5D9DE] rounded-lg px-4 py-3 text-sm text-[#2B3340] font-semibold focus:outline-none focus:border-[#E71B26] transition-colors"
+                      className="w-full bg-[#ECEEF0] border border-[#D5D9DE] rounded-lg px-4 py-3 text-sm text-[#2B3340] font-semibold focus:outline-none focus:border-[#E95A0C] transition-colors"
                     >
                       {serviceOptionsList.map((opt, i) => (
                         <option key={i} value={opt}>
@@ -258,7 +264,7 @@ export const RfqCalculator: React.FC<RfqCalculatorProps> = ({
                           key={i}
                           className={`flex items-center gap-2.5 p-3 rounded-lg border text-xs cursor-pointer transition-all ${
                             formData.hasDrawings === opt
-                              ? 'bg-[#FDECEE] border-[#E71B26] text-[#2B3340] font-bold shadow-xs'
+                              ? 'bg-[#FFF2EB] border-[#E95A0C] text-[#2B3340] font-bold shadow-xs'
                               : 'bg-[#ECEEF0] border-[#D5D9DE] text-[#444E60] hover:text-[#2B3340]'
                           }`}
                         >
@@ -267,7 +273,7 @@ export const RfqCalculator: React.FC<RfqCalculatorProps> = ({
                             name="hasDrawings"
                             checked={formData.hasDrawings === opt}
                             onChange={() => setFormData({ ...formData, hasDrawings: opt })}
-                            className="accent-[#E71B26]"
+                            className="accent-[#E95A0C]"
                           />
                           <span>{opt}</span>
                         </label>
@@ -283,7 +289,7 @@ export const RfqCalculator: React.FC<RfqCalculatorProps> = ({
                     <select
                       value={formData.material}
                       onChange={(e) => setFormData({ ...formData, material: e.target.value })}
-                      className="w-full bg-[#ECEEF0] border border-[#D5D9DE] rounded-lg px-4 py-3 text-sm text-[#2B3340] font-semibold focus:outline-none focus:border-[#E71B26] transition-colors"
+                      className="w-full bg-[#ECEEF0] border border-[#D5D9DE] rounded-lg px-4 py-3 text-sm text-[#2B3340] font-semibold focus:outline-none focus:border-[#E95A0C] transition-colors"
                     >
                       {t.calculator.materialOptions.map((mat, i) => (
                         <option key={i} value={mat}>
@@ -304,7 +310,7 @@ export const RfqCalculator: React.FC<RfqCalculatorProps> = ({
                           key={i}
                           className={`flex items-center gap-2.5 p-3 rounded-lg border text-xs cursor-pointer transition-all ${
                             formData.quantity === qty
-                              ? 'bg-[#FDECEE] border-[#E71B26] text-[#2B3340] font-bold shadow-xs'
+                              ? 'bg-[#FFF2EB] border-[#E95A0C] text-[#2B3340] font-bold shadow-xs'
                               : 'bg-[#ECEEF0] border-[#D5D9DE] text-[#444E60] hover:text-[#2B3340]'
                           }`}
                         >
@@ -313,7 +319,7 @@ export const RfqCalculator: React.FC<RfqCalculatorProps> = ({
                             name="quantity"
                             checked={formData.quantity === qty}
                             onChange={() => setFormData({ ...formData, quantity: qty })}
-                            className="accent-[#E71B26]"
+                            className="accent-[#E95A0C]"
                           />
                           <span>{qty}</span>
                         </label>
@@ -326,7 +332,7 @@ export const RfqCalculator: React.FC<RfqCalculatorProps> = ({
                     <label className="block text-xs font-dela text-[#2B3340] uppercase tracking-wider mb-2">
                       {t.calculator.step5Label}
                     </label>
-                    <div className="border-2 border-dashed border-[#D5D9DE] hover:border-[#E71B26] rounded-xl p-5 text-center bg-[#ECEEF0] transition-colors">
+                    <div className="border-2 border-dashed border-[#D5D9DE] hover:border-[#E95A0C] rounded-xl p-5 text-center bg-[#ECEEF0] transition-colors">
                       <input
                         type="file"
                         id="calculator-file-upload"
@@ -335,7 +341,7 @@ export const RfqCalculator: React.FC<RfqCalculatorProps> = ({
                         className="hidden"
                       />
                       <label htmlFor="calculator-file-upload" className="cursor-pointer flex flex-col items-center">
-                        <Upload className="w-8 h-8 text-[#E71B26] mb-2" />
+                        <Upload className="w-8 h-8 text-[#E95A0C] mb-2" />
                         <span className="text-xs font-bold text-[#2B3340]">
                           {t.calculator.uploadTitle}
                         </span>
@@ -347,12 +353,12 @@ export const RfqCalculator: React.FC<RfqCalculatorProps> = ({
                         <div className="mt-3 flex flex-wrap gap-2 justify-center">
                           {formData.fileNames.map((name, i) => (
                             <span key={i} className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white border border-[#D5D9DE] rounded text-[11px] font-bold text-[#2B3340]">
-                              <FileCheck className="w-3.5 h-3.5 text-[#E71B26]" />
+                              <FileCheck className="w-3.5 h-3.5 text-[#E95A0C]" />
                               <span>{name}</span>
                               <button
                                 type="button"
                                 onClick={() => handleRemoveFile(i)}
-                                className="text-[#647082] hover:text-[#E71B26] cursor-pointer ml-0.5"
+                                className="text-[#647082] hover:text-[#E95A0C] cursor-pointer ml-0.5"
                                 title="Удалить файл"
                               >
                                 <X className="w-3.5 h-3.5" />
@@ -373,7 +379,7 @@ export const RfqCalculator: React.FC<RfqCalculatorProps> = ({
                     <span className="font-dela text-sm uppercase text-white tracking-wider">
                       {t.calculator.rightCardTitle}
                     </span>
-                    <span className="px-2 py-0.5 rounded bg-[#E71B26] text-white text-[10px] font-dela uppercase">
+                    <span className="px-2 py-0.5 rounded bg-[#E95A0C] text-white text-[10px] font-dela uppercase">
                       {t.calculator.rightCardBadge}
                     </span>
                   </div>
@@ -393,7 +399,7 @@ export const RfqCalculator: React.FC<RfqCalculatorProps> = ({
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         placeholder={t.calculator.fieldNamePlaceholder}
-                        className="w-full bg-[#1B222C] border border-white/15 rounded-lg px-3.5 py-2.5 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-[#E71B26]"
+                        className="w-full bg-[#1B222C] border border-white/15 rounded-lg px-3.5 py-2.5 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-[#E95A0C]"
                       />
                     </div>
 
@@ -407,7 +413,7 @@ export const RfqCalculator: React.FC<RfqCalculatorProps> = ({
                         value={formData.company}
                         onChange={(e) => setFormData({ ...formData, company: e.target.value })}
                         placeholder={t.calculator.fieldCompanyPlaceholder}
-                        className="w-full bg-[#1B222C] border border-white/15 rounded-lg px-3.5 py-2.5 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-[#E71B26]"
+                        className="w-full bg-[#1B222C] border border-white/15 rounded-lg px-3.5 py-2.5 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-[#E95A0C]"
                       />
                     </div>
 
@@ -422,7 +428,7 @@ export const RfqCalculator: React.FC<RfqCalculatorProps> = ({
                           value={formData.phone}
                           onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                           placeholder={t.calculator.fieldPhonePlaceholder}
-                          className="w-full bg-[#1B222C] border border-white/15 rounded-lg px-3.5 py-2.5 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-[#E71B26]"
+                          className="w-full bg-[#1B222C] border border-white/15 rounded-lg px-3.5 py-2.5 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-[#E95A0C]"
                         />
                       </div>
 
@@ -436,7 +442,7 @@ export const RfqCalculator: React.FC<RfqCalculatorProps> = ({
                           value={formData.email}
                           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                           placeholder={t.calculator.fieldEmailPlaceholder}
-                          className="w-full bg-[#1B222C] border border-white/15 rounded-lg px-3.5 py-2.5 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-[#E71B26]"
+                          className="w-full bg-[#1B222C] border border-white/15 rounded-lg px-3.5 py-2.5 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-[#E95A0C]"
                         />
                       </div>
                     </div>
@@ -452,7 +458,7 @@ export const RfqCalculator: React.FC<RfqCalculatorProps> = ({
                             key={opt.id}
                             className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-xs cursor-pointer transition-colors ${
                               formData.preferredContact === opt.id
-                                ? 'bg-[#E71B26]/20 border-[#E71B26] text-white font-bold'
+                                ? 'bg-[#E95A0C]/20 border-[#E95A0C] text-white font-bold'
                                 : 'bg-[#1B222C] border-white/10 text-[#BAC5CF] hover:text-white'
                             }`}
                           >
@@ -461,7 +467,7 @@ export const RfqCalculator: React.FC<RfqCalculatorProps> = ({
                               name="preferredContact"
                               checked={formData.preferredContact === opt.id}
                               onChange={() => setFormData({ ...formData, preferredContact: opt.id })}
-                              className="accent-[#E71B26]"
+                              className="accent-[#E95A0C]"
                             />
                             <span>{opt.label}</span>
                           </label>
@@ -478,7 +484,7 @@ export const RfqCalculator: React.FC<RfqCalculatorProps> = ({
                         value={formData.comments}
                         onChange={(e) => setFormData({ ...formData, comments: e.target.value })}
                         placeholder={t.calculator.fieldCommentsPlaceholder}
-                        className="w-full bg-[#1B222C] border border-white/15 rounded-lg px-3.5 py-2 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-[#E71B26]"
+                        className="w-full bg-[#1B222C] border border-white/15 rounded-lg px-3.5 py-2 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-[#E95A0C]"
                       />
                     </div>
                     {/* Personal Data Consent (Law of RB No. 99-Z) */}
@@ -487,7 +493,7 @@ export const RfqCalculator: React.FC<RfqCalculatorProps> = ({
                         type="checkbox"
                         required
                         defaultChecked
-                        className="mt-0.5 accent-[#E71B26] shrink-0"
+                        className="mt-0.5 accent-[#E95A0C] shrink-0"
                       />
                       <span>
                         {currentLang === 'ru' ? (
@@ -496,7 +502,7 @@ export const RfqCalculator: React.FC<RfqCalculatorProps> = ({
                             <button
                               type="button"
                               onClick={onOpenPrivacyPolicy}
-                              className="text-white font-bold underline hover:text-[#E71B26] cursor-pointer"
+                              className="text-white font-bold underline hover:text-[#E95A0C] cursor-pointer"
                             >
                               Закону РБ № 99-З «О защите персональных данных»
                             </button>
@@ -507,7 +513,7 @@ export const RfqCalculator: React.FC<RfqCalculatorProps> = ({
                             <button
                               type="button"
                               onClick={onOpenPrivacyPolicy}
-                              className="text-white font-bold underline hover:text-[#E71B26] cursor-pointer"
+                              className="text-white font-bold underline hover:text-[#E95A0C] cursor-pointer"
                             >
                               Law of Belarus No. 99-Z
                             </button>
@@ -523,7 +529,7 @@ export const RfqCalculator: React.FC<RfqCalculatorProps> = ({
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full inline-flex items-center justify-center gap-2 px-6 py-4 rounded-lg bg-[#E71B26] hover:bg-[#C9141E] text-white font-extrabold text-xs uppercase tracking-wider shadow-lg shadow-red-900/40 hover:-translate-y-0.5 transition-all cursor-pointer"
+                    className="w-full inline-flex items-center justify-center gap-2 px-6 py-4 rounded-lg bg-[#E95A0C] hover:bg-[#CC4B06] text-white font-extrabold text-xs uppercase tracking-wider shadow-lg shadow-red-900/40 hover:-translate-y-0.5 transition-all cursor-pointer"
                   >
                     <span>{t.calculator.submitBtn}</span>
                     <ArrowUpRight className="w-4 h-4 stroke-[2.5]" />
@@ -531,11 +537,11 @@ export const RfqCalculator: React.FC<RfqCalculatorProps> = ({
 
                   <div className="mt-4 pt-4 border-t border-white/10 space-y-2 text-[11px] text-[#BAC5CF]">
                     <div className="flex items-center gap-2">
-                      <Clock className="w-3.5 h-3.5 text-[#E71B26] shrink-0" />
+                      <Clock className="w-3.5 h-3.5 text-[#E95A0C] shrink-0" />
                       <span>{t.calculator.turnaroundNote}</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-[#E71B26] shrink-0" />
+                      <CheckCircle2 className="w-3.5 h-3.5 text-[#E95A0C] shrink-0" />
                       <span>{t.calculator.confNote}</span>
                     </div>
                   </div>

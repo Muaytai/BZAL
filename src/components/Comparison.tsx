@@ -5,9 +5,10 @@ import { content, comparisonData } from '../data/content';
 
 interface ComparisonProps {
   currentLang: Language;
+  onSelectService?: (serviceTitle: string) => void;
 }
 
-export const Comparison: React.FC<ComparisonProps> = ({ currentLang }) => {
+export const Comparison: React.FC<ComparisonProps> = ({ currentLang, onSelectService }) => {
   const t = content[currentLang];
   const rows = comparisonData[currentLang] || comparisonData.ru;
 
@@ -17,8 +18,8 @@ export const Comparison: React.FC<ComparisonProps> = ({ currentLang }) => {
         
         {/* Header */}
         <div className="max-w-3xl mb-6 sm:mb-8">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-white rounded-md border border-[#D5D9DE] text-[#E71B26] text-xs font-dela uppercase tracking-wider mb-3">
-            <span className="w-2 h-2 rounded-full bg-[#E71B26]" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 bg-white rounded-md border border-[#D5D9DE] text-[#E95A0C] text-xs font-dela uppercase tracking-wider mb-3">
+            <span className="w-2 h-2 rounded-full bg-[#E95A0C]" />
             <span>{t.comparison.eyebrow}</span>
           </div>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#2B3340] tracking-tight font-dela uppercase">
@@ -38,8 +39,8 @@ export const Comparison: React.FC<ComparisonProps> = ({ currentLang }) => {
               {t.comparison.colCriterion}
             </div>
             <div className="md:col-span-4 text-white flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#E71B26]" />
-              <span className="text-[#E71B26]">{t.comparison.colBzal}</span>
+              <span className="w-2.5 h-2.5 rounded-full bg-[#E95A0C]" />
+              <span className="text-[#E95A0C]">{t.comparison.colBzal}</span>
             </div>
             <div className="md:col-span-4 text-[#BAC5CF] flex items-center gap-1.5">
               <ShieldAlert className="w-4 h-4 text-amber-400" />
@@ -62,8 +63,8 @@ export const Comparison: React.FC<ComparisonProps> = ({ currentLang }) => {
                 </div>
 
                 {/* BZAL Column */}
-                <div className="md:col-span-4 p-3.5 rounded-xl bg-[#FDECEE] border border-[#E71B26]/30 flex items-start gap-3">
-                  <div className="w-5 h-5 rounded-full bg-[#E71B26] text-white flex items-center justify-center shrink-0 mt-0.5 shadow-xs">
+                <div className="md:col-span-4 p-3.5 rounded-xl bg-[#FFF2EB] border border-[#E95A0C]/30 flex items-start gap-3">
+                  <div className="w-5 h-5 rounded-full bg-[#E95A0C] text-white flex items-center justify-center shrink-0 mt-0.5 shadow-xs">
                     <Check className="w-3.5 h-3.5 stroke-[3]" />
                   </div>
                   <div className="text-xs sm:text-sm font-bold text-[#2B3340] leading-snug">
@@ -87,15 +88,16 @@ export const Comparison: React.FC<ComparisonProps> = ({ currentLang }) => {
           {/* Bottom Summary Bar */}
           <div className="p-4 sm:p-5 bg-[#F7F8F9] border-t border-[#D5D9DE] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-semibold text-[#444E60]">
             <div className="flex items-center gap-2">
-              <FileText className="w-4 h-4 text-[#E71B26]" />
+              <FileText className="w-4 h-4 text-[#E95A0C]" />
               <span>{t.comparison.directContractNote}</span>
             </div>
-            <a
-              href="#calculator"
-              className="text-[#E71B26] font-bold hover:underline flex items-center gap-1"
+            <button
+              type="button"
+              onClick={() => onSelectService?.(t.comparison.title)}
+              className="text-[#E95A0C] font-bold hover:underline flex items-center gap-1 cursor-pointer"
             >
               <span>{t.comparison.ctaLink}</span>
-            </a>
+            </button>
           </div>
 
         </div>

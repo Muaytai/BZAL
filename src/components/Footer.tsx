@@ -4,6 +4,7 @@ import { Language } from '../types';
 import { content } from '../data/content';
 import { SITE_PAGES, SitePageId } from './Navbar';
 import { MANDATORY_BELARUS_GOV_LINKS } from './GovComplianceSection';
+import { BrandLogo } from './BrandLogo';
 
 interface FooterProps {
   currentLang: Language;
@@ -40,27 +41,13 @@ export const Footer: React.FC<FooterProps> = ({
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 pb-8 border-b border-white/10">
           
           {/* Brand Info */}
-          <div className="lg:col-span-5 space-y-3">
-            <div className="flex items-center gap-3.5">
-              <div className="w-10 h-10 rounded-lg bg-white p-1.5 shrink-0 flex items-center justify-center shadow-md">
-                <img
-                  src="/images/bzal_mark_pristine_red.png"
-                  alt="БЗАЛ"
-                  className="w-full h-full object-contain"
-                />
+          <div className="lg:col-span-5 space-y-3.5">
+            <div className="flex flex-col items-start gap-2.5">
+              <div className="w-[184px] h-[54px] rounded-xl bg-white overflow-hidden shrink-0 flex items-center justify-center shadow-md border border-white/20 p-1">
+                <BrandLogo currentLang={currentLang} />
               </div>
-              <div>
-                <div className="flex items-center gap-2">
-                  <span className="font-dela text-white text-base tracking-wider">
-                    {t.brand.name}
-                  </span>
-                  <span className="bg-[#E71B26] text-white font-dela text-[10px] px-2 py-0.5 rounded tracking-wider uppercase">
-                    {t.brand.subname}
-                  </span>
-                </div>
-                <div className="text-[10px] sm:text-[11px] text-[#BAC5CF] uppercase tracking-wide font-semibold mt-0.5">
-                  {t.brand.fullName}
-                </div>
+              <div className="text-[11px] text-[#BAC5CF] uppercase tracking-wide font-bold leading-snug">
+                {t.brand.fullName}
               </div>
             </div>
 
@@ -69,23 +56,35 @@ export const Footer: React.FC<FooterProps> = ({
             </p>
 
             <div className="flex items-center gap-2 text-[11px] text-[#BAC5CF]">
-              <ShieldCheck className="w-4 h-4 text-[#E71B26] shrink-0" />
+              <ShieldCheck className="w-4 h-4 text-[#E95A0C] shrink-0" />
               <span>{t.footer.isoCert}</span>
             </div>
 
-            <div className="flex flex-wrap items-center gap-2 pt-1">
-              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-[#1B222C] border border-white/10 text-[10px] font-bold text-emerald-400">
+            <div className="flex flex-wrap items-center gap-2.5 pt-1">
+              <span className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-[#1B222C] border border-white/10 text-[10px] font-bold text-emerald-400">
                 <Lock className="w-3 h-3" />
-                <span>HTTPS / SSL • Указ Президента РБ № 60</span>
+                <span>
+                  {currentLang === 'ru'
+                    ? 'HTTPS / SSL • Указ Президента РБ № 60'
+                    : currentLang === 'en'
+                      ? 'HTTPS / SSL • Decree of RB No. 60'
+                      : 'HTTPS / SSL • 白俄罗斯总统令第60号'}
+                </span>
               </span>
               {onToggleA11y && (
                 <button
                   type="button"
                   onClick={onToggleA11y}
-                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-[#1B222C] hover:bg-[#E71B26] border border-white/15 text-[10px] font-bold text-white transition-colors cursor-pointer"
+                  className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-[#FFCC00] hover:bg-white text-[#1B222C] border-2 border-white text-xs font-black uppercase tracking-wide shadow-md transition-all cursor-pointer"
                 >
-                  <Eye className="w-3 h-3 text-[#E71B26]" />
-                  <span>Версия для слабовидящих (СТБ 2105)</span>
+                  <Eye className="w-4 h-4 text-[#E95A0C] stroke-[2.5]" />
+                  <span>
+                    {currentLang === 'ru'
+                      ? 'Версия для слабовидящих (СТБ 2105)'
+                      : currentLang === 'en'
+                        ? 'Visually Impaired Mode (STB 2105)'
+                        : '无障碍高对比度模式 (STB 2105)'}
+                  </span>
                 </button>
               )}
             </div>
@@ -102,9 +101,9 @@ export const Footer: React.FC<FooterProps> = ({
                   <button
                     type="button"
                     onClick={() => onSelectPage?.(page.id)}
-                    className="text-[#BAC5CF] hover:text-[#E71B26] transition-colors font-medium flex items-center gap-1.5 cursor-pointer text-left"
+                    className="text-[#BAC5CF] hover:text-[#E95A0C] transition-colors font-medium flex items-center gap-1.5 cursor-pointer text-left"
                   >
-                    <span className="text-[#E71B26] font-bold">{page.num}.</span>
+                    <span className="text-[#E95A0C] font-bold">{page.num}.</span>
                     <span>
                       {currentLang === 'ru'
                         ? page.labelRu
@@ -120,9 +119,9 @@ export const Footer: React.FC<FooterProps> = ({
                   <button
                     type="button"
                     onClick={onOpenGovSection}
-                    className="text-white hover:text-[#E71B26] underline decoration-[#E71B26] underline-offset-3 transition-colors font-extrabold flex items-center gap-1.5 cursor-pointer text-left pt-1"
+                    className="text-white hover:text-[#E95A0C] underline decoration-[#E95A0C] underline-offset-3 transition-colors font-extrabold flex items-center gap-1.5 cursor-pointer text-left pt-1"
                   >
-                    <Scale className="w-3.5 h-3.5 text-[#E71B26] shrink-0" />
+                    <Scale className="w-3.5 h-3.5 text-[#E95A0C] shrink-0" />
                     <span>
                       {currentLang === 'ru'
                         ? 'Обращения граждан и Госресурсы РБ'
@@ -144,12 +143,12 @@ export const Footer: React.FC<FooterProps> = ({
             
             <div className="space-y-2 text-[#BAC5CF] text-xs">
               <div className="flex items-start gap-2">
-                <MapPin className="w-4 h-4 text-[#E71B26] shrink-0 mt-0.5" />
+                <MapPin className="w-4 h-4 text-[#E95A0C] shrink-0 mt-0.5" />
                 <span>{t.contacts.addressVal}</span>
               </div>
               <div className="flex items-center gap-2">
-                <Phone className="w-4 h-4 text-[#E71B26] shrink-0" />
-                <a href="tel:+375447514477" className="text-white font-bold hover:text-[#E71B26]">
+                <Phone className="w-4 h-4 text-[#E95A0C] shrink-0" />
+                <a href="tel:+375447514477" className="text-white font-bold hover:text-[#E95A0C]">
                   +375 44 751 44 77 {t.footer.salesDept}
                 </a>
               </div>
@@ -158,13 +157,18 @@ export const Footer: React.FC<FooterProps> = ({
                 <span>+375 (163) 67-20-48 / 67-20-41 {t.footer.faxDept}</span>
               </div>
               <div className="flex items-center gap-2">
-                <Mail className="w-4 h-4 text-[#E71B26] shrink-0" />
-                <a href="mailto:sales@bzal.by" className="text-white hover:text-[#E71B26] underline">
+                <Mail className="w-4 h-4 text-[#E95A0C] shrink-0" />
+                <a href="mailto:sales@bzal.by" className="text-white hover:text-[#E95A0C] underline">
                   sales@bzal.by
                 </a>
               </div>
               <div className="pt-2 text-[11px] text-[#8E9BAE]">
-                {t.footer.unpLabel} • Вышестоящий орган: ГО «Белорусская железная дорога»
+                {t.footer.unpLabel} •{' '}
+                {currentLang === 'ru'
+                  ? 'Вышестоящий орган: ГО «Белорусская железная дорога»'
+                  : currentLang === 'en'
+                    ? 'Higher Authority: Belarusian Railway (rw.by)'
+                    : '上级主管部门：白俄罗斯国家铁路集团'}
               </div>
             </div>
           </div>
@@ -189,7 +193,7 @@ export const Footer: React.FC<FooterProps> = ({
                 rel="noopener noreferrer"
                 className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-bold underline underline-offset-3 transition-colors ${
                   item.highlight
-                    ? 'bg-[#E71B26] border-[#E71B26] text-white hover:bg-[#C9141E]'
+                    ? 'bg-[#E95A0C] border-[#E95A0C] text-white hover:bg-[#CC4B06]'
                     : 'bg-[#1B222C] border-white/15 text-[#BAC5CF] hover:text-white hover:border-white/40'
                 }`}
               >
@@ -258,8 +262,8 @@ export const Footer: React.FC<FooterProps> = ({
             )}
             <button
               onClick={scrollToTop}
-              className="p-2 rounded-lg bg-[#1B222C] hover:bg-[#E71B26] text-white transition-colors cursor-pointer"
-              title="Наверх"
+              className="p-2 rounded-lg bg-[#1B222C] hover:bg-[#E95A0C] text-white transition-colors cursor-pointer"
+              title={currentLang === 'ru' ? 'Наверх' : currentLang === 'en' ? 'Back to top' : '返回顶部'}
             >
               <ArrowUp className="w-4 h-4" />
             </button>
