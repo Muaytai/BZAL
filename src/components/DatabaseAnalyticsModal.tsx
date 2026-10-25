@@ -31,6 +31,7 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { CmsContentEditor } from './CmsContentEditor';
+import { BrandLogo } from './BrandLogo';
 import {
   BzalRfqInquiry,
   BzalPassportLead,
@@ -2182,12 +2183,8 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
             <div className="p-8 space-y-6 text-[#2B3340] text-xs">
               <div className="flex items-start justify-between border-b-2 border-[#2B3340] pb-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-[138px] h-[42px] overflow-hidden rounded-lg border border-[#D5D9DE] bg-white shrink-0 flex items-center justify-center">
-                    <img
-                      src="/assets/aistudio/_________________________2__________8849418c.png"
-                      alt="Технопарк БЗАЛ"
-                      className="w-full h-full object-cover object-center scale-[1.15]"
-                    />
+                  <div className="w-[138px] h-[42px] overflow-hidden rounded-lg border border-[#D5D9DE] bg-white shrink-0 flex items-center justify-center px-1.5">
+                    <BrandLogo currentLang="ru" className="w-full h-full" />
                   </div>
                   <div>
                     <div className="font-dela text-base uppercase text-[#2B3340]">
