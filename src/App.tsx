@@ -603,6 +603,7 @@ export default function App() {
         onClose={() => setIsPassportOpen(false)}
         currentLang={currentLang}
         onLeadCreated={triggerCrmRefresh}
+        onOpenPrivacyPolicy={() => setIsPrivacyOpen(true)}
       />
 
       {/* Personal Data Protection Policy Modal (Law of Belarus No. 99-Z) */}

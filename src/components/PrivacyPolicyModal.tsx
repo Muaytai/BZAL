@@ -165,14 +165,31 @@ export const PrivacyPolicyModal: React.FC<PrivacyPolicyModalProps> = ({
           <div className="space-y-2">
             <h4 className="font-dela text-xs sm:text-sm uppercase text-[#2B3340]">
               {currentLang === 'ru'
-                ? '5. Права субъектов персональных данных'
+                ? '5. Сроки хранения и локализация персональных данных (Указ № 60 и ст. 5 Закона № 99-З)'
                 : currentLang === 'en'
-                  ? '5. Rights of Data Subjects'
-                  : '5. 个人数据主体的权利'}
+                  ? '5. Data Retention Period & Localization (Decree No. 60 & Art. 5 of Law No. 99-Z)'
+                  : '5. 数据保存期限与本地化存储（总统令第60号及第99-Z号法第5条）'}
             </h4>
             <p className="text-[#444E60]">
               {currentLang === 'ru'
-                ? 'Субъект персональных данных вправе в любое время отозвать согласие на обработку персональных данных, запросить информацию об их обработке, требовать внесения изменений или удаления данных путём направления письменного заявления по адресу: 225410, г. Барановичи, ул. Королика, 8 либо через систему '
+                ? 'Срок обработки и хранения персональных данных в составе коммерческих заявок (ТЗ) составляет 3 (три) года с момента регистрации обращения или завершения договорной переписки, либо до момента отзыва согласия субъектом персональных данных. Обработка и хранение осуществляются в национальном сегменте сети Интернет Республики Беларусь в соответствии с Указом Президента РБ от 01.02.2010 № 60.'
+                : currentLang === 'en'
+                  ? 'Personal data submitted within commercial RFQ inquiries is retained for 3 (three) years from the date of registration or completion of pre-contractual correspondence, or until consent is withdrawn by the data subject.'
+                  : '商业询价 (RFQ) 中提交的个人数据保存期限为自登记或合同磋商结束之日起 3（三）年，或直至数据主体撤回同意为止。'}
+            </p>
+          </div>
+
+          <div className="space-y-2">
+            <h4 className="font-dela text-xs sm:text-sm uppercase text-[#2B3340]">
+              {currentLang === 'ru'
+                ? '6. Права субъектов персональных данных (ст. 10–13 Закона РБ № 99-З)'
+                : currentLang === 'en'
+                  ? '6. Rights of Data Subjects (Articles 10–13 of Law No. 99-Z)'
+                  : '6. 个人数据主体的权利（第99-Z号法第10-13条）'}
+            </h4>
+            <p className="text-[#444E60]">
+              {currentLang === 'ru'
+                ? 'Субъект персональных данных вправе в любое время без объяснения причин отозвать своё согласие, получить информацию об обработке своих данных, требовать их изменения, блокирования или удаления путём подачи заявления письменно по адресу: 225410, г. Барановичи, ул. Королика, 8 либо через систему '
                 : currentLang === 'en'
                   ? 'Data subjects have the right at any time to withdraw consent, request information on data processing, or request correction/deletion by sending a written notice to: 8 Korolika Str., 225410, Baranovichi, Belarus or via '
                   : '个人数据主体有权随时撤回同意、查询数据处理情况或要求更正/删除数据，请寄送书面申请至：225410, Baranovichi, 8 Korolika Str. 或通过 '}
@@ -184,7 +201,20 @@ export const PrivacyPolicyModal: React.FC<PrivacyPolicyModalProps> = ({
               >
                 обращения.бел
               </a>
-              .
+              {currentLang === 'ru' ? (
+                <>
+                  . Уполномоченный орган по защите прав субъектов персональных данных в Республике Беларусь — Национальный центр защиты персональных данных РБ (
+                  <a
+                    href="https://cpd.by"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[#E95A0C] font-extrabold underline"
+                  >
+                    cpd.by
+                  </a>
+                  ).
+                </>
+              ) : null}
             </p>
           </div>
         </div>
@@ -237,9 +267,9 @@ export const CookieConsentBanner: React.FC<CookieConsentBannerProps> = ({
 
   if (!visible) return null;
 
-  const handleAccept = () => {
+  const handleChoice = (mode: 'accepted_all' | 'technical_only') => {
     try {
-      localStorage.setItem(COOKIE_CONSENT_KEY, 'accepted');
+      localStorage.setItem(COOKIE_CONSENT_KEY, mode);
     } catch {
       // ignore
     }
@@ -260,18 +290,29 @@ export const CookieConsentBanner: React.FC<CookieConsentBannerProps> = ({
           </div>
           <p>
             {currentLang === 'ru'
-              ? 'Мы используем технические файлы cookie (включая настройки версии для слабовидящих СТБ 2105) и защищённое соединение HTTPS/SSL в соответствии с законодательством Республики Беларусь.'
+              ? 'Мы используем технические файлы cookie (выбор языка, режим для слабовидящих по СТБ 2105-2012) и защищённое соединение HTTPS/SSL в соответствии с требованиями Закона РБ № 99-З и рекомендациями НЦЗПД РБ.'
               : currentLang === 'en'
-                ? 'We use technical cookies (including accessibility settings) and HTTPS/SSL encryption in compliance with the legislation of the Republic of Belarus.'
+                ? 'We use technical cookies (language, STB 2105 accessibility mode) and HTTPS/SSL encryption in compliance with the legislation of the Republic of Belarus.'
                 : '本网站根据白俄罗斯共和国法律使用技术性 Cookie 及 HTTPS/SSL 安全加密连接。'}
           </p>
-          <div className="mt-3 flex flex-wrap items-center gap-2.5">
+          <div className="mt-3 flex flex-wrap items-center gap-2">
             <button
               type="button"
-              onClick={handleAccept}
-              className="px-4 py-1.5 rounded-lg bg-[#E95A0C] hover:bg-[#CC4B06] text-white font-extrabold text-xs uppercase tracking-wider cursor-pointer"
+              onClick={() => handleChoice('accepted_all')}
+              className="px-3.5 py-1.5 rounded-lg bg-[#E95A0C] hover:bg-[#CC4B06] text-white font-extrabold text-xs uppercase tracking-wider cursor-pointer"
             >
-              {currentLang === 'ru' ? 'Принять' : currentLang === 'en' ? 'Accept' : '同意'}
+              {currentLang === 'ru' ? 'Принять все' : currentLang === 'en' ? 'Accept All' : '全部接受'}
+            </button>
+            <button
+              type="button"
+              onClick={() => handleChoice('technical_only')}
+              className="px-3.5 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white border border-white/20 font-bold text-xs cursor-pointer"
+            >
+              {currentLang === 'ru'
+                ? 'Только технические'
+                : currentLang === 'en'
+                  ? 'Technical Only'
+                  : '仅必要 Cookie'}
             </button>
             <button
               type="button"

@@ -43,28 +43,70 @@ const ADMIN_PASSWORDS = [
   'admin1974',
 ];
 
-// Active session tokens in memory + deterministic HMAC token so restarts don't log out the specialist
+// Active session tokens with 12-hour TTL and bound to current password hash
 const TOKEN_SECRET = SUPABASE_SECRET_KEY + '_bzal_admin_hmac_2026';
+const TOKEN_TTL_MS = 12 * 60 * 60 * 1000; // 12 hours
+
+// Persistent server-side database file so data is shared across all browsers/devices on the server
+const DATA_DIR = path.join(import.meta.dirname, 'data');
+const DB_FILE = path.join(DATA_DIR, 'bzal_server_db.json');
+const AUTH_CONFIG_FILE = path.join(DATA_DIR, 'bzal_admin_auth.json');
+
+function hashAdminPassword(raw: string): string {
+  return crypto
+    .createHmac('sha256', 'bzal_admin_pwd_salt_2026')
+    .update(raw.trim())
+    .digest('hex');
+}
+
+function getCurrentPasswordFingerprint(): string {
+  try {
+    if (fs.existsSync(AUTH_CONFIG_FILE)) {
+      const parsed = JSON.parse(fs.readFileSync(AUTH_CONFIG_FILE, 'utf-8'));
+      if (parsed && typeof parsed.passwordHash === 'string') {
+        return parsed.passwordHash.slice(0, 16);
+      }
+    }
+  } catch {
+    // ignore
+  }
+  return 'default_pin_v1';
+}
 
 function createAdminToken(email: string): string {
   const normalized = email.trim().toLowerCase();
+  const issuedAt = Date.now().toString(36);
+  const pwdFp = getCurrentPasswordFingerprint();
+  const payload = `${normalized}|${issuedAt}|${pwdFp}`;
   const sig = crypto
     .createHmac('sha256', TOKEN_SECRET)
-    .update(normalized)
+    .update(payload)
     .digest('hex');
-  return Buffer.from(`${normalized}:${sig}`).toString('base64url');
+  return Buffer.from(`${payload}|${sig}`).toString('base64url');
 }
 
 function verifyAdminToken(token: string): { valid: boolean; email?: string } {
   try {
     const decoded = Buffer.from(token, 'base64url').toString('utf-8');
-    const [email, sig] = decoded.split(':');
-    if (!email || !sig || !ALLOWED_EMAILS.includes(email)) {
+    const parts = decoded.split('|');
+    if (parts.length !== 4) {
       return { valid: false };
     }
+    const [email, issuedAtB36, pwdFp, sig] = parts;
+    if (!email || !issuedAtB36 || !pwdFp || !sig || !ALLOWED_EMAILS.includes(email)) {
+      return { valid: false };
+    }
+    const issuedAt = parseInt(issuedAtB36, 36);
+    if (!Number.isFinite(issuedAt) || Date.now() - issuedAt > TOKEN_TTL_MS) {
+      return { valid: false };
+    }
+    if (pwdFp !== getCurrentPasswordFingerprint()) {
+      return { valid: false };
+    }
+    const payload = `${email}|${issuedAtB36}|${pwdFp}`;
     const expected = crypto
       .createHmac('sha256', TOKEN_SECRET)
-      .update(email)
+      .update(payload)
       .digest('hex');
     const sigBuf = Buffer.from(sig, 'utf8');
     const expBuf = Buffer.from(expected, 'utf8');
@@ -79,36 +121,89 @@ function verifyAdminToken(token: string): { valid: boolean; email?: string } {
 
 function sanitizeStr(val: unknown, maxLen = 500): string {
   return String(val ?? '')
+    .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, '')
     .trim()
     .slice(0, maxLen);
 }
 
-// Rate limiter for admin login (protects against brute-force attacks)
-const loginAttempts = new Map<string, { count: number; resetAt: number }>();
-function checkLoginRateLimit(ip: string): boolean {
-  const now = Date.now();
-  const entry = loginAttempts.get(ip);
-  if (!entry || now > entry.resetAt) {
-    loginAttempts.set(ip, { count: 1, resetAt: now + 15 * 60 * 1000 });
+const ALLOWED_DRAWING_EXT_REGEX =
+  /\.(pdf|step|stp|iges|igs|dwg|dxf|cdw|m3d|stl|zip|rar|7z|jpg|jpeg|png|webp|doc|docx|xls|xlsx|txt)$/i;
+
+function sanitizeDrawingFileName(rawName: unknown): string {
+  const base = path.basename(String(rawName || 'drawing.pdf')).slice(0, 180);
+  const cleaned = base.replace(/[^a-zA-Zа-яА-ЯёЁ0-9._() -]/g, '_');
+  if (!ALLOWED_DRAWING_EXT_REGEX.test(cleaned)) {
+    return `${cleaned}.pdf`;
+  }
+  return cleaned;
+}
+
+function isValidImageMagicBytes(buf: Buffer): boolean {
+  if (!buf || buf.length < 12) return false;
+  // JPEG: FF D8 FF
+  if (buf[0] === 0xff && buf[1] === 0xd8 && buf[2] === 0xff) return true;
+  // PNG: 89 50 4E 47 0D 0A 1A 0A
+  if (
+    buf[0] === 0x89 &&
+    buf[1] === 0x50 &&
+    buf[2] === 0x4e &&
+    buf[3] === 0x47
+  ) {
     return true;
   }
-  if (entry.count >= 12) {
+  // GIF: GIF87a or GIF89a
+  if (
+    buf[0] === 0x47 &&
+    buf[1] === 0x49 &&
+    buf[2] === 0x46 &&
+    buf[3] === 0x38
+  ) {
+    return true;
+  }
+  // WEBP: RIFF....WEBP
+  if (
+    buf[0] === 0x52 &&
+    buf[1] === 0x49 &&
+    buf[2] === 0x46 &&
+    buf[3] === 0x46 &&
+    buf[8] === 0x57 &&
+    buf[9] === 0x45 &&
+    buf[10] === 0x42 &&
+    buf[11] === 0x50
+  ) {
+    return true;
+  }
+  return false;
+}
+
+// Generic rate limiter with automatic memory cleanup
+const rateBuckets = new Map<string, { count: number; resetAt: number }>();
+function checkRateLimit(key: string, maxRequests: number, windowMs: number): boolean {
+  const now = Date.now();
+  if (rateBuckets.size > 5000) {
+    for (const [k, v] of rateBuckets.entries()) {
+      if (now > v.resetAt) rateBuckets.delete(k);
+    }
+  }
+  const entry = rateBuckets.get(key);
+  if (!entry || now > entry.resetAt) {
+    rateBuckets.set(key, { count: 1, resetAt: now + windowMs });
+    return true;
+  }
+  if (entry.count >= maxRequests) {
     return false;
   }
   entry.count += 1;
   return true;
 }
 
-// Persistent server-side database file so data is shared across all browsers/devices on the server
-const DATA_DIR = path.join(import.meta.dirname, 'data');
-const DB_FILE = path.join(DATA_DIR, 'bzal_server_db.json');
-const AUTH_CONFIG_FILE = path.join(DATA_DIR, 'bzal_admin_auth.json');
+function getClientIp(req: Request): string {
+  const xff = String(req.headers['x-forwarded-for'] || '').split(',')[0].trim();
+  return xff || req.socket.remoteAddress || 'unknown';
+}
 
-function hashAdminPassword(raw: string): string {
-  return crypto
-    .createHmac('sha256', 'bzal_admin_pwd_salt_2026')
-    .update(raw.trim())
-    .digest('hex');
+function checkLoginRateLimit(ip: string): boolean {
+  return checkRateLimit(`login:${ip}`, 10, 15 * 60 * 1000);
 }
 
 function isValidAdminPassword(candidate: string): boolean {
@@ -154,7 +249,7 @@ function saveCustomAdminPassword(newPassword: string): void {
       null,
       2
     ),
-    'utf-8'
+    { encoding: 'utf-8', mode: 0o600 }
   );
 }
 
@@ -468,13 +563,21 @@ function requireSpecialistAuth(
 
 async function startServer() {
   const app = express();
+  app.disable('x-powered-by');
   app.use(express.json({ limit: '10mb' }));
 
-  // Security headers middleware
+  // Hardened HTTP security headers middleware (Presidential Decree RB No. 60 & OAC compliance)
   app.use((_req: Request, res: Response, next: NextFunction) => {
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
-    res.setHeader('X-XSS-Protection', '1; mode=block');
+    res.setHeader('X-Permitted-Cross-Domain-Policies', 'none');
+    res.setHeader('Permissions-Policy', 'camera=(), microphone=(), payment=(), usb=()');
+    if (process.env.NODE_ENV === 'production') {
+      res.setHeader(
+        'Strict-Transport-Security',
+        'max-age=31536000; includeSubDomains'
+      );
+    }
     next();
   });
 
@@ -496,6 +599,14 @@ async function startServer() {
   // =========================================================================
 
   app.post('/api/public/inquiries', async (req: Request, res: Response) => {
+    const clientIp = getClientIp(req);
+    if (!checkRateLimit(`pub_inq:${clientIp}`, 15, 15 * 60 * 1000)) {
+      res.status(429).json({
+        error: 'Превышен лимит отправки заявок. Пожалуйста, повторите попытку через 15 минут.',
+      });
+      return;
+    }
+
     try {
       const body = req.body || {};
       const clientName = sanitizeStr(body.client_name, 160);
@@ -513,8 +624,8 @@ async function startServer() {
 
       const safeFiles = Array.isArray(body.drawing_files)
         ? body.drawing_files.slice(0, 10).map((f: Record<string, unknown>) => ({
-            name: sanitizeStr(f?.name, 200),
-            size: Math.max(0, Number(f?.size) || 0),
+            name: sanitizeDrawingFileName(f?.name),
+            size: Math.min(50 * 1024 * 1024, Math.max(0, Number(f?.size) || 0)),
             storage_path: f?.storage_path ? sanitizeStr(f.storage_path, 300) : undefined,
             uploaded_at: sanitizeStr(f?.uploaded_at || now, 50),
           }))
@@ -547,7 +658,7 @@ async function startServer() {
         feedback_status: 'pending',
         estimated_amount_byn: Math.min(100_000_000, Math.max(0, Number(body.estimated_amount_byn) || 35000)),
         internal_notes:
-          'Заявка поступила с сайта в отдел маркетинга и продаж (Пн–Пт 08:00–16:30). Ожидает первичной проверки и передачи в ОГК / ОГТ.',
+          'Заявка поступила с сайта в отдел маркетинга и продаж (Пн–Пт 08:00–16:30). Подтверждено согласие субъекта ПДн по Закону РБ № 99-З. Ожидает первичной проверки и передачи в ОГК / ОГТ.',
         created_at: now,
       };
 
@@ -574,6 +685,14 @@ async function startServer() {
   });
 
   app.post('/api/public/passport-leads', async (req: Request, res: Response) => {
+    const clientIp = getClientIp(req);
+    if (!checkRateLimit(`pub_lead:${clientIp}`, 15, 15 * 60 * 1000)) {
+      res.status(429).json({
+        error: 'Превышен лимит запросов. Повторите попытку позже.',
+      });
+      return;
+    }
+
     try {
       const body = req.body || {};
       const contactName = sanitizeStr(body.contact_name, 160);
@@ -611,6 +730,15 @@ async function startServer() {
   });
 
   app.get('/api/public/inquiry-status', (req: Request, res: Response) => {
+    const clientIp = getClientIp(req);
+    if (!checkRateLimit(`pub_status:${clientIp}`, 35, 5 * 60 * 1000)) {
+      res.status(429).json({
+        found: false,
+        error: 'Слишком много запросов проверки статуса. Подождите несколько минут.',
+      });
+      return;
+    }
+
     const rawNum = sanitizeStr(req.query.number, 40).toUpperCase();
     // Require at least 4 characters (e.g., "0101" or "БЗАЛ-2026-0101") to prevent 1-char enumeration
     if (!rawNum || rawNum.length < 4) {
@@ -649,7 +777,7 @@ async function startServer() {
   // =========================================================================
 
   app.post('/api/admin/login', (req: Request, res: Response) => {
-    const clientIp = String(req.headers['x-forwarded-for'] || req.socket.remoteAddress || 'unknown');
+    const clientIp = getClientIp(req);
     if (!checkLoginRateLimit(clientIp)) {
       res.status(429).json({
         error: 'Слишком много попыток входа. Повторите попытку через 15 минут.',
@@ -665,7 +793,7 @@ async function startServer() {
       ALLOWED_EMAILS.includes(normalizedEmail) &&
       isValidAdminPassword(cleanPass)
     ) {
-      loginAttempts.delete(clientIp);
+      rateBuckets.delete(`login:${clientIp}`);
       const token = createAdminToken(normalizedEmail);
       res.json({
         success: true,
@@ -708,10 +836,19 @@ async function startServer() {
         return;
       }
 
+      // Extract current specialist email before rotating password fingerprint
+      const authHeader = String(req.headers.authorization || '');
+      const oldToken = authHeader.slice('Bearer '.length).trim();
+      const check = verifyAdminToken(oldToken);
+      const specialistEmail = check.email || ALLOWED_EMAILS[0];
+
       saveCustomAdminPassword(cleanNew);
+      const refreshedToken = createAdminToken(specialistEmail);
+
       res.json({
         success: true,
-        message: 'Пароль доступа в админ-панель успешно изменён и сохранён на сервере.',
+        token: refreshedToken,
+        message: 'Пароль доступа в админ-панель успешно изменён и сохранён на сервере. Старые сессии аннулированы.',
       });
     }
   );
@@ -1054,6 +1191,13 @@ async function startServer() {
           return;
         }
 
+        if (!isValidImageMagicBytes(buffer)) {
+          res.status(400).json({
+            error: 'Файл повреждён или не является подлинным изображением (JPG/PNG/WEBP/GIF).',
+          });
+          return;
+        }
+
         await ensureSupabaseBucket();
         const stampedName = `${Date.now()}_${baseName || 'img'}${ext}`;
 
@@ -1109,7 +1253,7 @@ async function startServer() {
     });
   });
 
-  // Always serve dynamically uploaded CMS images from public/images/uploads
+  // Always serve dynamically uploaded CMS images from public/images/uploads with strict sandbox headers
   const runtimeUploadsDir = path.join(
     import.meta.dirname,
     'public',
@@ -1119,7 +1263,15 @@ async function startServer() {
   if (!fs.existsSync(runtimeUploadsDir)) {
     fs.mkdirSync(runtimeUploadsDir, { recursive: true });
   }
-  app.use('/images/uploads', express.static(runtimeUploadsDir));
+  app.use(
+    '/images/uploads',
+    (_req: Request, res: Response, next: NextFunction) => {
+      res.setHeader('X-Content-Type-Options', 'nosniff');
+      res.setHeader('Content-Security-Policy', "default-src 'none'; sandbox");
+      next();
+    },
+    express.static(runtimeUploadsDir)
+  );
 
   // =========================================================================
   // 3. VITE MIDDLEWARE (DEV) OR STATIC ASSETS (PROD)

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { X, Send, CheckCircle2, Upload, FileCheck, Mail, Clock, Database } from 'lucide-react';
 import { Language } from '../types';
 import { content } from '../data/content';
-import { createRfqInquiry } from '../utils/supabase';
+import { createRfqInquiry, isAllowedEngineeringFile } from '../utils/supabase';
 
 interface RfqModalProps {
   isOpen: boolean;
@@ -35,10 +35,14 @@ export const RfqModal: React.FC<RfqModalProps> = ({
   const [comment, setComment] = useState('');
   const [files, setFiles] = useState<string[]>([]);
   const [rawFiles, setRawFiles] = useState<File[]>([]);
+  const [fileError, setFileError] = useState<string | null>(null);
+  const [consentChecked, setConsentChecked] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
       setSubmitted(false);
+      setFileError(null);
+      setConsentChecked(false);
       setService(initialService || content[currentLang].modal.serviceOptions[0]);
     }
   }, [isOpen, initialService, currentLang]);
@@ -74,10 +78,21 @@ export const RfqModal: React.FC<RfqModalProps> = ({
 
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
+      setFileError(null);
       const selected = Array.from(e.target.files);
-      const names = selected.map((f) => f.name);
-      setRawFiles((prev) => [...prev, ...selected]);
-      setFiles((prev) => [...prev, ...names]);
+      const validFiles: File[] = [];
+      for (const f of selected) {
+        const check = isAllowedEngineeringFile(f.name, f.size);
+        if (!check.ok) {
+          setFileError(check.reason || 'Недопустимый файл');
+        } else {
+          validFiles.push(f);
+        }
+      }
+      if (validFiles.length > 0) {
+        setRawFiles((prev) => [...prev, ...validFiles].slice(0, 10));
+        setFiles((prev) => [...prev, ...validFiles.map((f) => f.name)].slice(0, 10));
+      }
     }
   };
 
@@ -319,6 +334,7 @@ export const RfqModal: React.FC<RfqModalProps> = ({
                       type="file"
                       id="modal-file-upload"
                       multiple
+                      accept=".pdf,.step,.stp,.iges,.igs,.dwg,.dxf,.cdw,.m3d,.stl,.zip,.rar,.7z,.jpg,.jpeg,.png,.webp,.doc,.docx,.xls,.xlsx,.txt"
                       onChange={handleFile}
                       className="hidden"
                     />
@@ -326,6 +342,11 @@ export const RfqModal: React.FC<RfqModalProps> = ({
                       <Upload className="w-4 h-4 text-[#E95A0C]" />
                       <span>{files.length > 0 ? `${t.modal.filesCountLabel} ${files.length}` : t.modal.chooseFileLabel}</span>
                     </label>
+                    {fileError && (
+                      <div className="mt-1.5 text-[11px] font-bold text-red-600">
+                        {fileError}
+                      </div>
+                    )}
                     {files.length > 0 && (
                       <div className="mt-2 flex flex-wrap gap-1.5 justify-center">
                         {files.map((fileName, idx) => (
@@ -346,29 +367,30 @@ export const RfqModal: React.FC<RfqModalProps> = ({
                   </div>
                 </div>
 
-                {/* Personal Data Protection Consent (Law of RB No. 99-Z) */}
+                {/* Personal Data Protection Consent (Law of RB No. 99-Z — active user choice required) */}
                 <label className="flex items-start gap-2 pt-1 text-[11px] text-[#444E60] cursor-pointer">
                   <input
                     type="checkbox"
                     required
-                    defaultChecked
+                    checked={consentChecked}
+                    onChange={(e) => setConsentChecked(e.target.checked)}
                     className="mt-0.5 accent-[#E95A0C] shrink-0"
                   />
                   <span>
                     {currentLang === 'ru' ? (
                       <>
-                        Даю согласие на обработку персональных данных в соответствии с{' '}
+                        Я ознакомлен(а) с Политикой и даю свободное, однозначное согласие на обработку моих персональных данных в соответствии с{' '}
                         <button
                           type="button"
                           onClick={onOpenPrivacyPolicy}
                           className="text-[#E95A0C] font-bold underline cursor-pointer"
                         >
-                          Законом РБ № 99-З «О защите персональных данных»
+                          Законом РБ от 07.05.2021 № 99-З «О защите персональных данных»
                         </button>
                       </>
                     ) : currentLang === 'en' ? (
                       <>
-                        I consent to personal data processing under{' '}
+                        I have read the Policy and give explicit consent to personal data processing under{' '}
                         <button
                           type="button"
                           onClick={onOpenPrivacyPolicy}
@@ -379,7 +401,7 @@ export const RfqModal: React.FC<RfqModalProps> = ({
                       </>
                     ) : (
                       <>
-                        同意根据白俄罗斯第99-Z号法律处理个人数据
+                        我已阅读政策并明确同意根据白俄罗斯第99-Z号法律处理个人数据
                       </>
                     )}
                   </span>
@@ -394,9 +416,42 @@ export const RfqModal: React.FC<RfqModalProps> = ({
                   <span>{t.modal.submitBtn}</span>
                 </button>
 
-                <div className="flex items-center justify-center gap-2 text-[10px] text-[#647082] pt-1">
-                  <Clock className="w-3.5 h-3.5 text-[#E95A0C] shrink-0" />
-                  <span>{t.modal.note}</span>
+                <div className="space-y-1 pt-1 text-[10px] text-[#647082]">
+                  <div className="flex items-center justify-center gap-2">
+                    <Clock className="w-3.5 h-3.5 text-[#E95A0C] shrink-0" />
+                    <span>{t.modal.note}</span>
+                  </div>
+                  <div className="text-center leading-tight">
+                    {currentLang === 'ru' ? (
+                      <>
+                        Форма предназначена для коммерческих запросов (расчёт ТКП). Официальные обращения граждан и юрлиц по Закону РБ № 300-З подаются через{' '}
+                        <a
+                          href="https://обращения.бел"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-[#E95A0C] font-bold underline"
+                        >
+                          обращения.бел
+                        </a>
+                        .
+                      </>
+                    ) : currentLang === 'en' ? (
+                      <>
+                        For commercial RFQ only. Official appeals under Belarus Law No. 300-Z are submitted via{' '}
+                        <a
+                          href="https://обращения.бел"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-[#E95A0C] font-bold underline"
+                        >
+                          обращения.бел
+                        </a>
+                        .
+                      </>
+                    ) : (
+                      <>本表单仅用于商业询价，法定行政申诉请通过 обращения.бел 提交。</>
+                    )}
+                  </div>
                 </div>
               </form>
             </div>

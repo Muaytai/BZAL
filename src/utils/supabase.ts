@@ -259,7 +259,6 @@ function getLocalInquiries(): BzalRfqInquiry[] {
   try {
     const raw = localStorage.getItem(LOCAL_RFQ_KEY);
     if (!raw) {
-      localStorage.setItem(LOCAL_RFQ_KEY, JSON.stringify(FALLBACK_INQUIRIES));
       return FALLBACK_INQUIRIES;
     }
     const parsed = JSON.parse(raw);
@@ -271,7 +270,10 @@ function getLocalInquiries(): BzalRfqInquiry[] {
 
 function saveLocalInquiries(list: BzalRfqInquiry[]) {
   try {
-    localStorage.setItem(LOCAL_RFQ_KEY, JSON.stringify(list));
+    // Only persist full list in localStorage if specialist is authenticated
+    if (getSavedAdminToken()) {
+      localStorage.setItem(LOCAL_RFQ_KEY, JSON.stringify(list));
+    }
   } catch {
     // ignore
   }
@@ -281,7 +283,6 @@ function getLocalLeads(): BzalPassportLead[] {
   try {
     const raw = localStorage.getItem(LOCAL_PASSPORT_KEY);
     if (!raw) {
-      localStorage.setItem(LOCAL_PASSPORT_KEY, JSON.stringify(FALLBACK_LEADS));
       return FALLBACK_LEADS;
     }
     const parsed = JSON.parse(raw);
@@ -347,6 +348,25 @@ function readFileAsDataUrl(file: File): Promise<string | undefined> {
   });
 }
 
+const ALLOWED_CLIENT_FILE_EXT =
+  /\.(pdf|step|stp|iges|igs|dwg|dxf|cdw|m3d|stl|zip|rar|7z|jpg|jpeg|png|webp|doc|docx|xls|xlsx|txt)$/i;
+
+export function isAllowedEngineeringFile(fileName: string, fileSize = 0): { ok: boolean; reason?: string } {
+  if (fileSize > 25 * 1024 * 1024) {
+    return {
+      ok: false,
+      reason: `Файл «${fileName}» превышает допустимый размер 25 МБ.`,
+    };
+  }
+  if (!ALLOWED_CLIENT_FILE_EXT.test(fileName.trim())) {
+    return {
+      ok: false,
+      reason: `Формат файла «${fileName}» не поддерживается. Разрешены чертежи и документы: PDF, STEP, IGES, DWG, DXF, КОМПАС (.cdw, .m3d), STL, архивы ZIP/RAR/7Z, изображения JPG/PNG и документы Office.`,
+    };
+  }
+  return { ok: true };
+}
+
 export async function uploadDrawingFilesToSupabase(
   inquiryPrefix: string,
   files: File[]
@@ -354,8 +374,11 @@ export async function uploadDrawingFilesToSupabase(
   const now = new Date().toISOString();
   const results: DrawingFileMeta[] = [];
 
-  for (const file of files) {
-    const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+  for (const file of files.slice(0, 10)) {
+    const check = isAllowedEngineeringFile(file.name, file.size);
+    if (!check.ok) continue;
+
+    const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_').slice(0, 150);
     const storagePath = `inquiries/${inquiryPrefix}/${Date.now()}_${safeName}`;
     const dataUrl = await readFileAsDataUrl(file);
     try {
@@ -372,7 +395,7 @@ export async function uploadDrawingFilesToSupabase(
       results.push({
         name: file.name,
         size: file.size,
-        storage_path: error ? `server/${inquiryPrefix}/${file.name}` : storagePath,
+        storage_path: error ? `server/${inquiryPrefix}/${safeName}` : storagePath,
         public_url: publicUrl,
         data_url: dataUrl,
         uploaded_at: now,
@@ -381,7 +404,7 @@ export async function uploadDrawingFilesToSupabase(
       results.push({
         name: file.name,
         size: file.size,
-        storage_path: `server/${inquiryPrefix}/${file.name}`,
+        storage_path: `server/${inquiryPrefix}/${safeName}`,
         data_url: dataUrl,
         uploaded_at: now,
       });
@@ -804,20 +827,21 @@ export async function loginSpecialistApi(
 
   const allowedEmails = ['makc.kuxta@gmail.com', 'sales@bzal.by', 'admin@bzal.by'];
   const pinCode = String.fromCharCode(49, 57, 55, 52);
-  const customLocalPin = localStorage.getItem('bzal_custom_admin_pin_v1');
-  const validFallbackCodes = customLocalPin
-    ? [customLocalPin]
+  const customLocalHash = localStorage.getItem('bzal_custom_admin_pin_hash_v1');
+  const candidateHash = await sha256Hex(cleanPass);
+
+  const isPasswordMatch = customLocalHash
+    ? candidateHash === customLocalHash
     : [
         pinCode,
         `bzal${pinCode}`,
         `admin${pinCode}`,
         import.meta.env.VITE_ADMIN_PIN,
-      ].filter(Boolean);
+      ]
+        .filter(Boolean)
+        .includes(cleanPass);
 
-  if (
-    allowedEmails.includes(normalizedEmail) &&
-    validFallbackCodes.includes(cleanPass)
-  ) {
+  if (allowedEmails.includes(normalizedEmail) && isPasswordMatch) {
     const localToken = `local-specialist-${btoa(normalizedEmail)}`;
     saveAdminSession(localToken, normalizedEmail);
     return {
@@ -839,6 +863,9 @@ export async function changeSpecialistPasswordApi(
   newPassword: string
 ): Promise<{ success: boolean; message?: string; error?: string }> {
   const token = getSavedAdminToken();
+  const savedEmail = getSavedAdminEmail() || 'makc.kuxta@gmail.com';
+  const newHash = await sha256Hex(newPassword.trim());
+
   try {
     const res = await fetch('/api/admin/change-password', {
       method: 'POST',
@@ -855,8 +882,12 @@ export async function changeSpecialistPasswordApi(
     if (contentType.includes('application/json')) {
       const data = await res.json();
       if (res.ok && data.success) {
+        if (data.token) {
+          saveAdminSession(data.token, savedEmail);
+        }
         try {
-          localStorage.setItem('bzal_custom_admin_pin_v1', newPassword.trim());
+          localStorage.removeItem('bzal_custom_admin_pin_v1');
+          localStorage.setItem('bzal_custom_admin_pin_hash_v1', newHash);
         } catch {
           // ignore
         }
@@ -882,13 +913,14 @@ export async function changeSpecialistPasswordApi(
     };
   }
   try {
-    localStorage.setItem('bzal_custom_admin_pin_v1', newPassword.trim());
+    localStorage.removeItem('bzal_custom_admin_pin_v1');
+    localStorage.setItem('bzal_custom_admin_pin_hash_v1', newHash);
   } catch {
     // ignore
   }
   return {
     success: true,
-    message: 'Пароль доступа успешно обновлён.',
+    message: 'Пароль доступа успешно обновлён (SHA-256).',
   };
 }
 

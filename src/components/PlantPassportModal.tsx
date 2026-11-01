@@ -9,6 +9,7 @@ interface PlantPassportModalProps {
   onClose: () => void;
   currentLang: Language;
   onLeadCreated?: () => void;
+  onOpenPrivacyPolicy?: () => void;
 }
 
 export const PlantPassportModal: React.FC<PlantPassportModalProps> = ({
@@ -16,12 +17,14 @@ export const PlantPassportModal: React.FC<PlantPassportModalProps> = ({
   onClose,
   currentLang,
   onLeadCreated,
+  onOpenPrivacyPolicy,
 }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     company: ''
   });
+  const [consentChecked, setConsentChecked] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   if (!isOpen) return null;
@@ -213,6 +216,44 @@ Email: sales@bzal.by | Сайт: www.bzal.by
                   />
                 </div>
               </div>
+
+              {/* Personal Data Protection Consent (Law of RB No. 99-Z) */}
+              <label className="flex items-start gap-2 pt-1 text-[11px] text-[#444E60] cursor-pointer">
+                <input
+                  type="checkbox"
+                  required
+                  checked={consentChecked}
+                  onChange={(e) => setConsentChecked(e.target.checked)}
+                  className="mt-0.5 accent-[#E95A0C] shrink-0"
+                />
+                <span>
+                  {currentLang === 'ru' ? (
+                    <>
+                      Я ознакомлен(а) с Политикой и даю согласие на обработку моих персональных данных в соответствии с{' '}
+                      <button
+                        type="button"
+                        onClick={onOpenPrivacyPolicy}
+                        className="text-[#E95A0C] font-bold underline cursor-pointer"
+                      >
+                        Законом РБ от 07.05.2021 № 99-З «О защите персональных данных»
+                      </button>
+                    </>
+                  ) : currentLang === 'en' ? (
+                    <>
+                      I have read the Policy and give explicit consent to personal data processing under{' '}
+                      <button
+                        type="button"
+                        onClick={onOpenPrivacyPolicy}
+                        className="text-[#E95A0C] font-bold underline cursor-pointer"
+                      >
+                        Law of Belarus No. 99-Z
+                      </button>
+                    </>
+                  ) : (
+                    <>我已阅读政策并明确同意根据白俄罗斯第99-Z号法律处理个人数据</>
+                  )}
+                </span>
+              </label>
 
               <div className="pt-2">
                 <button

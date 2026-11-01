@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Upload, CheckCircle2, Clock, FileCheck, Phone, Mail, ArrowUpRight, X, Database } from 'lucide-react';
 import { Language, RfqFormData } from '../types';
 import { content } from '../data/content';
-import { createRfqInquiry } from '../utils/supabase';
+import { createRfqInquiry, isAllowedEngineeringFile } from '../utils/supabase';
 
 interface RfqCalculatorProps {
   currentLang: Language;
@@ -37,6 +37,8 @@ export const RfqCalculator: React.FC<RfqCalculatorProps> = ({
   });
 
   const [rawFiles, setRawFiles] = useState<File[]>([]);
+  const [fileError, setFileError] = useState<string | null>(null);
+  const [consentChecked, setConsentChecked] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [createdNumber, setCreatedNumber] = useState<string>('');
@@ -71,10 +73,24 @@ export const RfqCalculator: React.FC<RfqCalculatorProps> = ({
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
+      setFileError(null);
       const selected = Array.from(e.target.files);
-      const names = selected.map((f) => f.name);
-      setRawFiles((prev) => [...prev, ...selected]);
-      setFormData((prev) => ({ ...prev, fileNames: [...prev.fileNames, ...names] }));
+      const validFiles: File[] = [];
+      for (const f of selected) {
+        const check = isAllowedEngineeringFile(f.name, f.size);
+        if (!check.ok) {
+          setFileError(check.reason || 'Недопустимый файл');
+        } else {
+          validFiles.push(f);
+        }
+      }
+      if (validFiles.length > 0) {
+        setRawFiles((prev) => [...prev, ...validFiles].slice(0, 10));
+        setFormData((prev) => ({
+          ...prev,
+          fileNames: [...prev.fileNames, ...validFiles.map((f) => f.name)].slice(0, 10),
+        }));
+      }
     }
   };
 
@@ -337,6 +353,7 @@ export const RfqCalculator: React.FC<RfqCalculatorProps> = ({
                         type="file"
                         id="calculator-file-upload"
                         multiple
+                        accept=".pdf,.step,.stp,.iges,.igs,.dwg,.dxf,.cdw,.m3d,.stl,.zip,.rar,.7z,.jpg,.jpeg,.png,.webp,.doc,.docx,.xls,.xlsx,.txt"
                         onChange={handleFileUpload}
                         className="hidden"
                       />
@@ -349,6 +366,11 @@ export const RfqCalculator: React.FC<RfqCalculatorProps> = ({
                           {t.calculator.uploadFormats}
                         </span>
                       </label>
+                      {fileError && (
+                        <div className="mt-2 text-xs font-bold text-red-600">
+                          {fileError}
+                        </div>
+                      )}
                       {formData.fileNames.length > 0 && (
                         <div className="mt-3 flex flex-wrap gap-2 justify-center">
                           {formData.fileNames.map((name, i) => (
@@ -487,29 +509,30 @@ export const RfqCalculator: React.FC<RfqCalculatorProps> = ({
                         className="w-full bg-[#1B222C] border border-white/15 rounded-lg px-3.5 py-2 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-[#E95A0C]"
                       />
                     </div>
-                    {/* Personal Data Consent (Law of RB No. 99-Z) */}
+                    {/* Personal Data Consent (Law of RB No. 99-Z — active user choice required) */}
                     <label className="flex items-start gap-2 pt-1 text-[11px] text-[#BAC5CF] cursor-pointer">
                       <input
                         type="checkbox"
                         required
-                        defaultChecked
+                        checked={consentChecked}
+                        onChange={(e) => setConsentChecked(e.target.checked)}
                         className="mt-0.5 accent-[#E95A0C] shrink-0"
                       />
                       <span>
                         {currentLang === 'ru' ? (
                           <>
-                            Согласен на обработку персональных данных согласно{' '}
+                            Я ознакомлен(а) с Политикой и даю свободное, однозначное согласие на обработку моих персональных данных согласно{' '}
                             <button
                               type="button"
                               onClick={onOpenPrivacyPolicy}
                               className="text-white font-bold underline hover:text-[#E95A0C] cursor-pointer"
                             >
-                              Закону РБ № 99-З «О защите персональных данных»
+                              Закону РБ от 07.05.2021 № 99-З «О защите персональных данных»
                             </button>
                           </>
                         ) : currentLang === 'en' ? (
                           <>
-                            I agree to personal data processing under{' '}
+                            I have read the Policy and give explicit consent to personal data processing under{' '}
                             <button
                               type="button"
                               onClick={onOpenPrivacyPolicy}
@@ -519,7 +542,7 @@ export const RfqCalculator: React.FC<RfqCalculatorProps> = ({
                             </button>
                           </>
                         ) : (
-                          <>同意根据白俄罗斯第99-Z号法律处理个人数据</>
+                          <>我已阅读政策并明确同意根据白俄罗斯第99-Z号法律处理个人数据</>
                         )}
                       </span>
                     </label>
@@ -543,6 +566,37 @@ export const RfqCalculator: React.FC<RfqCalculatorProps> = ({
                     <div className="flex items-center gap-2">
                       <CheckCircle2 className="w-3.5 h-3.5 text-[#E95A0C] shrink-0" />
                       <span>{t.calculator.confNote}</span>
+                    </div>
+                    <div className="text-[10px] text-[#8E9BAE] pt-1 leading-snug">
+                      {currentLang === 'ru' ? (
+                        <>
+                          Форма предназначена для коммерческих запросов (расчёт ТКП и кооперация). Официальные электронные обращения по Закону РБ № 300-З подаются через систему{' '}
+                          <a
+                            href="https://обращения.бел"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-white underline hover:text-[#E95A0C]"
+                          >
+                            обращения.бел
+                          </a>
+                          .
+                        </>
+                      ) : currentLang === 'en' ? (
+                        <>
+                          For commercial RFQ only. Official appeals under Belarus Law No. 300-Z are submitted via{' '}
+                          <a
+                            href="https://обращения.бел"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-white underline hover:text-[#E95A0C]"
+                          >
+                            обращения.бел
+                          </a>
+                          .
+                        </>
+                      ) : (
+                        <>本表单仅用于商业询价，法定行政申诉请通过 обращения.бел 提交。</>
+                      )}
                     </div>
                   </div>
 
