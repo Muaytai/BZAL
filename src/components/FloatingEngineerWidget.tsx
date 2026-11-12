@@ -99,7 +99,7 @@ export const FloatingEngineerWidget: React.FC<FloatingEngineerWidgetProps> = ({
               <Phone className="w-4 h-4 text-[#E95A0C] shrink-0" />
               <div>
                 <div>{t.callNow}</div>
-                <div className="text-[10px] font-mono text-[#647082]">+375 44 751 44 77 / (163) 67-20-41</div>
+                <div className="text-[10px] font-mono text-[#647082]">+375 44 751 44 77 / (163) 67-20-47</div>
               </div>
             </a>
 

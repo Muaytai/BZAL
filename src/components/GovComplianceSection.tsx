@@ -242,7 +242,7 @@ export const GovComplianceSection: React.FC<GovComplianceSectionProps> = ({
             day: 'Первая и третья среда месяца',
             hours: '08:00 – 13:00',
             room: 'Приёмная руководителя (административный корпус, 2 этаж)',
-            phone: '+375 (163) 67-20-41',
+            phone: '+375 (163) 67-20-47',
           },
           {
             role: 'Главный инженер — первый заместитель директора',
@@ -250,7 +250,7 @@ export const GovComplianceSection: React.FC<GovComplianceSectionProps> = ({
             day: 'Второй и четвёртый вторник месяца',
             hours: '08:00 – 13:00',
             room: 'Кабинет главного инженера (административный корпус)',
-            phone: '+375 (163) 67-20-41',
+            phone: '+375 (163) 67-20-47',
           },
           {
             role: 'Заместитель директора по коммерческим вопросам',
@@ -266,7 +266,7 @@ export const GovComplianceSection: React.FC<GovComplianceSectionProps> = ({
             day: 'Каждый понедельник месяца',
             hours: '08:00 – 13:00',
             room: 'Отдел кадров и социального развития',
-            phone: '+375 (163) 67-20-41',
+            phone: '+375 (163) 67-20-47',
           },
           {
             role: 'Главный бухгалтер',
@@ -285,7 +285,7 @@ export const GovComplianceSection: React.FC<GovComplianceSectionProps> = ({
               day: '1st and 3rd Wednesday of the month',
               hours: '08:00 – 13:00',
               room: 'Director Reception (Admin Building, 2nd Floor)',
-              phone: '+375 (163) 67-20-41',
+              phone: '+375 (163) 67-20-47',
             },
             {
               role: 'Chief Engineer — First Deputy Director',
@@ -293,7 +293,7 @@ export const GovComplianceSection: React.FC<GovComplianceSectionProps> = ({
               day: '2nd and 4th Tuesday of the month',
               hours: '08:00 – 13:00',
               room: 'Chief Engineer Office (Admin Building)',
-              phone: '+375 (163) 67-20-41',
+              phone: '+375 (163) 67-20-47',
             },
             {
               role: 'Deputy Director for Commercial Affairs',
@@ -309,7 +309,7 @@ export const GovComplianceSection: React.FC<GovComplianceSectionProps> = ({
               day: 'Every Monday',
               hours: '08:00 – 13:00',
               room: 'HR & Social Development Office',
-              phone: '+375 (163) 67-20-41',
+              phone: '+375 (163) 67-20-47',
             },
             {
               role: 'Chief Accountant',
@@ -327,7 +327,7 @@ export const GovComplianceSection: React.FC<GovComplianceSectionProps> = ({
               day: '每月第一和第三个周三',
               hours: '08:00 – 13:00',
               room: '行政大楼二楼厂长接待室',
-              phone: '+375 (163) 67-20-41',
+              phone: '+375 (163) 67-20-47',
             },
             {
               role: '总工程师 — 第一副厂长',
@@ -335,7 +335,7 @@ export const GovComplianceSection: React.FC<GovComplianceSectionProps> = ({
               day: '每月第二和第四个周二',
               hours: '08:00 – 13:00',
               room: '行政大楼总工程师办公室',
-              phone: '+375 (163) 67-20-41',
+              phone: '+375 (163) 67-20-47',
             },
             {
               role: '商务副厂长',
@@ -351,7 +351,7 @@ export const GovComplianceSection: React.FC<GovComplianceSectionProps> = ({
               day: '每周一',
               hours: '08:00 – 13:00',
               room: '人事与社会发展部',
-              phone: '+375 (163) 67-20-41',
+              phone: '+375 (163) 67-20-47',
             },
             {
               role: '总会计师',
@@ -754,10 +754,10 @@ export const GovComplianceSection: React.FC<GovComplianceSectionProps> = ({
                     : '管理层接待预约电话：'}
               </span>
               <a
-                href="tel:+375163672041"
+                href="tel:+375163672047"
                 className="font-extrabold text-[#E95A0C] underline"
               >
-                +375 (163) 67-20-41
+                +375 (163) 67-20-47
               </a>
             </div>
           </div>

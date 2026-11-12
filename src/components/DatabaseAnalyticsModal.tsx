@@ -1332,7 +1332,7 @@ export const DatabaseAnalyticsModal: React.FC<DatabaseAnalyticsModalProps> = ({
                             href={`mailto:${inq.email}?subject=${encodeURIComponent(
                               `Ответ ОАО БЗАЛ по заявке ${inq.inquiry_number} (${inq.service_type})`
                             )}&body=${encodeURIComponent(
-                              `Уважаемый(ая) ${inq.client_name}!\n\nОтдел маркетинга и продаж ОАО БЗАЛ совместно с инженерными службами (ОГК / ОГТ) рассмотрел вашу заявку № ${inq.inquiry_number} (${inq.service_type}).\n\nС уважением,\nОтдел маркетинга и продаж ОАО БЗАЛ\nТел.: +375 44 751 44 77, +375 (163) 67-20-41\nEmail: sales@bzal.by`
+                              `Уважаемый(ая) ${inq.client_name}!\n\nОтдел маркетинга и продаж ОАО БЗАЛ совместно с инженерными службами (ОГК / ОГТ) рассмотрел вашу заявку № ${inq.inquiry_number} (${inq.service_type}).\n\nС уважением,\nОтдел маркетинга и продаж ОАО БЗАЛ\nТел.: +375 44 751 44 77, +375 (163) 67-20-47\nEmail: sales@bzal.by`
                             )}`}
                             className="font-bold text-[#E95A0C] hover:underline break-all"
                           >

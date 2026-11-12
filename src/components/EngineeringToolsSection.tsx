@@ -797,10 +797,10 @@ export const EngineeringToolsSection: React.FC<EngineeringToolsSectionProps> = (
                 </div>
                 <p className="text-[#647082]">
                   {currentLang === 'ru'
-                    ? 'Проверьте правильность написания номера (формат БЗАЛ-2026-XXXX) или свяжитесь с отделом маркетинга и продаж ОАО БЗАЛ: +375 44 751 44 77, +375 (163) 67-20-41, sales@bzal.by (Пн–Пт: 08:00 – 16:30).'
+                    ? 'Проверьте правильность написания номера (формат БЗАЛ-2026-XXXX) или свяжитесь с отделом маркетинга и продаж ОАО БЗАЛ: +375 44 751 44 77, +375 (163) 67-20-47, sales@bzal.by (Пн–Пт: 08:00 – 16:30).'
                     : currentLang === 'en'
-                      ? 'Please verify the inquiry number format (БЗАЛ-2026-XXXX) or contact the Marketing & Sales Department of JSC BZAL: +375 44 751 44 77, +375 (163) 67-20-41, sales@bzal.by (Mon–Fri: 08:00 – 16:30).'
-                      : '请核对编号格式（БЗАЛ-2026-XXXX）或联系BZAL市场销售部：+375 44 751 44 77，sales@bzal.by（周一至周五 08:00–16:30）。'}
+                      ? 'Please verify the inquiry number format (БЗАЛ-2026-XXXX) or contact the Marketing & Sales Department of JSC BZAL: +375 44 751 44 77, +375 (163) 67-20-47, sales@bzal.by (Mon–Fri: 08:00 – 16:30).'
+                      : '请核对编号格式（БЗАЛ-2026-XXXX）或联系BZAL市场销售部：+375 44 751 44 77 / +375 (163) 67-20-47，sales@bzal.by（周一至周五 08:00–16:30）。'}
                 </p>
               </div>
             )}
